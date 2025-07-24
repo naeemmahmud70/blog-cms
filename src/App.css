@@ -2,3 +2,18 @@
   margin: 0;
   padding: 0;
 }
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-mulish {
+  font-family: 'Mulish', sans-serif;
+}
+
+.font-archivo {
+  font-family: 'Archivo', sans-serif;
+}
+.font-nunito {
+  font-family: 'Nunito', sans-serif;
+}
