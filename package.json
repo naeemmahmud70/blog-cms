@@ -14,12 +14,14 @@
     "@fontsource/mulish": "^5.2.6",
     "@fontsource/nunito": "^5.2.6",
     "@fontsource/poppins": "^5.2.6",
+    "@hookform/resolvers": "^5.1.1",
     "bootstrap": "^5.3.7",
     "react": "^19.1.0",
     "react-hook-form": "^7.61.0",
     "react-router": "^7.7.0",
     "react-router-dom": "^7.7.0",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "zod": "^4.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",

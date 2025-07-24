@@ -5,4 +5,5 @@ export const ROUTES = {
   root: "/",
   home: "/home",
   login: "/login",
+  signUp: "/signUp",
 };

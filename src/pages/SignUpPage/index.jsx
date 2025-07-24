@@ -9,7 +9,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const loginSchema = z.object({
+const signupSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Full name is required")
+    .min(4, "Name should be at least 4 characters"),
   email: z
     .string()
     .min(1, "Email is required")
@@ -39,14 +43,14 @@ const loginSchema = z.object({
     }),
 });
 
-const Login = () => {
+const SignUpPage = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(signupSchema),
   });
   const navigate = useNavigate();
 
@@ -79,13 +83,22 @@ const Login = () => {
           <h1>BAAI</h1>
         </div>
         <div>
-          <p className="login-label">Login</p>
+          <p className="login-label">Sign Up</p>
         </div>
         {/* login form */}
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="login-input">
-              <label htmlFor="">Enter Email</label> <br />
+              <label htmlFor="">Full Name</label> <br />
+              <input
+                type="name"
+                placeholder="John Doe"
+                {...register("name", { required: true })}
+              />
+              {errors.name && <span>{errors.name.message}</span>}
+            </div>
+            <div className="login-input">
+              <label htmlFor="">Email Address</label> <br />
               <input
                 type="email"
                 placeholder="john@doe.com"
@@ -94,27 +107,29 @@ const Login = () => {
               {errors.email && <span>{errors.email.message}</span>}
             </div>
             <div className="login-input">
-              <label htmlFor="">Please enter your password!</label> <br />
+              <label htmlFor="">Password</label> <br />
               <input
                 type="password"
-                placeholder="Enter password"
+                placeholder="Must be at least 8 characters"
                 {...register("password", { required: true })}
               />
               {errors.password && <span>{errors.password.message}</span>}
             </div>
             <div className="login-button">
-              <button type="submit">Login</button>
+              <button type="submit">Sign Up</button>
             </div>
           </form>
         </div>
 
         <p className="sign-up-link">
-          Don&apos;t have an account yet ?{" "}
-          <Link className="link-color">Sign Up</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="link-color">
+            Login
+          </Link>
         </p>
       </div>
     </section>
   );
 };
 
-export default Login;
+export default SignUpPage;
