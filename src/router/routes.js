@@ -3,7 +3,7 @@ export const AUTH_PARAM = "authType";
 
 export const ROUTES = {
   root: "/",
-  home: "/home",
+  blogs: "/blogs",
   login: "/login",
   signUp: "/signUp",
 };

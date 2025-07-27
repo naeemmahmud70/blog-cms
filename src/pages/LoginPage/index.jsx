@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { setUserDetails } from "../../services/userServices";
 
 const loginSchema = z.object({
   email: z
@@ -52,6 +53,13 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     console.log("data", data);
+    if (data.email && data.password) {
+      setUserDetails(data);
+      toast.dismiss();
+      toast.success("Logged in Successfully!");
+      navigate("/admin/blogs");
+      reset();
+    }
     // try {
     //   const response = await loginUser(data);
     //   // console.logresponse);

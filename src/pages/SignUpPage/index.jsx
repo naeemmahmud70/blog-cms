@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { setUserDetails } from "../../services/userServices";
 
 const signupSchema = z.object({
   name: z
@@ -56,6 +57,13 @@ const SignUpPage = () => {
 
   const onSubmit = async (data) => {
     console.log("data", data);
+    if (data.email && data.password) {
+      setUserDetails(data);
+      toast.dismiss();
+      toast.success("Sign in Successfully!");
+      navigate("/admin/blogs");
+      reset();
+    }
     // try {
     //   const response = await loginUser(data);
     //   // console.logresponse);
