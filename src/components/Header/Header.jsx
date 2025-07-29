@@ -1,28 +1,71 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import profile from "../../assets/icon/user.png";
-import downArrow from "../../assets/icon/down-arrow.png";
 import "./Header.css";
 
 const Header = () => {
   const location = useLocation();
   const pageTitles = {
-    blogs: "Blog Home",
-    archives: "Archived Blog",
-    users: "Users",
-    edit: "Edit User",
+    blogs: "Published Blogs",
+    write_new_blog: "Write New Blog",
+    drafts: "Saved Drafts",
+    archives: "Archived Blogs",
+    admins_list: "Admins List",
   };
-  // Extract the last segment from the pathname
+  // Get path segments
   const segments = location.pathname.split("/").filter(Boolean);
-  const currentPage = segments[segments.length - 1] || "";
+  const last = segments[segments.length - 1] || "";
+  const prev = segments[segments.length - 2] || "";
 
-  // Capitalize (optional)
-  const pageTitle = pageTitles[currentPage] || "";
+  // Format helper
+  const formatTitle = (str) =>
+    str.replace(/[_-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  // Detect edit routes automatically
+  const detectEditTitle = (str) => {
+    if (str.toLowerCase().includes("edit")) {
+      const base = str.replace(/[_-]?edit/i, "").trim();
+      return `Edit ${formatTitle(base)}`;
+    }
+    return null;
+  };
+
+  // Detect if a segment looks like a dynamic ID (not in mapping and not "edit")
+  const isDynamicParam = (str) => {
+    return (
+      !pageTitles[str] && !str.toLowerCase().includes("edit") && str !== ""
+    );
+  };
+
+  let pageTitle = "";
+
+  if (pageTitles[last]) {
+    // Known static route
+    pageTitle = pageTitles[last];
+  } else if (detectEditTitle(last)) {
+    // Edit route detected from last segment
+    pageTitle = detectEditTitle(last);
+  } else if (pageTitles[prev] && isDynamicParam(last)) {
+    // Show the dynamic param as title instead of static mapping
+    pageTitle = formatTitle(last);
+  } else if (pageTitles[prev]) {
+    // Known previous segment
+    pageTitle = pageTitles[prev];
+  } else if (detectEditTitle(prev)) {
+    // Edit route detected from previous segment
+    pageTitle = detectEditTitle(prev);
+  } else if (isDynamicParam(last)) {
+    // If last is just a dynamic param (fallback)
+    pageTitle = formatTitle(last);
+  } else {
+    // Last fallback: format previous
+    pageTitle = formatTitle(prev);
+  }
   return (
     <>
       <header
         style={{ borderBottom: "2px solid #c0c0c077", boxShadow: "" }}
-        className="bg-white px-4 py-3 d-flex justify-content-between"
+        className="bg-white px-4 py-3 d-flex justify-content-between align-items-center"
       >
         <h3 className="fw-medium m-0 font-poppins">{pageTitle}</h3>
 
@@ -33,7 +76,8 @@ const Header = () => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img width={32} src={profile} alt="" /> <span>Naeem Miah</span>
+            <img width={32} src={profile} alt="" />{" "}
+            <span style={{ color: "#0C8AE6" }}>Naeem Miah</span>
           </button>
           <div className="dropdown-menu profile-dropdown shadow">
             <p style={{ color: "" }}>naeem@braina.live</p>

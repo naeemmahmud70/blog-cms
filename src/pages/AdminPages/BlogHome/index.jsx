@@ -1,8 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 const BlogHome = () => {
   return (
     <div>
-      <h1>Blogs home page </h1>
+      <div className="d-flex justify-content-between">
+        <h4>Blogs home page </h4>{" "}
+        <Link to="/admin/blogs/blog_edit/:sdfsdfg">Edit</Link>
+      </div>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis,
         perferendis? Odio illum natus possimus cumque, ducimus voluptas magni,

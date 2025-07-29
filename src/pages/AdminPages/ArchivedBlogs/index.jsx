@@ -3,7 +3,7 @@ import React from "react";
 const ArchivedBlogs = () => {
   return (
     <div>
-      <h1>Archived Blogs</h1>
+      <h4>Archived Blogs</h4>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
         molestiae inventore quae ullam voluptatem libero ea eius aperiam

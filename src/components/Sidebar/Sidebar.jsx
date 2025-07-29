@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import logo from "../assets/icon/logo.png";
-import blog from "../assets/icon/blog.png";
-import write from "../assets/icon/write.png";
-import draft from "../assets/icon/draft.png";
-import archive from "../assets/icon/archive.png";
-import admins from "../assets/icon/setting.png";
+import { NavLink } from "react-router-dom";
+import logo from "../../assets/icon/logo.png";
+import blog from "../../assets/icon/blog.png";
+import write from "../../assets/icon/write.png";
+import draft from "../../assets/icon/draft.png";
+import archive from "../../assets/icon/archive.png";
+import admins from "../../assets/icon/setting.png";
+import "./Sidebar.css";
 
 const Sidebar = () => {
   const data = [
@@ -14,6 +15,7 @@ const Sidebar = () => {
       title: "Blogs",
       link: "/admin/blogs",
       icon: blog,
+      exact: true,
     },
     {
       id: 2,
@@ -24,7 +26,7 @@ const Sidebar = () => {
     {
       id: 3,
       title: "Drafts",
-      link: "/admin/blogs/draft",
+      link: "/admin/blogs/drafts",
       icon: draft,
     },
     {
@@ -36,7 +38,7 @@ const Sidebar = () => {
     {
       id: 5,
       title: "Admins",
-      link: "/admin/admins-list",
+      link: "/admin/admins_list",
       icon: admins,
     },
   ];
@@ -51,14 +53,19 @@ const Sidebar = () => {
       </div>
       <div className="d-flex flex-column gap-3 mt-4">
         {data.map((item) => (
-          <Link
+          <NavLink
             key={item.id}
             to={item.link}
-            className="text-dark text-decoration-none font-nunito d-flex gap-2"
+            end={item.exact}
+            className={({ isActive }) =>
+              `text-dark text-decoration-none font-nunito d-flex gap-2 align-items-center px-2 py-1 ${
+                isActive ? "active-link" : ""
+              }`
+            }
           >
             <img src={item.icon} alt="" width={25} />
             {item.title}
-          </Link>
+          </NavLink>
         ))}
       </div>
     </div>
