@@ -1,12 +1,11 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../assets/icon/logo.png";
 import blog from "../../assets/icon/blog.png";
 import write from "../../assets/icon/write.png";
 import draft from "../../assets/icon/draft.png";
 import archive from "../../assets/icon/archive.png";
 import admins from "../../assets/icon/setting.png";
-import "./Sidebar.css";
 
 const Sidebar = () => {
   const data = [
@@ -15,7 +14,6 @@ const Sidebar = () => {
       title: "Blogs",
       link: "/admin/blogs",
       icon: blog,
-      exact: true,
     },
     {
       id: 2,
@@ -53,19 +51,14 @@ const Sidebar = () => {
       </div>
       <div className="d-flex flex-column gap-3 mt-4">
         {data.map((item) => (
-          <NavLink
+          <Link
             key={item.id}
             to={item.link}
-            end={item.exact}
-            className={({ isActive }) =>
-              `text-dark text-decoration-none font-nunito d-flex gap-2 align-items-center px-2 py-1 ${
-                isActive ? "active-link" : ""
-              }`
-            }
+            className="text-dark text-decoration-none font-nunito d-flex gap-2"
           >
             <img src={item.icon} alt="" width={25} />
             {item.title}
-          </NavLink>
+          </Link>
         ))}
       </div>
     </div>

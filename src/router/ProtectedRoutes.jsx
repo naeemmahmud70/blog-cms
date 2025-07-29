@@ -23,7 +23,7 @@ const ProtectedRoutes = () => {
         <Route path="blogs/drafts" element={<Drafts />} />
         <Route path="blogs/drafts/:id" element={<DynamicDraft />} />
         <Route path="blogs/drafts/draft-edit/:id" element={<EditDraft />} />
-        <Route path="/admins_list" element={<Admins />} />
+        <Route path="admins_list" element={<Admins />} />
       </Route>
     </Routes>
   );

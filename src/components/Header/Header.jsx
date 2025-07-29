@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import profile from "../../assets/icon/user.png";
+
 import "./Header.css";
+import Profile from "./Profile";
 
 const Header = () => {
   const location = useLocation();
@@ -67,22 +68,9 @@ const Header = () => {
         style={{ borderBottom: "2px solid #c0c0c077", boxShadow: "" }}
         className="bg-white px-4 py-3 d-flex justify-content-between align-items-center"
       >
-        <h3 className="fw-medium m-0 font-poppins">{pageTitle}</h3>
-
-        <div className="dropdown ">
-          <button
-            className="btn dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <img width={32} src={profile} alt="" />{" "}
-            <span style={{ color: "#0C8AE6" }}>Naeem Miah</span>
-          </button>
-          <div className="dropdown-menu profile-dropdown shadow">
-            <p style={{ color: "" }}>naeem@braina.live</p>
-            <button>Sign Out</button>
-          </div>
+        <h4 className="fw-medium m-0 font-poppins">{pageTitle}</h4>
+        <div className="d-none d-md-block">
+          <Profile />
         </div>
       </header>
     </>
