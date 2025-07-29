@@ -9,7 +9,7 @@ const ProtectedRoutes = () => {
     <Routes>
       <Route path="/" element={<AdminLayout />}>
         <Route path="blogs" element={<BlogHome />} />
-        <Route path="blogs/archived" element={<ArchivedBlogs />} />
+        <Route path="blogs/archives" element={<ArchivedBlogs />} />
       </Route>
     </Routes>
   );

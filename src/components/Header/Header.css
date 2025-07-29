@@ -1,0 +1,68 @@
+#header-style {
+    height: 80px;
+    padding: 16px 24px;
+    position: sticky !important;
+    top: 0;
+    background: #fff;
+    z-index: 3;
+}
+
+.company-logo img {
+    height: 42px;
+    width: 24px;
+}
+
+.company-logo h1 {
+    color: #161616;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    margin-left: 8px;
+}
+
+#profile-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.profile-dropdown {
+    padding: 12px !important;
+    text-align: center !important;
+    border: 0 !important;
+}
+
+.profile-dropdown p {
+    color: #141415;
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    margin: 0;
+
+
+}
+
+.profile-dropdown button {
+    border: 0;
+    background: #0C8AE6;
+    color: #fff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 100%;
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 22px;
+    margin-top: 10px;
+}
+
+.dropdown-toggle:focus,
+.dropdown-toggle.show {
+  border-color: rgba(0, 0, 0, 0.227) !important; 
+}

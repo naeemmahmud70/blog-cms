@@ -1,14 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 
 const AdminLayout = () => {
   return (
-    <div
-      style={{ display: "flex", width: "100%", gap: "0px" }}
-      className="flex h-screen w-100"
-    >
+    <div style={{ display: "flex", gap: "0px", height: "100vh" }} className="">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
