@@ -18,11 +18,11 @@ const ProtectedRoutes = () => {
         <Route path="blogs" element={<BlogHome />} />
         <Route path="blogs/:id" element={<DynamicBlog />} />
         <Route path="blogs/blog_edit/:id" element={<EditBlog />} />
-        <Route path="blogs/archives" element={<ArchivedBlogs />} />
-        <Route path="blogs/write_new_blog" element={<WriteNewBlog />} />
-        <Route path="blogs/drafts" element={<Drafts />} />
-        <Route path="blogs/drafts/:id" element={<DynamicDraft />} />
-        <Route path="blogs/drafts/draft-edit/:id" element={<EditDraft />} />
+        <Route path="archives" element={<ArchivedBlogs />} />
+        <Route path="write_new_blog" element={<WriteNewBlog />} />
+        <Route path="drafts" element={<Drafts />} />
+        <Route path="drafts/:id" element={<DynamicDraft />} />
+        <Route path="drafts/draft-edit/:id" element={<EditDraft />} />
         <Route path="admins_list" element={<Admins />} />
       </Route>
     </Routes>

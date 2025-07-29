@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../../assets/icon/logo.png";
 import blog from "../../assets/icon/blog.png";
 import write from "../../assets/icon/write.png";
 import draft from "../../assets/icon/draft.png";
 import archive from "../../assets/icon/archive.png";
 import admins from "../../assets/icon/setting.png";
+import "./Sidebar.css"
 
 const Sidebar = () => {
   const data = [
@@ -18,19 +19,19 @@ const Sidebar = () => {
     {
       id: 2,
       title: "Write Blog",
-      link: "/admin/blogs/write_new_blog",
+      link: "/admin/write_new_blog",
       icon: write,
     },
     {
       id: 3,
       title: "Drafts",
-      link: "/admin/blogs/drafts",
+      link: "/admin/drafts",
       icon: draft,
     },
     {
       id: 1,
       title: "Archives",
-      link: "/admin/blogs/archives",
+      link: "/admin/archives",
       icon: archive,
     },
     {
@@ -51,14 +52,19 @@ const Sidebar = () => {
       </div>
       <div className="d-flex flex-column gap-3 mt-4">
         {data.map((item) => (
-          <Link
+          <NavLink
             key={item.id}
             to={item.link}
-            className="text-dark text-decoration-none font-nunito d-flex gap-2"
+            end={item.customMatch} // only blogs has strict match
+            className={({ isActive }) =>
+              `text-dark text-decoration-none font-nunito d-flex gap-2 align-items-center px-2 py-1 ${
+                isActive ? "active-link" : ""
+              }`
+            }
           >
             <img src={item.icon} alt="" width={25} />
             {item.title}
-          </Link>
+          </NavLink>
         ))}
       </div>
     </div>

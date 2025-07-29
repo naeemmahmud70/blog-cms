@@ -6,7 +6,7 @@ const Drafts = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h4>Your Drafts</h4>{" "}
-        <Link to="/admin/blogs/drafts/draft-edit/:dfgdsfghtr">Edit</Link>
+        <Link to="/admin/drafts/draft-edit/:dfgdsfghtr">Edit</Link>
       </div>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa eos
