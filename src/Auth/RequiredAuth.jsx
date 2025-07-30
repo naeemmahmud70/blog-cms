@@ -4,11 +4,10 @@ import { getUserDetails } from "../services/userServices";
 
 // eslint-disable-next-line react/prop-types
 const RequireAuth = ({ children }) => {
-  console.log("user", "enter");
   const user = getUserDetails();
   const location = useLocation();
-  console.log("user", user.email);
-  if (!user.email) {
+  console.log("user", user?.email);
+  if (user?.role !== "admin") {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return children;

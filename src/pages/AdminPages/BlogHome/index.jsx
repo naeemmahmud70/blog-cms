@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getAllBlogs } from "../../../services/userServices";
+import { LoadingContext } from "../../../App";
+
 const BlogHome = () => {
+  const { setLoading } = useContext(LoadingContext);
+  const [blogData, setBlogData] = useState([]);
+
+  useEffect(() => {
+    handleGetAllBlogs();
+  }, []);
+
+  const handleGetAllBlogs = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllBlogs();
+      if (data.length) {
+        setBlogData(data);
+      }
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    } catch (error) {
+      // setLoading(false);
+      console.log("err", error);
+    }
+  };
+
+  console.log("blogData", blogData);
   return (
     <div>
       <div className="d-flex justify-content-between">

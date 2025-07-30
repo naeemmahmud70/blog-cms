@@ -42,6 +42,7 @@ const signupSchema = z.object({
     .regex(/[!@#$%^&*(),.?":{}|<>]/, {
       message: "Password must contain at least one special character",
     }),
+  role: z.string(),
 });
 
 const SignUpPage = () => {
@@ -122,6 +123,14 @@ const SignUpPage = () => {
                 {...register("password", { required: true })}
               />
               {errors.password && <span>{errors.password.message}</span>}
+            </div>
+            <div className="login-input">
+              <input
+                type="hidden"
+                placeholder="admin/user"
+                defaultValue="admin"
+                {...register("role", { required: true })}
+              />
             </div>
             <div className="login-button">
               <button type="submit">Sign Up</button>

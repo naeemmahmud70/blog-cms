@@ -118,7 +118,9 @@ const Login = () => {
 
         <p className="sign-up-link">
           Don&apos;t have an account yet ?{" "}
-          <Link className="link-color">Sign Up</Link>
+          <Link to="/signup" className="link-color">
+            Sign Up
+          </Link>
         </p>
       </div>
     </section>

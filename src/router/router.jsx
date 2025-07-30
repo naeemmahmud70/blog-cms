@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
-import { ROUTES } from "./Routes";
 import RequireAuth from "../Auth/RequiredAuth";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { CheckUserLogin } from "../Auth/CheckUserLogin";
@@ -11,7 +10,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route
-        path={ROUTES.root}
+        path="/"
         element={
           <CheckUserLogin>
             {" "}
@@ -20,7 +19,7 @@ const AppRouter = () => {
         }
       />
       <Route
-        path={ROUTES.login}
+        path="/login"
         element={
           <CheckUserLogin>
             {" "}
@@ -28,7 +27,7 @@ const AppRouter = () => {
           </CheckUserLogin>
         }
       />
-      <Route path={ROUTES.signUp} element={<SignUpPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
       <Route
         path="/admin/*"
         element={
