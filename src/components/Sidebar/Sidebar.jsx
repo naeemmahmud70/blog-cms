@@ -6,7 +6,8 @@ import write from "../../assets/icon/write.png";
 import draft from "../../assets/icon/draft.png";
 import archive from "../../assets/icon/archive.png";
 import admins from "../../assets/icon/setting.png";
-import "./Sidebar.css"
+import "./Sidebar.css";
+import Profile from "../Header/Profile";
 
 const Sidebar = () => {
   const data = [
@@ -42,20 +43,22 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div
-      style={{ minWidth: "200px", background: "#c0c0c019" }}
-      className="px-4 py-3"
-    >
-      <div className="d-flex align-items-center gap-2">
-        <img src={logo} height={45} width={25} alt="" />
-        <h3 className="font-mulish m-0">BAAI</h3>
+    <div className="px-4 py-3 sticky-md-top sidebar-section">
+      <div className="d-flex justify-content-between">
+        <div className="d-flex align-items-center gap-2">
+          <img src={logo} height={45} width={25} alt="" />
+          <h2 className="font-mulish m-0">BAAI</h2>
+        </div>
+        <div className="d-block d-md-none">
+          <Profile />
+        </div>
       </div>
       <div className="d-flex flex-column gap-3 mt-4">
         {data.map((item) => (
           <NavLink
             key={item.id}
             to={item.link}
-            end={item.customMatch} // only blogs has strict match
+            end={item.customMatch} 
             className={({ isActive }) =>
               `text-dark text-decoration-none font-nunito d-flex gap-2 align-items-center px-2 py-1 ${
                 isActive ? "active-link fw-medium" : ""

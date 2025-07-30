@@ -1,4 +1,19 @@
+.sidebar-section {
+  min-width: 200px;
+  background: "#c0c0c019";
+  height: 100vh;
+}
+
 .active-link {
   border-left: 4px solid #007bff;
-  background-color: rgba(0, 123, 255, 0.1); 
+  background-color: rgba(0, 123, 255, 0.1);
+  font-weight: 600;
+}
+
+@media screen and (max-width:600px) {
+  .sidebar-section {
+    min-width: 200px;
+    background: "#c0c0c019";
+    height: auto;
+  }
 }

@@ -18,7 +18,6 @@ const Header = () => {
   const last = segments[segments.length - 1] || "";
   const prev = segments[segments.length - 2] || "";
 
-
   const formatTitle = (str) =>
     str.replace(/[_-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
@@ -59,9 +58,11 @@ const Header = () => {
     <>
       <header
         style={{ borderBottom: "2px solid #c0c0c077", boxShadow: "" }}
-        className="bg-white px-4 py-3 d-flex justify-content-between align-items-center"
+        className="bg-white sticky-top top-0 z-2 px-4 py-3 d-flex justify-content-between align-items-center"
       >
-        <h4 className="fw-normal m-0 font-poppins light-black-text">{pageTitle}</h4>
+        <h4 className="fw-normal m-0 font-poppins light-black-text">
+          {pageTitle}
+        </h4>
         <div className="d-none d-md-block">
           <Profile />
         </div>

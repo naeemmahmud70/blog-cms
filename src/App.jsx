@@ -1,10 +1,9 @@
-import React, { createContext, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import AppRouter from "./router/Router";
 import { ToastContainer } from "react-toastify";
 import Loading from "./components/Loading/Loading";
-
-export const LoadingContext = createContext();
+import { LoadingContext } from "./context/LoadingContext";
 
 function App() {
   const [loading, setLoading] = useState(false);

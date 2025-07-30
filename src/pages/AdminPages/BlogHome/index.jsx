@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllBlogs } from "../../../services/userServices";
-import { LoadingContext } from "../../../App";
+import { LoadingContext } from "../../../context/LoadingContext";
 
 const BlogHome = () => {
   const { setLoading } = useContext(LoadingContext);
@@ -22,7 +22,7 @@ const BlogHome = () => {
         setLoading(false);
       }, 3000);
     } catch (error) {
-      // setLoading(false);
+      setLoading(false);
       console.log("err", error);
     }
   };
