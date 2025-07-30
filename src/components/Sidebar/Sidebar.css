@@ -1,5 +1,4 @@
 .active-link {
-  border-left: 4px solid #007bff; /* Blue border on left */
-  background-color: rgba(0, 123, 255, 0.1); /* Light blue background */
-  font-weight: 600; /* Make text bolder */
+  border-left: 4px solid #007bff;
+  background-color: rgba(0, 123, 255, 0.1); 
 }

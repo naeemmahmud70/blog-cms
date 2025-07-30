@@ -13,7 +13,7 @@ const Profile = () => {
     navigate("/login");
   };
   return (
-    <div className="dropdown ">
+    <div className="dropdown">
       <button
         className="btn dropdown-toggle d-flex align-items-center gap-1"
         type="button"
@@ -21,13 +21,18 @@ const Profile = () => {
         aria-expanded="false"
       >
         <img width={32} src={profile} alt="" />{" "}
-        <span style={{ color: "#0C8AE6" }} className="d-none d-md-block">
+        <span className="d-none d-md-block blue-text text-base font-nunito fw-noral m-0 ">
           Naeem Miah
         </span>
       </button>
-      <div className="dropdown-menu profile-dropdown shadow">
-        <p style={{ color: "" }}>naeem@braina.live</p>
-        <button onClick={handleLogout}>Sign Out</button>
+      <div className="dropdown-menu profile-dropdown shadow p-3 text-center border-0">
+        <p className="text-base font-nunito m-0">naeem@braina.live</p>
+        <button
+          onClick={handleLogout}
+          className="border-0 blue-background text-white rounded py-1 px-2 w-100 text-base font-nunito mt-2"
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   );

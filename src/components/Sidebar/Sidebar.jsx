@@ -48,7 +48,7 @@ const Sidebar = () => {
     >
       <div className="d-flex align-items-center gap-2">
         <img src={logo} height={45} width={25} alt="" />
-        <h2 className="font-mulish m-0">BAAI</h2>
+        <h3 className="font-mulish m-0">BAAI</h3>
       </div>
       <div className="d-flex flex-column gap-3 mt-4">
         {data.map((item) => (
@@ -58,7 +58,7 @@ const Sidebar = () => {
             end={item.customMatch} // only blogs has strict match
             className={({ isActive }) =>
               `text-dark text-decoration-none font-nunito d-flex gap-2 align-items-center px-2 py-1 ${
-                isActive ? "active-link" : ""
+                isActive ? "active-link fw-medium" : ""
               }`
             }
           >
