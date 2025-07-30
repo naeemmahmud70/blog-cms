@@ -80,45 +80,66 @@ const Login = () => {
     // }
   };
   return (
-    <section className="login-form-container">
-      <div className="login-form">
-        <div className="form-header">
-          <img src={logo} alt="" />
-          <h1>BAAI</h1>
+    <section className="vh-100 w-100 d-flex justify-content-center align-items-center">
+      <div
+        className="login-form light-background p-4 p-md-5 rounded-3"
+        style={{ maxWidth: "500px" }}
+      >
+        <div className="d-flex justify-content-center align-items-center gap-2">
+          <img height={50} width={28.56} src={logo} alt="" />
+          <h1 className="fw-normal m-0 font-mulish secondary-black-text brand-text">
+            BAAI
+          </h1>
         </div>
         <div>
-          <p className="login-label">Login</p>
+          <p className="fs-5 primary-black-text fw-normal text-center my-1">Login</p>
         </div>
         {/* login form */}
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="login-input">
+            <div className="login-input mt-3 light-black-text font-nunito text-xs">
               <label htmlFor="">Enter Email</label> <br />
               <input
                 type="email"
                 placeholder="john@doe.com"
+                className="w-100 py-2 px-3 rounded bg-white"
                 {...register("email", { required: true })}
               />
-              {errors.email && <span>{errors.email.message}</span>}
+              {errors.email && (
+                <span className="text-xs text-danger fw-medium font-poppins">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
-            <div className="login-input">
+            <div className="login-input mt-3 light-black-text font-nunito text-xs">
               <label htmlFor="">Please enter your password!</label> <br />
               <input
                 type="password"
                 placeholder="Enter password"
+                className="w-100 py-2 px-3 rounded bg-white"
                 {...register("password", { required: true })}
               />
-              {errors.password && <span>{errors.password.message}</span>}
+              {errors.password && (
+                <span className="text-xs text-danger fw-medium font-poppins">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
-            <div className="login-button">
-              <button type="submit">Login</button>
+            <div className="login-button mt-4">
+              <button
+                type="submit"
+                className="border-0 w-100 py-2 px-3 rounded tex-base text-white fw-normal font-nunito blue-background"
+                style={{ height: "46px" }}
+              >
+                Login
+              </button>
             </div>
           </form>
         </div>
 
-        <p className="sign-up-link">
+        <p className="text-center mb-0 mt-3 font-poppins text-sm">
           Don&apos;t have an account yet ?{" "}
-          <Link to="/signup" className="link-color">
+          <Link to="/signup" className="blue-text fw-medium">
             Sign Up
           </Link>
         </p>
