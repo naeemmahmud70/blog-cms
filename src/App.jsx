@@ -1,11 +1,18 @@
+import React, { useState } from "react";
 import "./App.css";
 import AppRouter from "./router/Router";
+import { ToastContainer } from "react-toastify";
+import Loading from "./components/Loading/Loading";
+import { LoadingContext } from "./context/LoadingContext";
 
 function App() {
+  const [loading, setLoading] = useState(false);
   return (
-    <div>
+    <LoadingContext.Provider value={{ loading, setLoading }}>
       <AppRouter />
-    </div>
+      {loading && <Loading />}
+      <ToastContainer autoClose={2000} />
+    </LoadingContext.Provider>
   );
 }
 

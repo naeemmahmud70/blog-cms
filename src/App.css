@@ -2,3 +2,103 @@
   margin: 0;
   padding: 0;
 }
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-mulish {
+  font-family: 'Mulish', sans-serif;
+}
+
+.font-archivo {
+  font-family: 'Archivo', sans-serif;
+}
+
+.font-nunito {
+  font-family: 'Nunito', sans-serif;
+}
+
+/* text sizes */
+.text-xs-sm {
+  font-size: 12px;
+}
+
+.text-xs {
+  font-size: 13px;
+}
+
+.text-sm {
+  font-size: 14px;
+}
+
+.text-base {
+  font-size: 16px;
+}
+
+.text-md {
+  font-size: 18px;
+}
+
+.text-lg {
+  font-size: 20px;
+}
+
+.text-xl {
+  font-size: 24px;
+}
+
+.text-xxl {
+  font-size: 28px;
+}
+
+.text-3xl {
+  font-size: 32px;
+}
+
+.text-4xl {
+  font-size: 36px;
+}
+
+.text-5xl {
+  font-size: 40px;
+}
+
+.text-6xl {
+  font-size: 44px;
+}
+
+.text-7xl {
+  font-size: 48px;
+}
+
+.brand-text {
+  font-size: 38px;
+}
+
+/* text color */
+.primary-black-text {
+  color: #000;
+}
+
+.secondary-black-text {
+  color: #161616;
+}
+
+.light-black-text {
+  color: #181818;
+}
+
+/* blue color */
+.blue-text {
+  color: #0C8AE6;
+}
+
+/* backgrounds colors */
+.light-background {
+  background: #F3F3F5;
+}
+
+.blue-background {
+  background: #0C8AE6;
+}

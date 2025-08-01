@@ -1,5 +1,4 @@
 import React from "react";
-import "./index.css";
 import logo from "../../assets/icon/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -10,7 +9,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setUserDetails } from "../../services/userServices";
 
-const loginSchema = z.object({
+const signupSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Full name is required")
+    .min(4, "Name should be at least 4 characters"),
   email: z
     .string()
     .min(1, "Email is required")
@@ -38,16 +41,17 @@ const loginSchema = z.object({
     .regex(/[!@#$%^&*(),.?":{}|<>]/, {
       message: "Password must contain at least one special character",
     }),
+  role: z.string(),
 });
 
-const Login = () => {
+const SignUpPage = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(signupSchema),
   });
   const navigate = useNavigate();
 
@@ -56,7 +60,7 @@ const Login = () => {
     if (data.email && data.password) {
       setUserDetails(data);
       toast.dismiss();
-      toast.success("Logged in Successfully!");
+      toast.success("Sign in Successfully!");
       navigate("/admin/blogs");
       reset();
     }
@@ -92,11 +96,27 @@ const Login = () => {
           </h1>
         </div>
         <div>
-          <p className="fs-5 primary-black-text fw-normal text-center my-1">Login</p>
+          <p className="fs-5 primary-black-text fw-normal text-center my-1">
+            Sign Up
+          </p>
         </div>
         {/* login form */}
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="login-input mt-3 light-black-text font-nunito text-xs">
+              <label htmlFor="">Full Name</label> <br />
+              <input
+                type="name"
+                placeholder="John Doe"
+                className="w-100 py-2 px-3 rounded bg-white"
+                {...register("name", { required: true })}
+              />
+              {errors.email && (
+                <span className="text-xs text-danger fw-medium font-poppins">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
             <div className="login-input mt-3 light-black-text font-nunito text-xs">
               <label htmlFor="">Enter Email</label> <br />
               <input
@@ -124,6 +144,11 @@ const Login = () => {
                   {errors.password.message}
                 </span>
               )}
+              <input
+                type="hidden"
+                defaultValue="admin"
+                {...register("role", { required: true })}
+              />
             </div>
             <div className="login-button mt-4">
               <button
@@ -131,16 +156,16 @@ const Login = () => {
                 className="border-0 w-100 py-2 px-3 rounded tex-base text-white fw-normal font-nunito blue-background"
                 style={{ height: "46px" }}
               >
-                Login
+                Sign Up
               </button>
             </div>
           </form>
         </div>
 
         <p className="text-center mb-0 mt-3 font-poppins text-sm">
-          Don&apos;t have an account yet ?{" "}
-          <Link to="/signup" className="blue-text fw-medium">
-            Sign Up
+          Already have an account?{" "}
+          <Link to="/login" className="blue-text fw-medium">
+            Login
           </Link>
         </p>
       </div>
@@ -148,4 +173,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUpPage;

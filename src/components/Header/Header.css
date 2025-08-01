@@ -1,0 +1,4 @@
+.dropdown-toggle:focus,
+.dropdown-toggle.show {
+    border-color: rgba(0, 0, 0, 0.227) !important;
+}
