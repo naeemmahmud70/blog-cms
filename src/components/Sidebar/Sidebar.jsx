@@ -30,7 +30,7 @@ const Sidebar = () => {
       icon: draft,
     },
     {
-      id: 1,
+      id: 4,
       title: "Archives",
       link: "/admin/archives",
       icon: archive,

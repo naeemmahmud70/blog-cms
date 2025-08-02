@@ -1,0 +1,293 @@
+/* Text color white inside the editor */
+.quill-white-text .ql-editor {
+    color: white !important;
+    font-size: 18px;
+    padding: 10px;
+    font-weight: 300;
+}
+
+.back-to-home-bg {
+    height: 64px;
+}
+
+.write-blog-section {
+    height: auto;
+}
+
+.back-to-home {
+    font-weight: 400;
+    font-size: 16px;
+    color: #AAAAB1;
+    padding-top: 4px;
+}
+
+.left-arrow {
+    width: 35px;
+    padding-bottom: 3px;
+    margin-right: 10px;
+}
+
+
+.cover-img-bg {
+    width: 516;
+    height: 360px;
+    background: #EAEAEB;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.cover-select-image {
+    position: relative;
+    top: 42%;
+    left: 10%;
+}
+
+.selected-cover-img {
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    z-index: -1;
+}
+
+.click-to-add-cover {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    position: relative;
+    left: 5%;
+}
+
+.blog-header-post-left-space {
+    margin-left: 1.5rem;
+}
+
+.post-on-text {
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 22px;
+    color: #CACACE;
+}
+
+.post-on {
+    padding: 4px 15px;
+    background: #FFFFFF;
+    border-radius: 4px;
+    width: 170px;
+    height: 40px;
+    margin-right: 1rem;
+    margin-top: -.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#time-div {
+    width: 120px;
+}
+
+.post-date {
+    font-weight: 400;
+    font-size: 12px;
+    color: #313135;
+    padding-top: 5px;
+    position: relative;
+    top: 5px;
+    text-align: center;
+}
+
+.add-tag-btn {
+    border: 0;
+    height: 35px;
+    width: 120px;
+    padding: 8px;
+    padding-top: 10px;
+    background: #1974CE;
+    border-radius: 4px;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 16px;
+    color: #FFFFFF;
+}
+
+
+.tags-input input {
+    border: 0;
+    height: 31px;
+    border-radius: 4px;
+    margin-top: 2px;
+    margin-left: 5px;
+    width: 120px;
+    padding-left: 5px;
+    font-size: 13px;
+}
+
+.tags-input input:focus {
+    outline: 0;
+}
+
+
+.tag-plus-icon {
+    width: 15px;
+    margin-left: .5rem;
+    padding-bottom: 3px;
+}
+
+.article-title-input input {
+    border: 0;
+    width: 100%;
+    height: 70px;
+    margin-top: 1rem;
+    background: none;
+    font-weight: 700;
+    font-size: 48px;
+    color: #FFFFFF;
+}
+
+.article-title-input input:focus {
+    outline: 0;
+}
+
+.article-title-input input::placeholder {
+    font-weight: 500;
+    font-size: 48px;
+    color: #FFFFFF;
+}
+
+.publish-article-btn {
+    border: 0;
+    padding: 8px 48px;
+    padding-bottom: 10px;
+    height: 52px;
+    background: #1974CE;
+    border-radius: 4px;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFFFF;
+}
+
+.write-blog-header {
+    border-radius: 4px;
+}
+
+.save-as-draft-btn {
+    padding: 8px 48px;
+    padding-bottom: 10px;
+    height: 48px;
+    background: black;
+    border-radius: 4px;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 22px;
+    color: #fff;
+    border: 1px solid #fff;
+    margin-left: 1rem;
+}
+
+
+/* Write main contant */
+.post-blog-container {
+    width: 85%;
+}
+
+.write {
+    padding-top: 50px;
+}
+
+.writeImg {
+    margin-left: 150px;
+    height: 250px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.writeForm {
+    position: relative;
+}
+
+.writeFormGroup {
+    display: flex;
+    align-items: center;
+}
+
+.file-upload-btn {
+    position: relative;
+    margin-top: .8rem;
+    margin-left: .5rem;
+    font-size: 15px;
+
+}
+
+.file-upload-btn::-webkit-file-upload-button {
+    padding: 3px 0px;
+    padding-bottom: 5px;
+    border: 0;
+    padding: 2px 12px;
+    border-radius: 2px;
+    padding-bottom: 4px;
+}
+
+
+.writeIcon {
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
+    border: 1px solid;
+    border-radius: 50%;
+    color: rgb(129, 125, 125);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    top: 5px;
+
+}
+
+.writeInput {
+    font-size: 30px;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    background: none;
+    color: #fff;
+}
+
+.writeText {
+    font-size: 20px;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    font-weight: 300;
+    overflow: hidden;
+}
+
+.writeInput::placeholder {
+    color: rgb(189, 185, 185);
+    font-weight: 400;
+}
+
+.writeText::placeholder {
+    color: rgb(189, 185, 185);
+    font-weight: 400;
+}
+
+.writeInput:focus {
+    outline-style: none;
+}
+
+
+.title-input {
+    position: relative;
+}
+
+.title-input:focus {
+    background: none;
+}
+
+.publish-btn {
+    margin-left: 10px;
+    padding: 8px 12px 10px 10px;
+    border-radius: 5px;
+    border: 0 !important;
+}
