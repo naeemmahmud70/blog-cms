@@ -15,11 +15,16 @@ import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
+
 const WriteBlogPost = () => {
   const { setLoading } = useContext(LoadingContext);
   const quillRefs = useRef([]);
+  const { quill, quillRef } = useQuill();
   const hostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
   console.log("hostingKey", hostingKey);
+  const [editorHtml, setEditorHtml] = useState("");
 
   // generate image url for cover picture by hosting free image hosting server
   const [coverImg, setCoverImg] = useState(null);
@@ -28,6 +33,8 @@ const WriteBlogPost = () => {
     const imageData = new FormData();
     imageData.set("key", hostingKey);
     imageData.append("image", event.target.files[0]);
+    console.log("imgData", imageData);
+    console.log("imgData", event.target.files[0]);
 
     axios
       .post("https://api.imgbb.com/1/upload", imageData)
@@ -41,6 +48,23 @@ const WriteBlogPost = () => {
 
     // const url = await hostImage(event);
     // setCoverImg(url);
+  };
+
+  const generateImageUrl = async (file) => {
+    try {
+      const imageData = new FormData();
+      imageData.set("key", hostingKey);
+      imageData.append("image", file);
+
+      const response = await axios.post(
+        "https://api.imgbb.com/1/upload",
+        imageData
+      );
+      return response.data.data.display_url;
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return null;
+    }
   };
 
   // get local time
@@ -132,20 +156,22 @@ const WriteBlogPost = () => {
       blogTitle: blogTitle.title,
       blogContent: blogInputs,
     };
-    try {
-      setLoading(true);
-      const response = await postBlog(fullBloglogData);
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
-        toast.success("Blog posted successfully!");
-        navigate("/dashboard/blogs");
-      }
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+    console.log("quill", quillRef.current);
+    console.log("fullBloglogData", fullBloglogData);
+    // try {
+    //   setLoading(true);
+    //   const response = await postBlog(fullBloglogData);
+    //   if (response.error) {
+    //     toast.dismiss();
+    //     toast.error(response?.error?.message || "Something went worng!");
+    //   } else {
+    //     toast.success("Blog posted successfully!");
+    //     navigate("/dashboard/blogs");
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   setLoading(false);
+    // }
     setLoading(false);
     event.preventDefault();
   };
@@ -207,6 +233,50 @@ const WriteBlogPost = () => {
       }
     });
   }, [blogInputs?.length]);
+
+  // Insert Image(selected by user) to quill
+  const insertToEditor = (url) => {
+    const range = quill.getSelection();
+    quill.insertEmbed(range.index, "image", url);
+  };
+
+  // Upload Image to Image Server such as AWS S3, Cloudinary, Cloud Storage, etc..
+  const saveToServer = async (file) => {
+    const url = await generateImageUrl(file);
+    console.log("url", url);
+     insertToEditor(url);
+  };
+
+  // Open Dialog to select Image File
+  const selectLocalImage = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files[0];
+      console.log("files", file);
+      saveToServer(file);
+    };
+  };
+
+  useEffect(() => {
+    if (quill) {
+      // Add custom handler for Image Upload
+      quill.getModule("toolbar").addHandler("image", selectLocalImage);
+    }
+  }, [quill]);
+
+  useEffect(() => {
+    if (quill) {
+      // Listen to text change events
+      quill.on("text-change", () => {
+        setEditorHtml(quill.root.innerHTML); // Get HTML content
+      });
+    }
+  }, [quill]);
+
   return (
     <section>
       <section className="back-to-home-bg d-flex justify-content-center neutral-black-bg">
@@ -396,7 +466,7 @@ const WriteBlogPost = () => {
                         onKeyPress={handleKeyPress}
                       /> */}
 
-                      <ReactQuill
+                      {/* <ReactQuill
                         ref={(el) => (quillRefs.current[index] = el)}
                         className="quill-white-text"
                         style={{ width: "100%", margin: "5px", color: "white" }}
@@ -416,7 +486,17 @@ const WriteBlogPost = () => {
                           ],
                         }}
                         placeholder="Type the description..."
-                      />
+                      /> */}
+
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 300,
+                          border: "1px solid lightgray",
+                        }}
+                      >
+                        <div ref={quillRef} />
+                      </div>
 
                       <button
                         type="button"
@@ -433,6 +513,12 @@ const WriteBlogPost = () => {
             </section>
           </form>
         </div>
+      </section>
+      <section>
+        <div
+          style={{ padding: "1rem", border: "1px solid #ccc", minHeight: 100, width:"100%" }}
+          dangerouslySetInnerHTML={{ __html: editorHtml }}
+        />
       </section>
     </section>
   );
