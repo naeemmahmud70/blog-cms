@@ -56,10 +56,7 @@ const Header = () => {
   }
   return (
     <>
-      <header
-        style={{ borderBottom: "2px solid #c0c0c077", boxShadow: "" }}
-        className="bg-white sticky-top top-0 z-2 px-4 py-3 d-flex justify-content-between align-items-center"
-      >
+      <header className="bg-white header-styles sticky-top top-0 z-2 px-4 py-3 d-flex justify-content-between align-items-center">
         <h4 className="fw-normal m-0 font-poppins light-black-text">
           {pageTitle}
         </h4>

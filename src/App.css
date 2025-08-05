@@ -89,6 +89,11 @@
   color: #181818;
 }
 
+/* gray color  */
+.light-gray {
+  color: #AAAAB1
+}
+
 /* blue color */
 .blue-text {
   color: #0C8AE6;
@@ -97,6 +102,10 @@
 /* backgrounds colors */
 .light-background {
   background: #F3F3F5;
+}
+
+.gray-background {
+  background: #EAEAEB;
 }
 
 .blue-background {

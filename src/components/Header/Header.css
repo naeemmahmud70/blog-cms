@@ -1,3 +1,7 @@
+.header-styles {
+    border-bottom: 2px solid #c0c0c077;
+}
+
 .dropdown-toggle:focus,
 .dropdown-toggle.show {
     border-color: rgba(0, 0, 0, 0.227) !important;

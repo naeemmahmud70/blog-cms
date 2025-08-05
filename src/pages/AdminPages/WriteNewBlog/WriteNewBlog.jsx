@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./WriteBlogPost.css";
+import "../../../App.css";
+// import "../BlogHome/BlogHome.css";
 import { Link } from "react-router-dom";
 import arrow from "../../../assets/icon/left-arrow.png";
 import selectImg from "../../../assets/icon/select-img.png";
@@ -47,6 +49,10 @@ const WriteBlogPost = () => {
     let newTags = [...tagInputs];
     newTags[i][e.target.name] = e.target.value;
     setTagInputs(newTags);
+  };
+
+  const handletagRemove = (index) => {
+    console.log(index);
   };
 
   const handleTitleChange = (e) => {
@@ -142,137 +148,142 @@ const WriteBlogPost = () => {
 
   return (
     <section>
-      <section className="back-to-home-bg d-flex justify-content-center neutral-black-bg w-full">
-        <div className="w-100 d-flex align-items-center mt-5">
-          <div className="d-flex align-items-center">
-            <Link to="/dashboard/blogs">
-              <img className="left-arrow" src={arrow} alt="" />
-            </Link>
-            <p className="back-to-home">Back to home</p>
-          </div>
+      <section>
+        <div className="d-flex gap-2 align-items-center mb-3">
+          <Link to="/dashboard/blogs">
+            <img className="w-100" src={arrow} alt="back" />
+          </Link>
+          <p className="light-gray text-base m-0 p-0">Back to home</p>
         </div>
       </section>
 
-      <section className="d-flex justify-content-center neutral-black-bg">
-        <div className=" w-100">
+      <section className="d-flex justify-content-center">
+        <div className="w-100">
           <form>
-            <section className="write-blog-header secondary-black-fade-bg py-5">
-              <div className="">
-                <div className="row">
-                  <div className="col-md-5">
-                    {coverImg ? (
-                      <div className="cover-img-bg">
-                        <img
-                          className="selected-cover-img"
-                          src={coverImg}
-                          alt=""
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <label
-                          htmlFor="coverPicInput"
-                          className="cover-img-bg d-flex align-items-center justify-content-center"
-                        >
-                          <div>
-                            <p className="text-center click-to-add-cover">
-                              Click to Add Article Cover
-                            </p>
-                          </div>
-                          <div className="d-flex align-items-end justify-content-end cover-select-image">
-                            <img src={selectImg} alt="" />
-                          </div>
-                        </label>
-                        <input
-                          onChange={uploadCoverImg}
-                          id="coverPicInput"
-                          type="file"
-                          style={{ display: "none" }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-md-7">
-                    <div className="blog-header-post-left-space h-100 d-flex align-items-start flex-column">
-                      <div>
+            <section className="write-blog-header ">
+              <div className="row px-2 pb-4 pb-lg-0">
+                <div className="col-lg-5 p-4">
+                  {coverImg ? (
+                    <div className="cover-img-bg gray-background rounded-2">
+                      <img
+                        className="selected-cover-img w-100 h-100 rounded-2"
+                        src={coverImg}
+                        alt=""
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label
+                        htmlFor="coverPicInput"
+                        className="cover-img-bg gray-background rounded-2 d-flex align-items-center justify-content-center position-relative"
+                      >
                         <div>
-                          <div>
-                            <p className="post-on-text"> Post On:</p>
-                            <div className="d-flex">
-                              <div className="post-on">
-                                <p className="post-date">{fullDate}</p>
-                                <img src={dateIcon} alt="" />
-                              </div>
-                              <div id="time-div" className="post-on">
-                                <p className="post-date">{time}</p>
-                                <img src={timeIcon} alt="" />
-                              </div>
-                            </div>
+                          <p className="text-poppins light-black-text text-lg text-center fw-bold ">
+                            Click to Add Article Cover
+                          </p>
+                        </div>
+                        <div className="position-absolute end-0 bottom-0 p-3">
+                          <img src={selectImg} alt="select-image" />
+                        </div>
+                      </label>
+                      <input
+                        onChange={uploadCoverImg}
+                        id="coverPicInput"
+                        type="file"
+                        style={{ display: "none" }}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="col-lg-7 px-4 py-0 py-lg-4">
+                  <div className=" h-100 d-flex flex-column">
+                    <div>
+                      <div className="w-100">
+                        <p className="text-base text-light-black-text font-nunito mb-2">
+                          {" "}
+                          Post On:
+                        </p>
+                        <div className="d-flex">
+                          <div className="post-on">
+                            <p className="post-date">{fullDate}</p>
+                            <img src={dateIcon} alt="" />
+                          </div>
+                          <div id="time-div" className="post-on">
+                            <p className="post-date">{time}</p>
+                            <img src={timeIcon} alt="" />
                           </div>
                         </div>
-                        <div>
-                          <p
-                            style={{ marginBottom: "7px" }}
-                            className="post-on-text mt-3"
-                          >
-                            Tags:
-                          </p>
+                      </div>
 
-                          <div className="d-flex">
-                            <div>
-                              <button
-                                type="button"
-                                onClick={addTagFields}
-                                className="add-tag-btn"
-                              >
-                                Add Tags{" "}
-                                <img
-                                  className="tag-plus-icon"
-                                  src={plus}
-                                  alt=""
-                                />
-                              </button>
-                            </div>
-                            <div className="tags-input">
-                              {tagInputs.map((data, index) => (
+                      <div>
+                        <p
+                          style={{ marginBottom: "-12px" }}
+                          className="text-base text-light-black-text font-nunito mt-3"
+                        >
+                          Tags:
+                        </p>
+
+                        <div className="d-flex flex-wrap gap-2">
+                          <div>
+                            <button
+                              type="button"
+                              onClick={addTagFields}
+                              className="add-tag-btn border-0 mt-3 p-2 rounded-1 text-xs text-white font-poppins"
+                            >
+                              Add Tags{" "}
+                              <img
+                                className="tag-plus-icon"
+                                src={plus}
+                                alt=""
+                              />
+                            </button>
+                          </div>
+                          <div className="tags-input position-relative d-flex flex-wrap">
+                            {tagInputs.map((data, index) => (
+                              <div key={index} className="d-flex mt-3">
                                 <input
-                                  key={index}
                                   type="text"
                                   name="tags"
                                   value={data.tags}
                                   onChange={(e) => handleTagChange(index, e)}
                                 />
-                              ))}
-                            </div>
-                          </div>
-
-                          <div className="article-title-input">
-                            <input
-                              type="text"
-                              placeholder="Article Title Here"
-                              name="title"
-                              value={blogTitle.title}
-                              onChange={(e) => handleTitleChange(e)}
-                            />
+                                <p
+                                  className="text-secondary tag-close bg-transparent"
+                                  onClick={() => handletagRemove(index)}
+                                >
+                                  +
+                                </p>
+                              </div>
+                            ))}
                           </div>
                         </div>
+
+                        <div className="article-title-input">
+                          <input
+                            type="text"
+                            placeholder="Article Title Here"
+                            name="title"
+                            value={blogTitle.title}
+                            onChange={(e) => handleTitleChange(e)}
+                          />
+                        </div>
                       </div>
-                      <div className="mt-auto">
-                        <button
-                          type="button"
-                          onClick={handleSubmit}
-                          className="publish-article-btn"
-                        >
-                          Publish Article
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleDraftSubmit}
-                          className="save-as-draft-btn"
-                        >
-                          Save as Draft
-                        </button>
-                      </div>
+                    </div>
+                    <div className="mt-auto d-md-flex gap-3">
+                      <button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="publish-article-btn mt-3"
+                      >
+                        Publish Article
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDraftSubmit}
+                        className="save-as-draft-btn mt-3"
+                      >
+                        Save as Draft
+                      </button>
                     </div>
                   </div>
                 </div>
