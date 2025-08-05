@@ -14,7 +14,7 @@ import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
 import { postBlog, setDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
+import 'quill/dist/quill.snow.css';
 import { generateImageUrl } from "../../../services/imageUpload";
 import { selectLocalImage } from "../../../utils/selectLocalImage";
 
@@ -23,8 +23,8 @@ const WriteBlogPost = () => {
   const navigate = useNavigate();
   const [blogTitle, setBlogTitle] = useState({ title: "" });
   const [tagInputs, setTagInputs] = useState([]);
-  const { quill, quillRef } = useQuill();
   const [editorHtml, setEditorHtml] = useState("");
+  const { quill, quillRef } = useQuill();
 
   const fullDate = localDateAndTime();
   const time = getLocalTime();
@@ -150,7 +150,7 @@ const WriteBlogPost = () => {
     <section>
       <section>
         <div className="d-flex gap-2 align-items-center mb-3">
-          <Link to="/dashboard/blogs">
+          <Link to="/admin/blogs">
             <img className="w-100" src={arrow} alt="back" />
           </Link>
           <p className="light-gray text-base m-0 p-0">Back to home</p>
@@ -291,42 +291,14 @@ const WriteBlogPost = () => {
             </section>
 
             {/* Write blog contents */}
-            <section className="write-blog-section">
-              <div className="py-5">
-                <div className="mt-5">
-                  <div className="d-flex w-100 position-relative">
-                    {/* <ReactQuill
-                        ref={(el) => (quillRefs.current[index] = el)}
-                        className="quill-white-text"
-                        style={{ width: "100%", margin: "5px", color: "white" }}
-                        theme="snow"
-                        name="description"
-                        value={items.description}
-                        onChange={(e) =>
-                          handleBlogInputChange(index, "description", e)
-                        }
-                        modules={{
-                          toolbar: [
-                            ["bold", "italic", "underline", "strike"],
-                            ["link", "blockquote", "code-block"],
-                            [{ list: "ordered" }, { list: "bullet" }],
-                            [{ header: [1, 2, 3, false] }],
-                            ["clean"],
-                          ],
-                        }}
-                        placeholder="Type the description..."
-                      /> */}
-
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "300px",
-                      }}
-                    >
-                      <div ref={quillRef} />
-                    </div>
-                  </div>
-                </div>
+            <section className="py-5">
+              <div
+                style={{
+                  width: "100%",
+                  height: "300px",
+                }}
+              >
+                <div ref={quillRef} />
               </div>
             </section>
           </form>
@@ -334,6 +306,7 @@ const WriteBlogPost = () => {
       </section>
       <section>
         <div
+          className="blog-content"
           style={{
             padding: "1rem",
             border: "1px solid #ccc",

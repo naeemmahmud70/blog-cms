@@ -139,6 +139,38 @@
     font-family: 'Poppins', sans-serif;
 }
 
+
+
+/* Style bullet lists properly */
+.blog-content ol {
+    list-style: none;
+    padding-left: 1.5em;
+}
+
+.blog-content li[data-list="bullet"] {
+    position: relative;
+    padding-left: 1em;
+}
+
+.blog-content li[data-list="bullet"]::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #000;
+}
+
+.blog-content li[data-list="ordered"] {
+    list-style-type: decimal;
+}
+
+.ql-editor {
+     font-family: 'Poppins', sans-serif;
+}
+
+.blog-content p {
+    margin: 0;
+}
+
 @media screen and (max-width:520px) {
     .publish-article-btn {
         width: 100%;
