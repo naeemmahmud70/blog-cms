@@ -1,58 +1,323 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import "./WriteBlogPost.css";
+import "../../../App.css";
+// import "../BlogHome/BlogHome.css";
+import { Link } from "react-router-dom";
+import arrow from "../../../assets/icon/left-arrow.png";
+import selectImg from "../../../assets/icon/select-img.png";
+import dateIcon from "../../../assets/icon/date.png";
+import timeIcon from "../../../assets/icon/time.png";
+import plus from "../../../assets/icon/plus.png";
+import { useNavigate } from "react-router-dom";
+import { LoadingContext } from "../../../context/LoadingContext";
+import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
+import { postBlog, setDraft } from "../../../services/userServices";
+import { toast } from "react-toastify";
+import { useQuill } from "react-quilljs";
+import 'quill/dist/quill.snow.css';
+import { generateImageUrl } from "../../../services/imageUpload";
+import { selectLocalImage } from "../../../utils/selectLocalImage";
 
-const WriteNewBlog = () => {
+const WriteBlogPost = () => {
+  const { setLoading } = useContext(LoadingContext);
+  const navigate = useNavigate();
+  const [blogTitle, setBlogTitle] = useState({ title: "" });
+  const [tagInputs, setTagInputs] = useState([]);
+  const [editorHtml, setEditorHtml] = useState("");
+  const { quill, quillRef } = useQuill();
+
+  const fullDate = localDateAndTime();
+  const time = getLocalTime();
+
+  // generate image url for cover picture by hosting free image hosting server
+  const [coverImg, setCoverImg] = useState(null);
+  const uploadCoverImg = async (event) => {
+    try {
+      const url = await generateImageUrl(event.target.files[0]);
+      setCoverImg(url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // multiple tags input
+  const addTagFields = () => {
+    setTagInputs([...tagInputs, { tags: "" }]);
+  };
+
+  const handleTagChange = (i, e) => {
+    let newTags = [...tagInputs];
+    newTags[i][e.target.name] = e.target.value;
+    setTagInputs(newTags);
+  };
+
+  const handletagRemove = (index) => {
+    console.log(index);
+  };
+
+  const handleTitleChange = (e) => {
+    setBlogTitle({ ...blogTitle, [e.target.name]: e.target.value });
+  };
+
+  // 0pen dialog to select and upload image
+  const handleImageUpload = async () => {
+    try {
+      const file = await selectLocalImage();
+      const imageUrl = await generateImageUrl(file);
+      insertToEditor(imageUrl);
+    } catch (err) {
+      console.error("err", err?.message);
+    }
+  };
+
+  // Insert Image(selected by user) to quill
+  const insertToEditor = (url) => {
+    const range = quill.getSelection();
+    quill.insertEmbed(range.index, "image", url);
+  };
+
+  useEffect(() => {
+    if (quill) {
+      // Add custom handler for Image Upload
+      quill.getModule("toolbar").addHandler("image", handleImageUpload);
+      // Listen to text change events
+      quill.on("text-change", () => {
+        setEditorHtml(quill.root.innerHTML); // Get HTML content
+      });
+    }
+  }, [quill]);
+
+  // submit full blog data to the mongodb database
+  const handleSubmit = async (event) => {
+    const fullBloglogData = {
+      date: fullDate,
+      coverImg: coverImg,
+      tag: tagInputs,
+      blogTitle: blogTitle.title,
+      blogContent: editorHtml,
+    };
+
+    console.log("fullBloglogData", fullBloglogData);
+    try {
+      setLoading(true);
+      const response = await postBlog(fullBloglogData);
+      if (response.error) {
+        toast.dismiss();
+        toast.error(response?.error?.message || "Something went worng!");
+      } else {
+        toast.success("Blog posted successfully!");
+        navigate("/admin/blogs");
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+    setLoading(false);
+    event.preventDefault();
+  };
+
+  // Save as draft
+  const handleDraftSubmit = async (event) => {
+    const fullDate = localDateAndTime();
+
+    const fullBloglogData = {
+      date: fullDate,
+      coverImg: coverImg,
+      tag: tagInputs,
+      blogTitle: blogTitle.title,
+      blogContent: editorHtml,
+    };
+
+    try {
+      setLoading(true);
+      const response = await setDraft(fullBloglogData);
+      if (response.error) {
+        toast.dismiss();
+        toast.error(response?.error?.message || "Something went worng!");
+      } else {
+        toast.success("Draft saved successfully!");
+        navigate("/admin/drafts");
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+    setLoading(false);
+    event.preventDefault();
+  };
+
   return (
-    <div>
-      <h4>Write your new blog here</h4>
-      <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nobis,
-        blanditiis ratione! Esse, quibusdam tempora quod pariatur ab ipsum, modi
-        ipsam excepturi ipsa incidunt ducimus corporis eligendi. Quae omnis
-        numquam repellat, asperiores harum ratione aut ipsam, in rerum debitis
-        reiciendis ut adipisci aliquam beatae dolorem placeat exercitationem,
-        tempora saepe quidem velit error explicabo porro. At aliquid maiores aut
-        autem accusantium voluptates sint adipisci eius dolor animi corporis
-        similique tenetur, voluptatem eligendi, sit placeat maxime sequi quasi
-        unde excepturi explicabo. Rem molestias fugit ut eum reprehenderit quam
-        autem deleniti ratione tenetur, explicabo praesentium optio a fuga
-        repellendus voluptate voluptates ea. Maxime consectetur et perspiciatis
-        sit dolorem, laudantium eius sequi voluptatibus facilis, ipsa
-        perferendis officiis magni quis temporibus? Animi commodi fugiat
-        laudantium aliquid pariatur velit quam, dolorem corporis? Voluptatum
-        perferendis nobis impedit quasi provident ullam nihil optio dolorem,
-        consequuntur eius aliquam architecto sint. Praesentium laudantium odio
-        deleniti. Possimus quos ipsam voluptatem, harum, esse perferendis
-        ratione sapiente dignissimos est nobis placeat, rerum reprehenderit quae
-        ducimus voluptates maxime sed eius quisquam? Doloremque voluptatum atque
-        odio fugit cupiditate magni eius, eveniet, at eos ducimus voluptates
-        aspernatur expedita repellat sapiente, sunt non nesciunt accusantium rem
-        qui sed tenetur. Vitae, ex facilis! Alias amet eaque quas unde quod
-        asperiores ratione animi aliquid laudantium rem laborum voluptatibus et,
-        quo, veniam praesentium dicta harum? Consectetur, placeat corrupti.
-        Omnis, perferendis. In id, voluptate aspernatur earum, nobis ipsam ab
-        eos quibusdam accusantium quos quisquam nulla. Vel voluptatem ut
-        blanditiis? In itaque necessitatibus fugit ea similique. Ab quas vitae
-        fuga rerum itaque. Atque, unde modi eius ab deleniti reprehenderit. Ipsa
-        doloribus sint nam perferendis. Debitis dolorem unde soluta nobis error
-        quasi quaerat, iusto perferendis, voluptatum ipsum commodi laboriosam
-        distinctio dolor fuga incidunt placeat labore minima eaque totam.
-        Architecto laudantium dolorum est, quae praesentium laborum odio quod
-        numquam cum recusandae, exercitationem culpa, ab nisi iusto reiciendis
-        ratione aut laboriosam necessitatibus omnis maxime. Placeat, neque! Sunt
-        error non veritatis mollitia reprehenderit a in tempore corporis amet
-        necessitatibus! Ipsum doloribus rerum optio repellat quaerat impedit,
-        tempora reiciendis facilis quisquam consequuntur alias tempore mollitia
-        illo repudiandae fugit vero, nisi quibusdam et blanditiis perferendis.
-        Nobis delectus odit eligendi non tenetur, rerum pariatur perspiciatis
-        nihil doloribus velit temporibus nemo odio. Ipsam veritatis distinctio
-        nostrum nam itaque neque molestias earum facere id excepturi nihil
-        voluptatem repudiandae obcaecati quisquam nesciunt, quaerat sit
-        voluptatibus? Minus maxime tempora laudantium vitae recusandae fuga vel,
-        error, omnis odit cumque esse expedita deserunt ipsum exercitationem
-        illo.
-      </p>
-    </div>
+    <section>
+      <section>
+        <div className="d-flex gap-2 align-items-center mb-3">
+          <Link to="/admin/blogs">
+            <img className="w-100" src={arrow} alt="back" />
+          </Link>
+          <p className="light-gray text-base m-0 p-0">Back to home</p>
+        </div>
+      </section>
+
+      <section className="d-flex justify-content-center">
+        <div className="w-100">
+          <form>
+            <section className="write-blog-header ">
+              <div className="row px-2 pb-4 pb-lg-0">
+                <div className="col-lg-5 p-4">
+                  {coverImg ? (
+                    <div className="cover-img-bg gray-background rounded-2">
+                      <img
+                        className="selected-cover-img w-100 h-100 rounded-2"
+                        src={coverImg}
+                        alt=""
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label
+                        htmlFor="coverPicInput"
+                        className="cover-img-bg gray-background rounded-2 d-flex align-items-center justify-content-center position-relative"
+                      >
+                        <div>
+                          <p className="text-poppins light-black-text text-lg text-center fw-bold ">
+                            Click to Add Article Cover
+                          </p>
+                        </div>
+                        <div className="position-absolute end-0 bottom-0 p-3">
+                          <img src={selectImg} alt="select-image" />
+                        </div>
+                      </label>
+                      <input
+                        onChange={uploadCoverImg}
+                        id="coverPicInput"
+                        type="file"
+                        style={{ display: "none" }}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="col-lg-7 px-4 py-0 py-lg-4">
+                  <div className=" h-100 d-flex flex-column">
+                    <div>
+                      <div className="w-100">
+                        <p className="text-base text-light-black-text font-nunito mb-2">
+                          {" "}
+                          Post On:
+                        </p>
+                        <div className="d-flex">
+                          <div className="post-on ">
+                            <p className="post-date">{fullDate}</p>
+                            <img src={dateIcon} alt="" />
+                          </div>
+                          <div id="time-div" className="post-on">
+                            <p className="post-date">{time}</p>
+                            <img src={timeIcon} alt="" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p
+                          style={{ marginBottom: "-12px" }}
+                          className="text-base text-light-black-text font-nunito mt-3"
+                        >
+                          Tags:
+                        </p>
+
+                        <div className="d-flex flex-wrap gap-2">
+                          <div>
+                            <button
+                              type="button"
+                              onClick={addTagFields}
+                              className="add-tag-btn border-0 mt-3 p-2 rounded-1 text-xs text-white font-poppins"
+                            >
+                              Add Tags{" "}
+                              <img
+                                className="tag-plus-icon"
+                                src={plus}
+                                alt=""
+                              />
+                            </button>
+                          </div>
+                          <div className="tags-input position-relative d-flex flex-wrap">
+                            {tagInputs.map((data, index) => (
+                              <div key={index} className="d-flex mt-3">
+                                <input
+                                  type="text"
+                                  name="tags"
+                                  value={data.tags}
+                                  onChange={(e) => handleTagChange(index, e)}
+                                />
+                                <p
+                                  className="text-secondary tag-close bg-transparent"
+                                  onClick={() => handletagRemove(index)}
+                                >
+                                  +
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="article-title-input">
+                          <input
+                            type="text"
+                            placeholder="Article Title Here"
+                            name="title"
+                            value={blogTitle.title}
+                            onChange={(e) => handleTitleChange(e)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-auto d-md-flex gap-3">
+                      <button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="publish-article-btn mt-3"
+                      >
+                        Publish Article
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDraftSubmit}
+                        className="save-as-draft-btn mt-3"
+                      >
+                        Save as Draft
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Write blog contents */}
+            <section className="py-5">
+              <div
+                style={{
+                  width: "100%",
+                  height: "300px",
+                }}
+              >
+                <div ref={quillRef} />
+              </div>
+            </section>
+          </form>
+        </div>
+      </section>
+      <section>
+        <div
+          className="blog-content"
+          style={{
+            padding: "1rem",
+            border: "1px solid #ccc",
+            minHeight: 100,
+            width: "100%",
+          }}
+          dangerouslySetInnerHTML={{ __html: editorHtml }}
+        />
+      </section>
+    </section>
   );
 };
 
-export default WriteNewBlog;
+export default WriteBlogPost;

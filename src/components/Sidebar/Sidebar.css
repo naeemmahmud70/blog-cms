@@ -1,6 +1,6 @@
 .sidebar-section {
   min-width: 200px;
-  background: "#c0c0c019";
+  background: #c0c0c019;
   height: 100vh;
 }
 
@@ -13,7 +13,7 @@
 @media screen and (max-width:600px) {
   .sidebar-section {
     min-width: 200px;
-    background: "#c0c0c019";
+    background: #c0c0c019;
     height: auto;
   }
 }
