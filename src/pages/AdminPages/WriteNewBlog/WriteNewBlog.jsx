@@ -204,7 +204,7 @@ const WriteBlogPost = () => {
                           Post On:
                         </p>
                         <div className="d-flex">
-                          <div className="post-on">
+                          <div className="post-on ">
                             <p className="post-date">{fullDate}</p>
                             <img src={dateIcon} alt="" />
                           </div>
