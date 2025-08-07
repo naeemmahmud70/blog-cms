@@ -20,3 +20,10 @@ export const getAllBlogs = async () => {
 export const setDraft = async (data) => {
   return apiClient.post(basr_url + `/addDraft`, data).then((res) => res);
 };
+
+export const handleArchive = async (id) => {
+  return apiClient.delete(basr_url + `/blog/delete/${id}`).then((res) => res);
+};
+export const postArchive = async (data) => {
+  return apiClient.post(basr_url + `/addArchive`, data).then((res) => res);
+};

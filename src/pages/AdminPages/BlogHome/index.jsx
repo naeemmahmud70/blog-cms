@@ -1,11 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
+import "./BlogHome.css";
 import { Link } from "react-router-dom";
-import { getAllBlogs } from "../../../services/userServices";
+import {
+  getAllBlogs,
+  handleArchive,
+  postArchive,
+} from "../../../services/userServices";
 import { LoadingContext } from "../../../context/LoadingContext";
+import { toast } from "react-toastify";
+import { localDateAndTime } from "../../../utils/localtime";
+import threeDot from "../../../assets/icon/DotsThreeVertical.png";
+import edite from "../../../assets/icon/edite.png";
+import archive from "../../../assets/icon/archiving.png";
+import RenderParagraphsJSX from "../../../components/Common/RenderParagraphsJSX/RenderParagraphsJSX";
 
 const BlogHome = () => {
   const { setLoading } = useContext(LoadingContext);
-  const [blogData, setBlogData] = useState([]);
+  const [blogs, setBlogs] = useState([]);
+  const reversOrder = [...blogs].reverse();
+  const [isArcive, setArchive] = useState(true);
 
   useEffect(() => {
     handleGetAllBlogs();
@@ -14,85 +27,163 @@ const BlogHome = () => {
   const handleGetAllBlogs = async () => {
     try {
       setLoading(true);
-      const data = await getAllBlogs();
-      if (data.length) {
-        setBlogData(data);
+      const response = await getAllBlogs();
+      // console.log(response);
+
+      if (response.error) {
+        toast.dismiss();
+        toast.error(response?.error?.message || "Something went worng!");
+      } else {
+        setBlogs(response);
       }
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
     } catch (error) {
+      console.log(error);
       setLoading(false);
-      console.log("err", error);
     }
+    setLoading(false);
   };
 
-  console.log("blogData", blogData);
+  const handleArchives = async (id) => {
+    const artcile = blogs.find((data) => data._id === id);
+    postInArchive(artcile);
+    try {
+      setLoading(true);
+      const response = await handleArchive(id);
+
+      if (response.error) {
+        toast.dismiss();
+        toast.error(response?.error?.message || "Something went worng!");
+      } else {
+        setArchive(!isArcive);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+
+  // posting in archive file
+  const postInArchive = async (data) => {
+    const fulldate = localDateAndTime();
+
+    const fullBloglogData = {
+      date: fulldate,
+      coverImg: data.coverImg,
+      tag: data.tag,
+      blogTitle: data.blogTitle,
+      blogContent: data.blogContent,
+    };
+
+    try {
+      setLoading(true);
+      const response = await postArchive(fullBloglogData);
+      if (response.error) {
+        toast.dismiss();
+        toast.error(response?.error?.message || "Something went worng!");
+      } else {
+        toast.success("Stored In Achive File");
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+
+  console.log("blogData", blogs);
+
   return (
-    <div>
-      <div className="d-flex justify-content-between">
-        <h4>Blogs home page </h4>{" "}
-        <Link to="/admin/blogs/blog_edit/:sdfsdfg">Edit</Link>
+    <section>
+      <h5 className="text-lg secondary-black-text font-nunito m-0 mb-4">
+        All the published articles-
+      </h5>
+      <div className="">
+        {reversOrder.map((data) => (
+          <div key={data?._id} className="row blogs-div m-0 mt-4 pb-4">
+            <div className="col-lg-3 col-md-4 col-sm-12 d-flex">
+              <Link
+                to={`/dashboard/blogs/${data._id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <div className="admin-blog-card-img-overflow">
+                  <img className="blog-card-img" src={data.coverImg} alt="" />
+                </div>
+                <div className="mobile-blogs-img">
+                  <img className="" src={data.coverImg} alt="" />
+                </div>
+              </Link>
+            </div>
+            <div className="col-lg-9 col-md-8 p-0 col-sm-12 d-flex align-items-center">
+              <div className="blog-card-text">
+                <Link
+                  to={`/admin/blogs/blog_edit/${data._id}`}
+                  className="text-decoration-none"
+                >
+                  <h4 className="text-lg light-black-text font-nunito fw-semibold">
+                    {data.blogTitle}
+                  </h4>{" "}
+                  <div className="read-more-overflow secondary-light-text">
+                    <RenderParagraphsJSX html={data.blogContent} />
+                  </div>
+                  <p className="blog-read-more">Read more...</p>
+                </Link>
+
+                <div className="d-flex justify-content-between align-itemsw-center">
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex gap-3 align-items-center">
+                      <p className="m-0">{data.date}</p>{" "}
+                      <strong style={{ color: "gray" }} className="">
+                        .
+                      </strong>{" "}
+                      <p className="m-0">10 min read</p>
+                      <strong className="fw-bold">.</strong>{" "}
+                    </div>
+                    <div className="blog-buttons d-flex gap-2 ms-3">
+                      {data.tag.slice(0, 6).map((data, index) => (
+                        <button className={`tag-btn-${index + 1}`} key={index}>
+                          <small>{data.tags}</small>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="dropdown">
+                    <button
+                      className="drop-down-btn"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <img src={threeDot} alt="" />
+                    </button>
+                    <ul id="drop-down-bg" className="dropdown-menu">
+                      <li>
+                        <Link
+                          to={`/admin/blogs/blog_edit/${data._id}`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <button className="dropdown-item">
+                            Edit Article <img src={edite} alt="" />
+                          </button>
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => handleArchives(data._id)}
+                          className="dropdown-item"
+                        >
+                          Archive <img src={archive} alt="" />{" "}
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis,
-        perferendis? Odio illum natus possimus cumque, ducimus voluptas magni,
-        tenetur voluptatum, ullam sint dolorem! Unde reprehenderit eos
-        distinctio repellendus soluta enim officiis eveniet quis nostrum ut
-        laboriosam repudiandae, beatae excepturi. Incidunt minus, dignissimos
-        ratione quibusdam ipsa id vitae illum ipsam fuga animi veritatis, modi
-        porro consectetur harum beatae. Numquam, officiis! Id eaque sint ipsam
-        adipisci ipsum nostrum quibusdam fugiat iusto enim magnam, obcaecati
-        consequatur exercitationem repudiandae, minima nam sapiente numquam
-        commodi quos fugit voluptates. Perspiciatis, dignissimos nostrum?
-        Dolore, sed quibusdam magnam accusamus vitae nisi quas laborum fuga,
-        sit, dolorem tempore eos neque in inventore. Corporis tenetur modi ipsam
-        velit ducimus obcaecati perferendis repellat necessitatibus suscipit,
-        illum itaque reprehenderit quibusdam deleniti, dignissimos porro eum
-        dolore dicta. Alias tempora corporis vel. Nesciunt fugit non facere,
-        praesentium cum error, itaque ratione aspernatur culpa voluptates qui
-        nulla quia commodi, cumque neque dolores. Veniam illum eveniet ut
-        delectus natus, nesciunt, facilis quasi perspiciatis consequatur,
-        dolorem incidunt? Natus vero quae recusandae quidem maxime inventore
-        animi mollitia magnam illum? Dolorem corrupti ipsum repellendus eaque
-        pariatur voluptatum, vitae perferendis esse laudantium magnam eum quae
-        inventore consequuntur consectetur vel placeat quod iure, possimus dicta
-        at voluptatibus ipsa. Dolores, culpa dolor modi incidunt rerum
-        recusandae tempora. Laudantium, dicta dolores beatae aliquam eius
-        consequuntur vitae, et accusantium sunt in velit? Expedita ut, dicta
-        laudantium maiores voluptatum hic numquam, asperiores eaque dolor, totam
-        quod iusto quaerat libero. Blanditiis animi numquam repellendus commodi
-        quibusdam impedit magni molestiae? Maxime architecto iusto facere libero
-        minus. Enim, vel. Ad tempore, voluptate hic aliquam nemo ratione
-        quibusdam delectus eius et! Voluptatem similique modi deleniti minima,
-        itaque, natus, doloremque reprehenderit voluptatibus molestias officia
-        vel. Amet, ex, at totam beatae esse voluptas eius, corrupti fuga
-        corporis incidunt veniam voluptatibus quidem earum pariatur ab aliquam
-        nisi qui aliquid nemo possimus! Facere delectus atque, suscipit hic
-        voluptatum sed laborum eveniet perferendis inventore voluptas quasi odio
-        veritatis minima, placeat repudiandae. Sed ipsam consequuntur, numquam
-        temporibus sint sit harum eius est magnam quasi adipisci excepturi vitae
-        perferendis unde iusto? Eaque similique qui est accusamus, corrupti
-        dolorem culpa architecto delectus eum sequi labore aspernatur quia
-        distinctio amet pariatur quis ipsum voluptate aliquid natus, sint
-        praesentium. Quo, ad vel dolorem dolor maxime veritatis possimus
-        voluptate quae velit blanditiis, suscipit sint hic voluptates cumque,
-        quidem facilis? Provident mollitia accusamus nemo rem, omnis quis
-        voluptates quas repudiandae rerum vitae voluptatum praesentium ducimus
-        ipsum ratione est saepe voluptatibus incidunt cupiditate consectetur.
-        Eligendi consequuntur quasi placeat architecto necessitatibus aliquam
-        unde, deserunt temporibus ad sed quod ullam aut molestias corrupti
-        sapiente in numquam veritatis veniam rerum. Totam labore mollitia
-        explicabo beatae pariatur qui, fugit consectetur cumque laboriosam et
-        architecto magni. Porro enim inventore distinctio aspernatur fugiat
-        laboriosam nulla officia eligendi sequi iusto ipsam qui quo, molestiae
-        saepe repellendus dolorum vitae consequuntur fuga quidem maiores. Beatae
-        consequatur ipsum recusandae qui iste ducimus quam rerum nam in,
-        excepturi nesciunt, quod explicabo error hic porro quasi! Commodi
-        delectus, molestias aliquid ipsa reprehenderit asperiores sint quisquam
-        natus? Sapiente eius ipsa, dolore atque harum dolores debitis.
-      </p>
-    </div>
+    </section>
   );
 };
 
