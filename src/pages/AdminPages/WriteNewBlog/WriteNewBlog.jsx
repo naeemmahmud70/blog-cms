@@ -14,17 +14,23 @@ import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
 import { postBlog, setDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
-import 'quill/dist/quill.snow.css';
+import "quill/dist/quill.snow.css";
 import { generateImageUrl } from "../../../services/imageUpload";
 import { selectLocalImage } from "../../../utils/selectLocalImage";
 
 const WriteBlogPost = () => {
-  const { setLoading } = useContext(LoadingContext);
+  const { loading, setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
   const [blogTitle, setBlogTitle] = useState({ title: "" });
   const [tagInputs, setTagInputs] = useState([]);
   const [editorHtml, setEditorHtml] = useState("");
   const { quill, quillRef } = useQuill();
+  const [errors, setErrors] = useState({
+    coverImg: "",
+    title: "",
+    tags: "",
+    content: "",
+  });
 
   const fullDate = localDateAndTime();
   const time = getLocalTime();
@@ -52,7 +58,9 @@ const WriteBlogPost = () => {
   };
 
   const handletagRemove = (index) => {
-    console.log(index);
+    const newTags = [...tagInputs];
+    newTags.splice(index, 1);
+    setTagInputs(newTags);
   };
 
   const handleTitleChange = (e) => {
@@ -87,8 +95,41 @@ const WriteBlogPost = () => {
     }
   }, [quill]);
 
+  // checking validations while publishing and drafting
+  const validateForm = () => {
+    let newErrors = { coverImg: "", title: "", tags: "", content: "" };
+    let isValid = true;
+
+    if (!coverImg) {
+      newErrors.coverImg = "Cover image is required.";
+      isValid = false;
+    }
+
+    if (!blogTitle.title.trim()) {
+      newErrors.title = "Title is required.";
+      isValid = false;
+    }
+
+    const hasValidTags = tagInputs.some((tag) => tag.tags.trim() !== "");
+    if (!hasValidTags) {
+      newErrors.tags = "At least one tag is required.";
+      isValid = false;
+    }
+
+    if (!editorHtml || editorHtml === "<p><br></p>") {
+      newErrors.content = "Blog content cannot be empty.";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   // submit full blog data to the mongodb database
   const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+
     const fullBloglogData = {
       date: fullDate,
       coverImg: coverImg,
@@ -113,11 +154,13 @@ const WriteBlogPost = () => {
       setLoading(false);
     }
     setLoading(false);
-    event.preventDefault();
   };
 
   // Save as draft
   const handleDraftSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+
     const fullDate = localDateAndTime();
 
     const fullBloglogData = {
@@ -142,7 +185,9 @@ const WriteBlogPost = () => {
       console.log(error);
       setLoading(false);
     }
+
     setLoading(false);
+
     event.preventDefault();
   };
 
@@ -194,6 +239,11 @@ const WriteBlogPost = () => {
                       />
                     </div>
                   )}
+                  {errors.coverImg && (
+                    <p className="text-danger font-nunito text-sm-xs m-0 mt-1">
+                      {errors.coverImg}
+                    </p>
+                  )}
                 </div>
                 <div className="col-lg-7 px-4 py-0 py-lg-4">
                   <div className=" h-100 d-flex flex-column">
@@ -223,39 +273,46 @@ const WriteBlogPost = () => {
                           Tags:
                         </p>
 
-                        <div className="d-flex flex-wrap gap-2">
-                          <div>
-                            <button
-                              type="button"
-                              onClick={addTagFields}
-                              className="add-tag-btn border-0 mt-3 p-2 rounded-1 text-xs text-white font-poppins"
-                            >
-                              Add Tags{" "}
-                              <img
-                                className="tag-plus-icon"
-                                src={plus}
-                                alt=""
-                              />
-                            </button>
-                          </div>
-                          <div className="tags-input position-relative d-flex flex-wrap">
-                            {tagInputs.map((data, index) => (
-                              <div key={index} className="d-flex mt-3">
-                                <input
-                                  type="text"
-                                  name="tags"
-                                  value={data.tags}
-                                  onChange={(e) => handleTagChange(index, e)}
+                        <div>
+                          <div className="d-flex flex-wrap gap-2">
+                            <div>
+                              <button
+                                type="button"
+                                onClick={addTagFields}
+                                className="add-tag-btn border-0 mt-3 p-2 rounded-1 text-xs text-white font-poppins"
+                              >
+                                Add Tags{" "}
+                                <img
+                                  className="tag-plus-icon"
+                                  src={plus}
+                                  alt=""
                                 />
-                                <p
-                                  className="text-secondary tag-close bg-transparent"
-                                  onClick={() => handletagRemove(index)}
-                                >
-                                  +
-                                </p>
-                              </div>
-                            ))}
+                              </button>
+                            </div>
+                            <div className="tags-input position-relative d-flex flex-wrap">
+                              {tagInputs.map((data, index) => (
+                                <div key={index} className="d-flex mt-3">
+                                  <input
+                                    type="text"
+                                    name="tags"
+                                    value={data.tags}
+                                    onChange={(e) => handleTagChange(index, e)}
+                                  />
+                                  <p
+                                    className="text-secondary tag-close bg-transparent"
+                                    onClick={() => handletagRemove(index)}
+                                  >
+                                    +
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
                           </div>
+                          {errors.tags && (
+                            <p className="text-danger font-nunito text-sm-xs m-0 mt-1">
+                              {errors.tags}
+                            </p>
+                          )}
                         </div>
 
                         <div className="article-title-input">
@@ -266,21 +323,32 @@ const WriteBlogPost = () => {
                             value={blogTitle.title}
                             onChange={(e) => handleTitleChange(e)}
                           />
+                          {errors.title && (
+                            <p className="text-danger font-nunito text-sm-xs m-0 mt-1">
+                              {errors.title}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
                     <div className="mt-auto d-md-flex gap-3">
                       <button
+                        disabled={loading}
                         type="button"
                         onClick={handleSubmit}
-                        className="publish-article-btn mt-3"
+                        className={`publish-article-btn mt-3 ${
+                          loading ? "opacity-50" : ""
+                        }`}
                       >
                         Publish Article
                       </button>
                       <button
+                        disabled={loading}
                         type="button"
                         onClick={handleDraftSubmit}
-                        className="save-as-draft-btn mt-3"
+                        className={`save-as-draft-btn mt-3 ${
+                          loading ? "opacity-50" : ""
+                        }`}
                       >
                         Save as Draft
                       </button>
@@ -300,6 +368,11 @@ const WriteBlogPost = () => {
               >
                 <div ref={quillRef} />
               </div>
+              {errors.content && (
+                <p className="text-danger font-nunito text-sm-xs m-0 mt-5">
+                  {errors.content}
+                </p>
+              )}
             </section>
           </form>
         </div>
