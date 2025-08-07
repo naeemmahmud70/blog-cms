@@ -126,18 +126,18 @@ const BlogHome = () => {
                   <div className="read-more-overflow secondary-light-text">
                     <RenderParagraphsJSX html={data.blogContent} />
                   </div>
-                  <p className="blog-read-more">Read more...</p>
+                  <p className="blue-text text-xs-sm font-nunito">
+                    Read more...
+                  </p>
                 </Link>
 
                 <div className="d-flex justify-content-between align-itemsw-center">
                   <div className="d-flex align-items-center">
                     <div className="d-flex gap-3 align-items-center">
                       <p className="m-0">{data.date}</p>{" "}
-                      <strong style={{ color: "gray" }} className="">
-                        .
-                      </strong>{" "}
+                      <strong className="seperator-circle"></strong>{" "}
                       <p className="m-0">10 min read</p>
-                      <strong className="fw-bold">.</strong>{" "}
+                      <strong className="seperator-circle"></strong>
                     </div>
                     <div className="blog-buttons d-flex gap-2 ms-3">
                       {data.tag.slice(0, 6).map((data, index) => (
