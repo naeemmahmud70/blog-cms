@@ -91,97 +91,102 @@ const BlogHome = () => {
     setLoading(false);
   };
 
-  console.log("blogData", blogs);
-
   return (
     <section>
       <h5 className="text-lg secondary-black-text font-nunito m-0 mb-4">
         All the published articles-
       </h5>
       <div className="">
-        {reversOrder.map((data) => (
-          <div key={data?._id} className="row blogs-div m-0 mt-4 pb-4">
-            <div className="col-lg-3 col-md-4 col-sm-12 d-flex">
-              <Link
-                to={`/dashboard/blogs/${data._id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <div className="admin-blog-card-img-overflow">
-                  <img className="blog-card-img" src={data.coverImg} alt="" />
-                </div>
-                <div className="mobile-blogs-img">
-                  <img className="" src={data.coverImg} alt="" />
-                </div>
-              </Link>
-            </div>
-            <div className="col-lg-9 col-md-8 p-0 col-sm-12 d-flex align-items-center">
-              <div className="blog-card-text">
-                <Link
-                  to={`/admin/blogs/blog_edit/${data._id}`}
-                  className="text-decoration-none"
-                >
-                  <h4 className="text-lg light-black-text font-nunito fw-semibold">
-                    {data.blogTitle}
-                  </h4>{" "}
-                  <div className="read-more-overflow secondary-light-text">
-                    <RenderParagraphsJSX html={data.blogContent} />
+        {reversOrder.map((data, index) => {
+          const isLastItem = index === reversOrder.length - 1;
+          return (
+            <div
+              key={data?._id}
+              className={`blogs-div mt-4 pb-4 ${!isLastItem ? "border-bottom" : ""}`}
+            >
+              <div className="left-side-content">
+                <Link to={`/dashboard/blogs/${data._id}`}>
+                  <div className="admin-blog-card-img-overflow">
+                    <img className="blog-card-img" src={data.coverImg} alt="" />
                   </div>
-                  <p className="blue-text text-xs-sm font-nunito">
-                    Read more...
-                  </p>
                 </Link>
+              </div>
+              <div className="d-flex align-items-center right-side-content">
+                <div className="blog-card-text">
+                  <Link
+                    to={`/admin/blogs/blog_edit/${data._id}`}
+                    className="text-decoration-none"
+                  >
+                    <h4 className="text-lg light-black-text font-nunito fw-semibold">
+                      {data.blogTitle}
+                    </h4>{" "}
+                    <div className="read-more-overflow secondary-light-text">
+                      <RenderParagraphsJSX html={data.blogContent} />
+                    </div>
+                    <p className="blue-text text-xs-sm font-nunito">
+                      Read more...
+                    </p>
+                  </Link>
 
-                <div className="d-flex justify-content-between align-itemsw-center">
-                  <div className="d-flex align-items-center">
-                    <div className="d-flex gap-3 align-items-center">
-                      <p className="m-0">{data.date}</p>{" "}
-                      <strong className="seperator-circle"></strong>{" "}
-                      <p className="m-0">10 min read</p>
-                      <strong className="seperator-circle"></strong>
-                    </div>
-                    <div className="blog-buttons d-flex gap-2 ms-3">
-                      {data.tag.slice(0, 6).map((data, index) => (
-                        <button className={`tag-btn-${index + 1}`} key={index}>
-                          <small>{data.tags}</small>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="dropdown">
-                    <button
-                      className="drop-down-btn"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <img src={threeDot} alt="" />
-                    </button>
-                    <ul id="drop-down-bg" className="dropdown-menu">
-                      <li>
-                        <Link
-                          to={`/admin/blogs/blog_edit/${data._id}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <button className="dropdown-item">
-                            Edit Article <img src={edite} alt="" />
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex align-items-center">
+                      <div className="d-flex flex-wrap gap-3 align-items-center">
+                        <p className="m-0 text-xs-sm light-black-text font-poppins">
+                          {data.date}
+                        </p>{" "}
+                        <strong className="seperator-circle"></strong>{" "}
+                        <p className="m-0 text-xs-sm light-black-text font-poppins">
+                          10 min read
+                        </p>
+                        <strong className="seperator-circle"></strong>
+                      </div>
+                      <div className="blog-buttons d-flex flex-wrap gap-2 ms-3">
+                        {data.tag.slice(0, 6).map((data, index) => (
+                          <button
+                            className={`tag-btn-${index + 1}`}
+                            key={index}
+                          >
+                            <small>{data.tags}</small>
                           </button>
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => handleArchives(data._id)}
-                          className="dropdown-item"
-                        >
-                          Archive <img src={archive} alt="" />{" "}
-                        </button>
-                      </li>
-                    </ul>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="dropdown">
+                      <button
+                        className="bg-transparent p-1 border-0"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <img src={threeDot} alt="" />
+                      </button>
+                      <ul className="dropdown-menu drop-down-bg">
+                        <li>
+                          <Link
+                            to={`/admin/blogs/blog_edit/${data._id}`}
+                            style={{ textDecoration: "none" }}
+                          >
+                            <button className="dropdown-item">
+                              Edit Article <img src={edite} alt="" />
+                            </button>
+                          </Link>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleArchives(data._id)}
+                            className="dropdown-item"
+                          >
+                            Archive <img src={archive} alt="" />{" "}
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
