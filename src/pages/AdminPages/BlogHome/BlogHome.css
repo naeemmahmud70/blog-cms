@@ -60,133 +60,62 @@
     margin-left: 10%;
     margin-top: 9px;
     border-radius: 3px;
-    padding-bottom: 7px;
     font-size: 14px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 5px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.tag-btn-1 {
-    background: #D2CDF4;
+.tag-btn {
     font-weight: 500;
     font-size: 12px;
-    line-height: 10px;
+    line-height: normal;
     font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
+    padding: 3px 8px 2px 8px;
     border-radius: 4px;
     border: 0;
-    margin-right: 5px;
+}
+
+.tag-btn.tag-btn-1 {
+    background: #D2CDF4;
+
 }
 
 .tag-btn-2 {
     background: #CDDBF4;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-3 {
     background: #F4E6CD;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-4 {
     background: #D2CDF4;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-5 {
     background: #CDDBF4;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-6 {
     background: #F4E6CD;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-7 {
     background: #D2CDF4;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-8 {
     background: #CDDBF4;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-9 {
     background: #F4E6CD;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 .tag-btn-10 {
     background: #D2CDF4;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 10px;
-    font-family: 'Poppins', sans-serif;
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 0;
-    margin-right: 5px;
 }
 
 @media only screen and (max-width: 768px) {

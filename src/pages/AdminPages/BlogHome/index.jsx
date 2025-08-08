@@ -13,6 +13,7 @@ import threeDot from "../../../assets/icon/DotsThreeVertical.png";
 import edite from "../../../assets/icon/edite.png";
 import archive from "../../../assets/icon/archiving.png";
 import RenderParagraphsJSX from "../../../components/Common/RenderParagraphsJSX/RenderParagraphsJSX";
+import { calculateReadingTime } from "../../../utils/calculateReadingTime";
 
 const BlogHome = () => {
   const { setLoading } = useContext(LoadingContext);
@@ -102,7 +103,9 @@ const BlogHome = () => {
           return (
             <div
               key={data?._id}
-              className={`blogs-div mt-4 pb-4 ${!isLastItem ? "border-bottom" : ""}`}
+              className={`blogs-div mt-4 pb-4 ${
+                !isLastItem ? "border-bottom" : ""
+              }`}
             >
               <div className="left-side-content">
                 <Link to={`/dashboard/blogs/${data._id}`}>
@@ -136,14 +139,14 @@ const BlogHome = () => {
                         </p>{" "}
                         <strong className="seperator-circle"></strong>{" "}
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
-                          10 min read
+                          {calculateReadingTime(data.blogContent)} min read
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
                       <div className="blog-buttons d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
                           <button
-                            className={`tag-btn-${index + 1}`}
+                            className={`tag-btn tag-btn-${index + 1}`}
                             key={index}
                           >
                             <small>{data.tags}</small>
