@@ -67,6 +67,11 @@
     align-items: center;
 }
 
+.drop-down-bg .dropdown-item:active {
+    background: #fff;
+    color: black;
+}
+
 .tag-btn {
     font-weight: 500;
     font-size: 12px;

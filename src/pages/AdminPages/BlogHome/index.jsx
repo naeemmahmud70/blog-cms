@@ -23,7 +23,7 @@ const BlogHome = () => {
 
   useEffect(() => {
     handleGetAllBlogs();
-  }, []);
+  }, [isArcive]);
 
   const handleGetAllBlogs = async () => {
     try {
