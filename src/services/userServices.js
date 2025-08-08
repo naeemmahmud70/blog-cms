@@ -21,6 +21,13 @@ export const setDraft = async (data) => {
   return apiClient.post(basr_url + `/addDraft`, data).then((res) => res);
 };
 
+export const getAllDrafts = async () => {
+  return apiClient.get(basr_url + `/getDrafts`).then((res) => res);
+};
+export const deleteDraft = async (id) => {
+  return apiClient.delete(basr_url + `/delete/draft/${id}`).then((res) => res);
+};
+
 export const handleArchive = async (id) => {
   return apiClient.delete(basr_url + `/blog/delete/${id}`).then((res) => res);
 };
