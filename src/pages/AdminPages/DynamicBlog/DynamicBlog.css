@@ -1,0 +1,140 @@
+.dynamic-blog-header-bg {
+    height: 546px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(8px);
+    margin: -120px;
+    position: relative;
+}
+
+
+.blog-hero-text-bg {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.dynamic-blog-header-content {
+    width: 100%;
+    height: 556px;
+    position: absolute;
+    top: 70px;
+    padding: 16px;
+}
+
+.dynamic-blog-top-header-title {
+    margin-top: 1rem;
+    font-size: 28px !important;
+    line-height: 36px;
+    color: #FFFFFF;
+    font-family: Nunito;
+}
+
+.blog-background {
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+    margin-top: 100px;
+}
+
+
+.main-blog-content {
+    margin-top: 0rem;
+}
+
+.custom-toltip p {
+    background: rgba(128, 128, 128, 0.252);
+    color: rgba(255, 255, 255, 0.813);
+    padding: 2px 20px;
+    border-radius: 3px;
+    position: relative;
+    bottom: 25px;
+    right: 110px;
+    transition: .5s ease-in;
+}
+
+@media only screen and (max-width: 520px) {
+    .dynamic-blog-header-bg {
+        height: 550px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(5px);
+        margin: -0px;
+        position: relative;
+        /* width: 100%; */
+    }
+
+    .dynamic-blog-header-content {
+        width: 90%;
+        height: 456px;
+        position: absolute;
+        top: 7%;
+    }
+
+    .BAAI-banner {
+        height: 710px !important;
+    }
+
+    .BAAI-banner-content {
+        width: 90%;
+        height: 456px;
+        position: absolute;
+        top: 19% !important;
+    }
+
+    .dynamic-blog-top-header-title {
+        margin-top: 1rem;
+        font-size: 1.5rem !important;
+        line-height: 36px;
+        color: #FFFFFF;
+    }
+
+    .custom-toltip p {
+        background: rgba(128, 128, 128, 0.845);
+
+    }
+}
+
+@media only screen and (max-width: 410px) {
+    .dynamic-blog-header-bg {
+        height: 556px;
+
+    }
+
+    .dynamic-blog-header-content {
+        width: 90%;
+
+        position: absolute;
+        top: 9%;
+    }
+
+}
+
+@media only screen and (max-width: 360px) {
+    .dynamic-blog-header-bg {
+        height: 600px;
+
+    }
+
+    .dynamic-blog-header-content {
+        width: 90%;
+
+        position: absolute;
+        top: 11%;
+    }
+
+    .BAAI-banner {
+        height: 760px !important;
+    }
+
+    .BAAI-banner-content {
+        width: 90%;
+        height: 456px;
+        position: absolute;
+        top: 23% !important;
+    }
+
+}

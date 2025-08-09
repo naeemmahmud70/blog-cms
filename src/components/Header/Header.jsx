@@ -58,7 +58,7 @@ const Header = () => {
     <>
       <header className="bg-white header-styles sticky-top top-0 z-2 px-4 py-3 d-flex justify-content-between align-items-center">
         <h4 className="fw-normal m-0 font-poppins light-black-text">
-          {pageTitle}
+          {decodeURIComponent(pageTitle)}
         </h4>
         <div className="d-none d-md-block">
           <Profile />

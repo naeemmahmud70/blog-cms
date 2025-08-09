@@ -1,43 +1,200 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import facebook from "../../../assets/icon/facebook.png";
+import twitter from "../../../assets/icon/twitter.png";
+import linkedIn from "../../../assets/icon/linkedIn.png";
+import copy from "../../../assets/icon/copy .png";
+import { LoadingContext } from "../../../context/LoadingContext";
+import { getDynamicBlog } from "../../../services/userServices";
+import { toast } from "react-toastify";
 
 const DynamicBlog = () => {
+  const { title } = useParams();
+  const [blog, setBlog] = useState({});
+  const { setLoading } = useContext(LoadingContext);
+  const [open, setOpne] = useState(false);
+
+  useEffect(() => {
+    if (title) {
+      handleDynamicBlog(title?.replace(/_/g, " "));
+    }
+  }, [title]);
+
+  const handleDynamicBlog = async (title) => {
+    try {
+      setLoading(true);
+      const response = await getDynamicBlog(title);
+
+      if (response.error) {
+        toast.dismiss();
+        toast.error(response?.error?.message || "Something went worng!");
+      } else {
+        setBlog(response);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setOpne(false);
+    }, 1000);
+  }, [open]);
+
   return (
-    <div>
-      <h4>Dynamic Blog</h4>
-      <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium
-        assumenda est a, asperiores obcaecati cum ducimus, sed voluptate
-        repudiandae animi ea modi ratione rem accusantium architecto id nisi
-        possimus dolore perspiciatis vero. Totam quo culpa, odio voluptatem at
-        maxime autem aperiam commodi quia illum? Dolor numquam maiores in, illo
-        officiis ipsum ratione quisquam porro deserunt corporis libero iusto
-        laborum accusantium quo id eum rem ab eos reiciendis consequatur quidem.
-        Nesciunt repellat culpa, excepturi expedita pariatur neque similique
-        modi quibusdam laboriosam accusamus ipsam rerum consequatur magni totam
-        dignissimos eos dolorum eius magnam corrupti sit. Nisi vitae laborum
-        nostrum rerum voluptatem. Odit, quasi placeat reiciendis corporis,
-        distinctio doloribus nam nostrum et itaque doloremque maiores sunt
-        reprehenderit cumque impedit hic. Illum maiores doloribus itaque, dicta
-        facere nostrum officia consequatur molestiae iusto sit debitis aperiam.
-        Asperiores facere corporis nulla ad ipsa porro! Alias magni accusantium
-        recusandae adipisci, illo molestias, nobis illum harum sit quaerat
-        dolorem facere tempore eveniet aut doloremque unde aspernatur
-        perferendis sunt. Autem tempora non laboriosam earum id in quibusdam
-        necessitatibus nisi omnis est corporis repellendus placeat odit fugiat
-        enim harum, delectus porro commodi maxime libero dolorum veritatis
-        nesciunt. Ipsa veritatis sapiente aliquid sequi necessitatibus dolores
-        culpa suscipit corrupti aut dicta nulla excepturi possimus doloribus
-        tempore eaque reiciendis tenetur cupiditate molestiae temporibus sunt
-        ratione voluptates, quam iusto? Tempora nam a, repellat mollitia quos,
-        dolores sint, asperiores deserunt placeat ut voluptatem labore? Vitae
-        voluptatibus distinctio deserunt ea minima dignissimos dolorem numquam
-        iste. In, provident libero quidem unde placeat dicta mollitia eveniet
-        dolores aperiam hic perspiciatis ducimus, officia fuga laborum ut
-        possimus sit cumque voluptatum illum corrupti ea, voluptas eos quod?
-        Velit amet veniam quam eligendi, adipisci, culpa tenetur cupiditate
-        commodi voluptate itaque doloribus suscipit eos dicta soluta alias
-        deleniti ut eum consequatur non!
-      </p>
+    <div className="position-relative">
+      <section
+        className={`dynamic-blog-header-bg`}
+        style={{
+          backgroundImage: `linear-gradient(125.69deg, rgba(41, 41, 41, 0.74) 0%, rgba(25, 25, 25, 0.74) 100%), url(${blog.coverImg})`,
+        }}
+      ></section>
+
+        <div className={`dynamic-blog-header-content`}>
+          <div className="row">
+            <div className="col-md-5 d-flex align-items-center">
+              <img className="blog-header-image" src={blog.coverImg} alt="" />
+            </div>
+            <div className="col-md-7 d-flex align-items-center">
+              <div className="">
+                <div className="d-flex date-div mt-1">
+                  <p style={{ color: "gray", width: "110px" }} className="date">
+                    {blog.date}
+                  </p>{" "}
+                  <strong style={{ color: "gray" }} className="popular-dot">
+                    .
+                  </strong>{" "}
+                  <p style={{ color: "gray" }} className="date">
+                    10 min read
+                  </p>
+                </div>
+                <div>
+                  {blog.tag && (
+                    <>
+                      {blog.tag.map((data, index) => (
+                        <Link to={`/blogs/tag/${data.tags}`} key={index}>
+                          <button className={`tag-btn-${index + 1}`}>
+                            <small>{data.tags}</small>
+                          </button>
+                        </Link>
+                      ))}
+                    </>
+                  )}
+                </div>
+                <div>
+                  <h1 className="dynamic-blog-top-header-title">
+                    {blog.blogTitle}
+                  </h1>
+                </div>
+
+                <section>
+                  <h6 className="share-via mt-3">Share Via:</h6>
+                  <div className="d-flex flex-wrap mt-3">
+                    <div
+                      className="d-flex my-2 text-decoration-none pointer-cursor"
+                      onClick={() =>
+                        window.open(
+                          `https://www.facebook.com/sharer.php?u=${window.location.href}`,
+                          "Popup",
+                          "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
+                        )
+                      }
+                    >
+                      <div className="fb-share-text-bg">
+                        <p className="facebook-text px-3">FaceBook</p>
+                      </div>
+                      <div className="facebook-share-icon">
+                        <img src={facebook} alt="" />
+                      </div>
+                    </div>
+                    <div
+                      className="d-flex m-2 text-decoration-none pointer-cursor"
+                      onClick={() =>
+                        window.open(
+                          `https://twitter.com/intent/tweet?url=${window.location.href}`,
+                          "Popup",
+                          "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
+                        )
+                      }
+                    >
+                      <div className="twitter-share-text-bg">
+                        <p className="facebook-text px-3">Twitter</p>
+                      </div>
+                      <div className="twitter-share-icon">
+                        <img src={twitter} alt="" />
+                      </div>
+                    </div>
+                    <div
+                      className="d-flex my-2 text-decoration-none pointer-cursor"
+                      onClick={() =>
+                        window.open(
+                          `https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}`,
+                          "Popup",
+                          "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
+                        )
+                      }
+                    >
+                      <div className="linkedIn-share-text-bg">
+                        <p className="facebook-text px-3">LinkedIn</p>
+                      </div>
+                      <div className="linkedIn-share-icon">
+                        <img src={linkedIn} alt="" />
+                      </div>
+                    </div>
+
+                    <div
+                      className="d-flex m-2 more-share-div"
+                      onClick={() => {
+                        navigator.clipboard.writeText(window.location.href);
+                        setOpne(true);
+                      }}
+                    >
+                      <div className="plus-share-text-bg">
+                        <p className="copy-text px-3">Copy</p>
+                      </div>
+                      <div className="Plus-share-icon">
+                        <img src={copy} alt="" />
+                      </div>
+                    </div>
+                    <div className="custom-toltip">{open && <p>Copied</p>}</div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+ 
+
+      <section
+        style={{ background: "#fff" }}
+        className="blog-background position-relative"
+      >
+        <div className="">
+          <div className="">
+            <div className="">
+              <div className="main-blog-content mt-5">
+                <div className="d-flex justify-content-center blog-spacing-right ">
+                  <div className="focci-sdk-container">
+                    <div>
+                      {blog.blogContent && (
+                        <div
+                          className="main-blog-text secondary-dark-text"
+                          dangerouslySetInnerHTML={{
+                            __html: blog.blogContent,
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

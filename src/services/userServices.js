@@ -21,6 +21,12 @@ export const setDraft = async (data) => {
   return apiClient.post(basr_url + `/addDraft`, data).then((res) => res);
 };
 
+export const getDynamicBlog = async (title) => {
+  return apiClient
+    .get(`${basr_url}/blog/${encodeURIComponent(title)}`)
+    .then((res) => res);
+};
+
 export const getAllDrafts = async () => {
   return apiClient.get(basr_url + `/getDrafts`).then((res) => res);
 };
