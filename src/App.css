@@ -112,3 +112,7 @@
 .blue-background {
   background: #0C8AE6;
 }
+
+.cursor-pointer {
+  cursor: pointer !important;
+}

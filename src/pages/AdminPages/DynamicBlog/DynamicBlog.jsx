@@ -7,6 +7,9 @@ import copy from "../../../assets/icon/copy .png";
 import { LoadingContext } from "../../../context/LoadingContext";
 import { getDynamicBlog } from "../../../services/userServices";
 import { toast } from "react-toastify";
+import "./DynamicBlog.css";
+import "../BlogHome/BlogHome.css";
+import { calculateReadingTime } from "../../../utils/calculateReadingTime";
 
 const DynamicBlog = () => {
   const { title } = useParams();
@@ -43,6 +46,7 @@ const DynamicBlog = () => {
       setOpne(false);
     }, 1000);
   }, [open]);
+  
 
   return (
     <div className="position-relative">
@@ -53,125 +57,109 @@ const DynamicBlog = () => {
         }}
       ></section>
 
-        <div className={`dynamic-blog-header-content`}>
-          <div className="row">
-            <div className="col-md-5 d-flex align-items-center">
-              <img className="blog-header-image" src={blog.coverImg} alt="" />
-            </div>
-            <div className="col-md-7 d-flex align-items-center">
-              <div className="">
-                <div className="d-flex date-div mt-1">
-                  <p style={{ color: "gray", width: "110px" }} className="date">
-                    {blog.date}
-                  </p>{" "}
-                  <strong style={{ color: "gray" }} className="popular-dot">
-                    .
-                  </strong>{" "}
-                  <p style={{ color: "gray" }} className="date">
-                    10 min read
-                  </p>
-                </div>
-                <div>
-                  {blog.tag && (
-                    <>
-                      {blog.tag.map((data, index) => (
-                        <Link to={`/blogs/tag/${data.tags}`} key={index}>
-                          <button className={`tag-btn-${index + 1}`}>
-                            <small>{data.tags}</small>
-                          </button>
-                        </Link>
-                      ))}
-                    </>
-                  )}
-                </div>
-                <div>
-                  <h1 className="dynamic-blog-top-header-title">
-                    {blog.blogTitle}
-                  </h1>
-                </div>
-
-                <section>
-                  <h6 className="share-via mt-3">Share Via:</h6>
-                  <div className="d-flex flex-wrap mt-3">
-                    <div
-                      className="d-flex my-2 text-decoration-none pointer-cursor"
-                      onClick={() =>
-                        window.open(
-                          `https://www.facebook.com/sharer.php?u=${window.location.href}`,
-                          "Popup",
-                          "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
-                        )
-                      }
-                    >
-                      <div className="fb-share-text-bg">
-                        <p className="facebook-text px-3">FaceBook</p>
-                      </div>
-                      <div className="facebook-share-icon">
-                        <img src={facebook} alt="" />
-                      </div>
-                    </div>
-                    <div
-                      className="d-flex m-2 text-decoration-none pointer-cursor"
-                      onClick={() =>
-                        window.open(
-                          `https://twitter.com/intent/tweet?url=${window.location.href}`,
-                          "Popup",
-                          "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
-                        )
-                      }
-                    >
-                      <div className="twitter-share-text-bg">
-                        <p className="facebook-text px-3">Twitter</p>
-                      </div>
-                      <div className="twitter-share-icon">
-                        <img src={twitter} alt="" />
-                      </div>
-                    </div>
-                    <div
-                      className="d-flex my-2 text-decoration-none pointer-cursor"
-                      onClick={() =>
-                        window.open(
-                          `https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}`,
-                          "Popup",
-                          "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
-                        )
-                      }
-                    >
-                      <div className="linkedIn-share-text-bg">
-                        <p className="facebook-text px-3">LinkedIn</p>
-                      </div>
-                      <div className="linkedIn-share-icon">
-                        <img src={linkedIn} alt="" />
-                      </div>
-                    </div>
-
-                    <div
-                      className="d-flex m-2 more-share-div"
-                      onClick={() => {
-                        navigator.clipboard.writeText(window.location.href);
-                        setOpne(true);
-                      }}
-                    >
-                      <div className="plus-share-text-bg">
-                        <p className="copy-text px-3">Copy</p>
-                      </div>
-                      <div className="Plus-share-icon">
-                        <img src={copy} alt="" />
-                      </div>
-                    </div>
-                    <div className="custom-toltip">{open && <p>Copied</p>}</div>
-                  </div>
-                </section>
+      <div
+        className={`dynamic-blog-header-content d-flex align-items-center p-4`}
+      >
+        <div className="row h-100">
+          <div className="col-md-5 d-flex align-items-center ">
+            <img className="w-100 rounded-1" src={blog.coverImg} alt="" />
+          </div>
+          <div className="col-md-7 d-flex align-items-center">
+            <div>
+              <div className="d-flex flex-wrap gap-3 align-items-center">
+                <p className="m-0 text-xs-sm text-white font-nunito">
+                  {blog.date}
+                </p>{" "}
+                <strong className="seperator-circle bg-white"></strong>{" "}
+                <p className="m-0 text-xs-sm text-white font-nunito">
+                  {calculateReadingTime(blog.blogContent)} min read
+                </p>
               </div>
+              <div>
+                {blog.tag && (
+                  <div className="d-flex flex-wrap gap-2 mt-2">
+                    {blog.tag.map((data, index) => (
+                      <Link to={`/blogs/tag/${data.tags}`} key={index}>
+                        <button className={`tag-btn tag-btn-${index + 1}`}>
+                          <small>{data.tags}</small>
+                        </button>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
+                <h1 className="text-white text-4xl font-nunito lh-1 m-0 mb-2 mt-4">
+                  {blog.blogTitle}
+                </h1>
+              </div>
+
+              <section>
+                <h6 className="text-white text-md font-nunito mt-4">
+                  Share Via:
+                </h6>
+                <div className="d-flex flex-wrap gap-2 mt-2">
+                  <div
+                    className="d-flex gap-2 align-items-center px-3 py-1 text-decoration-none pointer-cursor rounded-1 bg-white cursor-pointer"
+                    onClick={() =>
+                      window.open(
+                        `https://www.facebook.com/sharer.php?u=${window.location.href}`,
+                        "Popup",
+                        "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
+                      )
+                    }
+                  >
+                    <p className="text-sm font-nunito m-0 lh-sm">FaceBook</p>
+                    <img src={facebook} alt="facebook" width={25} height={25} />
+                  </div>
+
+                  <div
+                    className="d-flex gap-2 align-items-center px-3 py-1 text-decoration-none pointer-cursor rounded-1 bg-white cursor-pointer"
+                    onClick={() =>
+                      window.open(
+                        `https://twitter.com/intent/tweet?url=${window.location.href}`,
+                        "Popup",
+                        "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
+                      )
+                    }
+                  >
+                    <p className="text-sm font-nunito m-0 lh-sm">Twitter</p>
+
+                    <img src={twitter} alt="twitter" width={25} height={25} />
+                  </div>
+                  <div
+                    className="d-flex gap-2 align-items-center px-3 py-1 text-decoration-none pointer-cursor rounded-1 bg-white cursor-pointer"
+                    onClick={() =>
+                      window.open(
+                        `https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}`,
+                        "Popup",
+                        "toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30"
+                      )
+                    }
+                  >
+                    <p className="text-sm font-nunito m-0 lh-sm">LinkedIn</p>
+                    <img src={linkedIn} alt="linkedIn" width={25} height={25} />
+                  </div>
+
+                  <div
+                    className="d-flex gap-2 align-items-center px-3 py-1 text-decoration-none rounded-1 bg-transparent border cursor-pointer"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      setOpne(true);
+                    }}
+                  >
+                    <p className="text-sm text-white font-nunito m-0 lh-sm">Copy</p>
+                    <img src={copy} alt="copy" width={25} height={25} />
+                  </div>
+                  <div className="custom-toltip text-poppins">{open && <p>Copied</p>}</div>
+                </div>
+              </section>
             </div>
           </div>
         </div>
- 
+      </div>
 
-      <section
-        style={{ background: "#fff" }}
-        className="blog-background position-relative"
-      >
+      <section className="bg-white position-relative">
         <div className="">
           <div className="">
             <div className="">

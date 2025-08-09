@@ -149,7 +149,7 @@ const BlogHome = () => {
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
-                      <div className="blog-buttons d-flex flex-wrap gap-2 ms-3">
+                      <div className="d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
                           <button
                             className={`tag-btn tag-btn-${index + 1}`}
