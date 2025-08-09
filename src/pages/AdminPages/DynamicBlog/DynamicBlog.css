@@ -36,6 +36,10 @@ a {
     font-family: 'Nunito', sans-serif;
 }
 
+.main-blog-content a {
+    color: #0C8AE6 !important;
+}
+
 @media screen and (max-width:1024px) {
     .blog-header-title {
         font-size: 28px;

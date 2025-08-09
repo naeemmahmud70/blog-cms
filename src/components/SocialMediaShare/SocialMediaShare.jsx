@@ -44,6 +44,7 @@ const SocialMediaShare = () => {
       setOpne(false);
     }, 1000);
   }, [open]);
+
   return (
     <section>
       <h6 className="text-white text-md font-nunito mt-4">Share Via:</h6>
