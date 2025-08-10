@@ -17,6 +17,12 @@ export const getAllBlogs = async () => {
   return apiClient.get(basr_url + `/getallBlogs`).then((res) => res);
 };
 
+export const updateBlog = (id, fullBloglogData) => {
+  return apiClient
+    .patch(basr_url + `/updateBlog/${id}`, { updatedBlog: fullBloglogData })
+    .then((res) => res);
+};
+
 export const setDraft = async (data) => {
   return apiClient.post(basr_url + `/addDraft`, data).then((res) => res);
 };

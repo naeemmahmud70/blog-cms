@@ -17,7 +17,7 @@ const ProtectedRoutes = () => {
       <Route path="/" element={<AdminLayout />}>
         <Route path="blogs" element={<BlogHome />} />
         <Route path="blogs/:title" element={<DynamicBlog />} />
-        <Route path="blogs/blog_edit/:id" element={<EditBlog />} />
+        <Route path="blogs/blog_edit/:title" element={<EditBlog />} />
         <Route path="archives" element={<ArchivedBlogs />} />
         <Route path="write_new_blog" element={<WriteNewBlog />} />
         <Route path="drafts" element={<Drafts />} />

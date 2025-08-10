@@ -3,6 +3,7 @@ import React from "react";
 import { calculateReadingTime } from "../../utils/calculateReadingTime";
 import { Link } from "react-router-dom";
 import SocialMediaShare from "../SocialMediaShare/SocialMediaShare";
+import edit from "../../assets/icon/edite.png";
 
 const BlogHeader = ({ blog }) => {
   return (
@@ -15,6 +16,14 @@ const BlogHeader = ({ blog }) => {
       <div
         className={`dynamic-blog-header-content w-100 px-4 py-5 d-flex align-items-center p-4`}
       >
+        <Link
+          to={`/admin/blogs/blog_edit/${encodeURIComponent(
+            blog?.blogTitle?.replace(/\s+/g, "_")
+          )}`}
+          className="blue-background text-white text-md font-nunito text-center px-4 py-2 rounded-2 d-flex justify-content-center align-items-center gap-2 position-absolute top-0 end-0 m-4"
+        >
+          Edit <img src={edit} alt="edit" height={25} width={25} />
+        </Link>
         <div className="row h-100">
           <div className="col-md-5 d-flex align-items-center ">
             <img className="w-100 rounded-1" src={blog.coverImg} alt="" />

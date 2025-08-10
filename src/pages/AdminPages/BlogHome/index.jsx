@@ -172,7 +172,9 @@ const BlogHome = () => {
                       <ul className="dropdown-menu drop-down-bg">
                         <li>
                           <Link
-                            to={`/admin/blogs/blog_edit/${data._id}`}
+                            to={`/admin/blogs/blog_edit/${encodeURIComponent(
+                              data?.blogTitle?.replace(/\s+/g, "_")
+                            )}`}
                             style={{ textDecoration: "none" }}
                           >
                             <button className="dropdown-item">
