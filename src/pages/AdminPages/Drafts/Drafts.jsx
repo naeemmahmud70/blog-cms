@@ -71,7 +71,11 @@ const Drafts = () => {
               }`}
             >
               <div className="left-side-content">
-                <Link to={`/dashboard/blogs/${data._id}`}>
+                <Link
+                  to={`/admin/drafts/${encodeURIComponent(
+                    data.blogTitle.replace(/\s+/g, "_")
+                  )}`}
+                >
                   <div className="admin-blog-card-img-overflow">
                     <img className="blog-card-img" src={data.coverImg} alt="" />
                   </div>
@@ -80,7 +84,9 @@ const Drafts = () => {
               <div className="d-flex align-items-center right-side-content">
                 <div className="blog-card-text">
                   <Link
-                    to={`/admin/blogs/blog_edit/${data._id}`}
+                    to={`/admin/drafts/${encodeURIComponent(
+                      data.blogTitle.replace(/\s+/g, "_")
+                    )}`}
                     className="text-decoration-none"
                   >
                     <h4 className="text-lg light-black-text font-nunito fw-semibold">
@@ -129,7 +135,7 @@ const Drafts = () => {
                       <ul className="dropdown-menu drop-down-bg">
                         <li>
                           <Link
-                            to={`/admin/blogs/blog_edit/${data._id}`}
+                            to={`/admin/drafts/${data.blogTitle}`}
                             style={{ textDecoration: "none" }}
                           >
                             <button className="dropdown-item">

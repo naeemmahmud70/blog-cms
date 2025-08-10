@@ -33,6 +33,18 @@ export const getAllDrafts = async () => {
 export const deleteDraft = async (id) => {
   return apiClient.delete(basr_url + `/delete/draft/${id}`).then((res) => res);
 };
+export const getDynamicDraft = async (title) => {
+  return apiClient
+    .get(`${basr_url}/draft/${encodeURIComponent(title)}`)
+    .then((res) => res);
+};
+export const updateDraft = (id, fullBloglogData) => {
+  return apiClient
+    .patch(basr_url + `updateDraftBlog/${id}`, {
+      updatedDraft: fullBloglogData,
+    })
+    .then((res) => res);
+};
 
 export const getAllArchives = async () => {
   return apiClient.get(basr_url + `/getAllArchive`).then((res) => res);
