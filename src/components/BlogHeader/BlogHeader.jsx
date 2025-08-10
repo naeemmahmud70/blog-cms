@@ -6,6 +6,14 @@ import SocialMediaShare from "../SocialMediaShare/SocialMediaShare";
 import edit from "../../assets/icon/edite.png";
 
 const BlogHeader = ({ blog }) => {
+  const draftUrl = `/admin/drafts/draft-edit/${encodeURIComponent(
+    blog?.blogTitle?.replace(/\s+/g, "_")
+  )}`;
+  const blogUrl = `/admin/blogs/blog_edit/${encodeURIComponent(
+    blog?.blogTitle?.replace(/\s+/g, "_")
+  )}`;
+
+  const link = location.pathname.includes("/drafts") ? draftUrl : blogUrl;
   return (
     <div
       className="bg-cover bg-center bg-no-repeat position-relative"
@@ -17,9 +25,7 @@ const BlogHeader = ({ blog }) => {
         className={`dynamic-blog-header-content w-100 px-4 py-5 d-flex align-items-center p-4`}
       >
         <Link
-          to={`/admin/blogs/blog_edit/${encodeURIComponent(
-            blog?.blogTitle?.replace(/\s+/g, "_")
-          )}`}
+          to={link}
           className="blue-background text-white text-md font-nunito text-center px-4 py-2 rounded-2 d-flex justify-content-center align-items-center gap-2 position-absolute top-0 end-0 m-4"
         >
           Edit <img src={edit} alt="edit" height={25} width={25} />

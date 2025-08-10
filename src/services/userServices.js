@@ -46,7 +46,7 @@ export const getDynamicDraft = async (title) => {
 };
 export const updateDraft = (id, fullBloglogData) => {
   return apiClient
-    .patch(basr_url + `updateDraftBlog/${id}`, {
+    .patch(basr_url + `/updateDraftBlog/${id}`, {
       updatedDraft: fullBloglogData,
     })
     .then((res) => res);

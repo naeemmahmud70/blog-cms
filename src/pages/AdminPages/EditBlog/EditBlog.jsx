@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
-import { getDynamicBlog, updateBlog } from "../../../services/userServices";
+import {
+  deleteDraft,
+  getDynamicBlog,
+  updateBlog,
+} from "../../../services/userServices";
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";

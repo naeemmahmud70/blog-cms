@@ -110,7 +110,7 @@ const BlogHome = () => {
               <div className="left-side-content">
                 <Link
                   to={`/admin/blogs/${encodeURIComponent(
-                    data.blogTitle.replace(/\s+/g, "_")
+                    data?.blogTitle?.replace(/\s+/g, "_")
                   )}`}
                 >
                   <div className="admin-blog-card-img-overflow">
@@ -122,7 +122,7 @@ const BlogHome = () => {
                 <div className="blog-card-text">
                   <Link
                     to={`/admin/blogs/${encodeURIComponent(
-                      data.blogTitle.replace(/\s+/g, "_")
+                      data?.blogTitle?.replace(/\s+/g, "_")
                     )}`}
                     className="text-decoration-none"
                   >

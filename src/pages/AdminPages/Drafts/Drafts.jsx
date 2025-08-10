@@ -46,7 +46,7 @@ const Drafts = () => {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
       } else {
-        toast.success("You have deleted the draft!");
+        toast.success("Draft deleted successfully!");
         setDeleted(!deleted);
       }
     } catch (error) {
@@ -135,11 +135,13 @@ const Drafts = () => {
                       <ul className="dropdown-menu drop-down-bg">
                         <li>
                           <Link
-                            to={`/admin/drafts/${data.blogTitle}`}
+                            to={`/admin/drafts/draft-edit/${encodeURIComponent(
+                              data?.blogTitle?.replace(/\s+/g, "_")
+                            )}`}
                             style={{ textDecoration: "none" }}
                           >
                             <button className="dropdown-item">
-                              Edit Article <img src={edite} alt="" />
+                              Edit Draft <img src={edite} alt="" />
                             </button>
                           </Link>
                         </li>
