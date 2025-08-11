@@ -42,6 +42,7 @@ const signupSchema = z.object({
       message: "Password must contain at least one special character",
     }),
   role: z.string(),
+  createdAt: z.string(),
 });
 
 const SignUpPage = () => {
@@ -148,6 +149,15 @@ const SignUpPage = () => {
                 type="hidden"
                 defaultValue="admin"
                 {...register("role", { required: true })}
+              />
+              <input
+                type="hidden"
+                defaultValue={new Date().toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+                {...register("createdAt", { required: true })}
               />
             </div>
             <div className="login-button mt-4">
