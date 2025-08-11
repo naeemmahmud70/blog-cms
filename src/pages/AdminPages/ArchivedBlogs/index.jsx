@@ -106,30 +106,19 @@ const ArchivedBlogs = () => {
               }`}
             >
               <div className="left-side-content">
-                <Link to={`/dashboard/blogs/${data._id}`}>
-                  <div className="admin-blog-card-img-overflow">
-                    <img className="blog-card-img" src={data.coverImg} alt="" />
-                  </div>
-                </Link>
+                <div className="admin-blog-card-img-overflow">
+                  <img className="blog-card-img" src={data.coverImg} alt="" />
+                </div>
               </div>
               <div className="d-flex align-items-center right-side-content">
                 <div className="blog-card-text">
-                  <Link
-                    to={`/admin/blogs/blog_edit/${data._id}`}
-                    className="text-decoration-none"
-                  >
-                    <h4 className="text-lg light-black-text font-nunito fw-semibold">
-                      {data.blogTitle}
-                    </h4>{" "}
-                    <div className="read-more-overflow secondary-light-text">
-                      <RenderParagraphsJSX html={data.blogContent} />
-                    </div>
-                    <p className="blue-text text-xs-sm font-nunito">
-                      Read more...
-                    </p>
-                  </Link>
-
-                  <div className="d-flex justify-content-between align-items-center">
+                  <h4 className="text-lg light-black-text font-nunito fw-semibold">
+                    {data.blogTitle}
+                  </h4>{" "}
+                  <div className="read-more-overflow secondary-light-text">
+                    <RenderParagraphsJSX html={data.blogContent} />
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mt-2">
                     <div className="d-flex align-items-center">
                       <div className="d-flex flex-wrap gap-3 align-items-center">
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
@@ -143,12 +132,16 @@ const ArchivedBlogs = () => {
                       </div>
                       <div className="blog-buttons d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
-                          <button
+                          <Link
+                            to={`/admin/blogs/tag/${data.tags.replace(
+                              /\s+/g,
+                              "_"
+                            )}`}
                             className={`tag-btn tag-btn-${index + 1}`}
                             key={index}
                           >
                             <small>{data.tags}</small>
-                          </button>
+                          </Link>
                         ))}
                       </div>
                     </div>

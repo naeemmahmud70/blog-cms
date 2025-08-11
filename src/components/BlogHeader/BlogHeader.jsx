@@ -49,7 +49,13 @@ const BlogHeader = ({ blog }) => {
                 {blog.tag && (
                   <div className="d-flex flex-wrap gap-2 mt-2">
                     {blog.tag.map((data, index) => (
-                      <Link to={`/blogs/tag/${data.tags}`} key={index}>
+                      <Link
+                        to={`/admin/blogs/tag/${data.tags.replace(
+                          /\s+/g,
+                          "_"
+                        )}`}
+                        key={index}
+                      >
                         <button className={`tag-btn tag-btn-${index + 1}`}>
                           <small>{data.tags}</small>
                         </button>

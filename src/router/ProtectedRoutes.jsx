@@ -10,6 +10,7 @@ import DynamicBlog from "../pages/AdminPages/DynamicBlog/DynamicBlog";
 import EditBlog from "../pages/AdminPages/EditBlog/EditBlog";
 import EditDraft from "../pages/AdminPages/EditDraft/EditDraft";
 import DynamicDraft from "../pages/AdminPages/DynamicDraft/DynamicDraft";
+import TaggedBlogs from "../pages/AdminPages/TaggedBlogs/TaggedBlogs";
 
 const ProtectedRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const ProtectedRoutes = () => {
       <Route path="/" element={<AdminLayout />}>
         <Route path="blogs" element={<BlogHome />} />
         <Route path="blogs/:title" element={<DynamicBlog />} />
+        <Route path="blogs/tag/:tag" element={<TaggedBlogs />} />
         <Route path="blogs/blog_edit/:title" element={<EditBlog />} />
         <Route path="archives" element={<ArchivedBlogs />} />
         <Route path="write_new_blog" element={<WriteNewBlog />} />

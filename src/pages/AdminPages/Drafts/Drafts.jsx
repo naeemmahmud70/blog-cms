@@ -114,12 +114,16 @@ const Drafts = () => {
                       </div>
                       <div className="blog-buttons d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
-                          <button
+                          <Link
+                            to={`/admin/blogs/tag/${data.tags.replace(
+                              /\s+/g,
+                              "_"
+                            )}`}
                             className={`tag-btn tag-btn-${index + 1}`}
                             key={index}
                           >
                             <small>{data.tags}</small>
-                          </button>
+                          </Link>
                         ))}
                       </div>
                     </div>

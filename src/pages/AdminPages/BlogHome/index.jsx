@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./BlogHome.css";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 import {
   getAllBlogs,
   handleArchive,
@@ -150,13 +150,17 @@ const BlogHome = () => {
                         <strong className="seperator-circle"></strong>
                       </div>
                       <div className="d-flex flex-wrap gap-2 ms-3">
-                        {data.tag.slice(0, 6).map((data, index) => (
-                          <button
-                            className={`tag-btn tag-btn-${index + 1}`}
+                        {data?.tag?.slice(0, 6).map((data, index) => (
+                          <Link
                             key={index}
+                            to={`/admin/blogs/tag/${data.tags.replace(
+                              /\s+/g,
+                              "_"
+                            )}`}
+                            className={`tag-btn tag-btn-${index + 1}`}
                           >
                             <small>{data.tags}</small>
-                          </button>
+                          </Link>
                         ))}
                       </div>
                     </div>
