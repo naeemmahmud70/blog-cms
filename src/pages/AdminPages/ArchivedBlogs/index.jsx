@@ -73,7 +73,6 @@ const ArchivedBlogs = () => {
 
   //Deleting archive post
   const deleteArchives = async (id) => {
-    console.log(id);
     try {
       setLoading(true);
       const response = await deleteArchive(id);
@@ -81,8 +80,6 @@ const ArchivedBlogs = () => {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
       } else {
-        toast.dismiss();
-        toast.success("Permanently deleted!");
         setPosted(!isPosted);
       }
     } catch (error) {

@@ -6,7 +6,6 @@ import { getUserDetails } from "../services/userServices";
 const RequireAuth = ({ children }) => {
   const user = getUserDetails();
   const location = useLocation();
-  console.log("user", user?.email);
   if (user?.role !== "admin") {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

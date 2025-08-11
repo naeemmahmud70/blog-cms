@@ -29,7 +29,6 @@ const BlogHome = () => {
     try {
       setLoading(true);
       const response = await getAllBlogs();
-      // console.log(response);
 
       if (response.error) {
         toast.dismiss();
@@ -83,7 +82,7 @@ const BlogHome = () => {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
       } else {
-        toast.success("Stored In Achive File");
+        toast.success("Stored in the achives!");
       }
     } catch (error) {
       console.log(error);

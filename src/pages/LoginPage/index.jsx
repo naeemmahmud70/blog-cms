@@ -52,7 +52,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log("data", data);
     if (data.email && data.password) {
       setUserDetails(data);
       toast.dismiss();

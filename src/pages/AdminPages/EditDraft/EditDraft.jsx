@@ -47,7 +47,6 @@ const EditDraft = () => {
   }, [title]);
 
   const handleDynamicBlog = async (title) => {
-    console.log("title", title);
     try {
       setLoading(true);
       const response = await getDynamicDraft(title);
@@ -64,11 +63,9 @@ const EditDraft = () => {
     }
     setLoading(false);
   };
-  console.log("blog draft", blog);
 
   useEffect(() => {
     if (blog) {
-      console.log("blogssss", blog);
       setCoverImg(blog.coverImg);
       setTagInputs(blog.tag);
       setBlogTitle(blog.blogTitle);
@@ -184,7 +181,6 @@ const EditDraft = () => {
       blogContent: editorHtml,
     };
 
-    console.log("fullBloglogData", fullBloglogData);
     try {
       setLoading(true);
       const response = await postBlog(fullBloglogData);
@@ -214,7 +210,6 @@ const EditDraft = () => {
       blogContent: editorHtml,
     };
 
-    console.log("fullBloglogData", fullBloglogData);
     try {
       setLoading(true);
       const response = await updateDraft(blog._id, fullBloglogData);

@@ -138,7 +138,6 @@ const WriteBlogPost = () => {
       blogContent: editorHtml,
     };
 
-    console.log("fullBloglogData", fullBloglogData);
     try {
       setLoading(true);
       const response = await postBlog(fullBloglogData);

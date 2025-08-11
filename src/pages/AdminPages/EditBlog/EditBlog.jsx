@@ -61,11 +61,9 @@ const EditBlog = () => {
     }
     setLoading(false);
   };
-  console.log("blog", blog);
 
   useEffect(() => {
     if (blog) {
-      console.log("blogssss", blog);
       setCoverImg(blog.coverImg);
       setTagInputs(blog.tag);
       setBlogTitle(blog.blogTitle);
@@ -181,7 +179,6 @@ const EditBlog = () => {
       blogContent: editorHtml,
     };
 
-    console.log("fullBloglogData", fullBloglogData);
     try {
       setLoading(true);
       const response = await updateBlog(blog._id, fullBloglogData);

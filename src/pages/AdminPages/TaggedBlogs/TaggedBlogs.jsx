@@ -34,8 +34,7 @@ const TaggedBlogs = () => {
     }
     setLoading(false);
   };
-  console.log("tag", tag);
-  console.log("blogs", blogs);
+
   return (
     <section>
       <h5 className="text-lg secondary-black-text font-nunito m-0 mb-4">
