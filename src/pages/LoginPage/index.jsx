@@ -3,12 +3,11 @@ import "./index.css";
 import logo from "../../assets/icon/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-// import { loginUser, setUserDetails } from "../services/userService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setUserDetails } from "../../services/userServices";
+import { loginUser, setUserDetails } from "../../services/userServices";
 
 const loginSchema = z.object({
   email: z
@@ -52,31 +51,24 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    if (data.email && data.password) {
-      setUserDetails(data);
+    try {
+      const response = await loginUser(data);
+      console.log(response);
+      if (response.status === 200) {
+        reset();
+        const userDetails = response?.data;
+        setUserDetails(userDetails);
+        toast.dismiss();
+        toast.success(response?.data?.message);
+        navigate("/admin/blogs");
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message);
+      }
+    } catch (error) {
       toast.dismiss();
-      toast.success("Logged in Successfully!");
-      navigate("/admin/blogs");
-      reset();
+      toast.error(error?.response?.data?.message);
     }
-    // try {
-    //   const response = await loginUser(data);
-    //   // console.logresponse);
-    //   if (response.status === 200) {
-    //     reset();
-    //     const userDetails = response?.data;
-    //     setUserDetails(userDetails);
-    //     toast.dismiss();
-    //     toast.success(response?.message);
-    //     navigate("/dashboard/admin");
-    //   } else {
-    //     toast.dismiss();
-    //     toast.error(response.message);
-    //   }
-    // } catch (error) {
-    //   toast.dismiss();
-    //   toast.error(error?.response?.data?.message);
-    // }
   };
   return (
     <section className="vh-100 w-100 d-flex justify-content-center align-items-center">
@@ -91,7 +83,9 @@ const Login = () => {
           </h1>
         </div>
         <div>
-          <p className="fs-5 primary-black-text fw-normal text-center my-1">Login</p>
+          <p className="fs-5 primary-black-text fw-normal text-center my-1">
+            Login
+          </p>
         </div>
         {/* login form */}
         <div>

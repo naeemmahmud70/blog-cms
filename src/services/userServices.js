@@ -9,6 +9,13 @@ export const getUserDetails = () => {
   return JSON.parse(localStorage.getItem("loginAccessToken"));
 };
 
+export const signUpUser = async (data) => {
+  return apiClient.post(basr_url + `/auth/signup`, data).then((res) => res);
+};
+export const loginUser = async (data) => {
+  return apiClient.post(basr_url + `/auth/login`, data).then((res) => res);
+};
+
 export const postBlog = async (data) => {
   return apiClient.post(basr_url + `/allBlogs`, data).then((res) => res);
 };

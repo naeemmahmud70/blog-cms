@@ -2,12 +2,11 @@ import React from "react";
 import logo from "../../assets/icon/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-// import { loginUser, setUserDetails } from "../services/userService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setUserDetails } from "../../services/userServices";
+import { setUserDetails, signUpUser } from "../../services/userServices";
 
 const signupSchema = z.object({
   name: z
@@ -57,32 +56,23 @@ const SignUpPage = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-    if (data.email && data.password) {
-      setUserDetails(data);
+    try {
+      const response = await signUpUser(data);
+      console.log("response", response);
+      if (response.status === 201) {
+        reset();
+        setUserDetails(response?.data);
+        toast.dismiss();
+        toast.success(response?.data?.message);
+        navigate("/admin/blogs");
+      } else {
+        toast.dismiss();
+        toast.error(response.message);
+      }
+    } catch (error) {
       toast.dismiss();
-      toast.success("Sign in Successfully!");
-      navigate("/admin/blogs");
-      reset();
+      toast.error(error?.response?.data?.message);
     }
-    // try {
-    //   const response = await loginUser(data);
-    //   // console.logresponse);
-    //   if (response.status === 200) {
-    //     reset();
-    //     const userDetails = response?.data;
-    //     setUserDetails(userDetails);
-    //     toast.dismiss();
-    //     toast.success(response?.message);
-    //     navigate("/dashboard/admin");
-    //   } else {
-    //     toast.dismiss();
-    //     toast.error(response.message);
-    //   }
-    // } catch (error) {
-    //   toast.dismiss();
-    //   toast.error(error?.response?.data?.message);
-    // }
   };
   return (
     <section className="vh-100 w-100 d-flex justify-content-center align-items-center">
@@ -114,7 +104,7 @@ const SignUpPage = () => {
               />
               {errors.email && (
                 <span className="text-xs text-danger fw-medium font-poppins">
-                  {errors.name.message}
+                  {errors?.name?.message}
                 </span>
               )}
             </div>

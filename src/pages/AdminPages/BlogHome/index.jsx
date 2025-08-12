@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./BlogHome.css";
-import { Link, Links } from "react-router-dom";
+import { Link, } from "react-router-dom";
 import {
   getAllBlogs,
   handleArchive,
@@ -34,7 +34,7 @@ const BlogHome = () => {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
       } else {
-        setBlogs(response);
+        setBlogs(response?.data);
       }
     } catch (error) {
       console.log(error);
