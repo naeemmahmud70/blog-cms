@@ -30,15 +30,16 @@ const ArchivedBlogs = () => {
       setLoading(true);
       const response = await getAllArchives();
 
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+      if (response.status == 200) {
+        setArchive(response?.data?.archives);
       } else {
-        setArchive(response.data);
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };
@@ -57,16 +58,17 @@ const ArchivedBlogs = () => {
     try {
       setLoading(true);
       const response = await postBlog(fullBloglogData);
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
+      if (response.status === 201) {
         deleteArchives(id);
-        toast.success("Re-posted successfully!");
+        toast.success("Re-posted article successfully!");
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };
@@ -76,15 +78,16 @@ const ArchivedBlogs = () => {
     try {
       setLoading(true);
       const response = await deleteArchive(id);
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
+      if (response.status == 200) {
         setPosted(!isPosted);
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
   return (

@@ -59,19 +59,18 @@ export const updateDraft = (id, fullBloglogData) => {
     .then((res) => res);
 };
 
-export const getAllArchives = async () => {
-  return apiClient.get(basr_url + `/getAllArchive`).then((res) => res);
-};
-
 export const handleArchive = async (id) => {
   return apiClient.delete(basr_url + `/articles/${id}`).then((res) => res);
 };
+
 export const postArchive = async (data) => {
-  return apiClient.post(basr_url + `/addArchive`, data).then((res) => res);
+  return apiClient.post(basr_url + `/archives`, data).then((res) => res);
+};
+
+export const getAllArchives = async () => {
+  return apiClient.get(basr_url + `/archives`).then((res) => res);
 };
 
 export const deleteArchive = async (id) => {
-  return apiClient
-    .delete(basr_url + `/archive/delete/${id}`)
-    .then((res) => res);
+  return apiClient.delete(basr_url + `/archives/${id}`).then((res) => res);
 };
