@@ -31,7 +31,7 @@ export const updateBlog = (id, fullBloglogData) => {
 };
 
 export const setDraft = async (data) => {
-  return apiClient.post(basr_url + `/addDraft`, data).then((res) => res);
+  return apiClient.post(basr_url + `/drafts`, data).then((res) => res);
 };
 
 export const getDynamicBlog = async (title) => {
@@ -41,19 +41,19 @@ export const getDynamicBlog = async (title) => {
 };
 
 export const getAllDrafts = async () => {
-  return apiClient.get(basr_url + `/getDrafts`).then((res) => res);
+  return apiClient.get(basr_url + `/drafts`).then((res) => res);
 };
 export const deleteDraft = async (id) => {
-  return apiClient.delete(basr_url + `/delete/draft/${id}`).then((res) => res);
+  return apiClient.delete(basr_url + `/drafts/${id}`).then((res) => res);
 };
 export const getDynamicDraft = async (title) => {
   return apiClient
-    .get(`${basr_url}/draft/${encodeURIComponent(title)}`)
+    .get(`${basr_url}/drafts/${encodeURIComponent(title)}`)
     .then((res) => res);
 };
 export const updateDraft = (id, fullBloglogData) => {
   return apiClient
-    .patch(basr_url + `/updateDraftBlog/${id}`, {
+    .patch(basr_url + `/drafts/${id}`, {
       updatedDraft: fullBloglogData,
     })
     .then((res) => res);

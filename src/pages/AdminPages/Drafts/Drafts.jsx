@@ -25,15 +25,16 @@ const Drafts = () => {
       setLoading(true);
       const response = await getAllDrafts();
 
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+      if (response.status == 200) {
+        setDrafts(response?.data?.drafts);
       } else {
-        setDrafts(response?.data);
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };
@@ -42,16 +43,17 @@ const Drafts = () => {
     try {
       setLoading(true);
       const response = await deleteDraft(id);
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
-        toast.success("Draft deleted successfully!");
+      if (response.status == 200) {
+        toast.success(response.data.message);
         setDeleted(!deleted);
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 

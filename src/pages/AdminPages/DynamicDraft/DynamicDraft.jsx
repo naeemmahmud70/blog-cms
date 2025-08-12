@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { LoadingContext } from "../../../context/LoadingContext";
-import {
-  getDynamicDraft,
-} from "../../../services/userServices";
+import { getDynamicDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
 import "../DynamicBlog/DynamicBlog.css";
 import "../BlogHome/BlogHome.css";
@@ -27,15 +25,16 @@ const DynamicDraft = () => {
       setLoading(true);
       const response = await getDynamicDraft(title);
 
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+      if (response.status == 200) {
+        setBlog(response?.data?.draft);
       } else {
-        setBlog(response);
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };
