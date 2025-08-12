@@ -24,16 +24,16 @@ const DynamicBlog = () => {
     try {
       setLoading(true);
       const response = await getDynamicBlog(title);
-
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+      if (response.status == 200) {
+        setBlog(response?.data?.article);
       } else {
-        setBlog(response);
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };

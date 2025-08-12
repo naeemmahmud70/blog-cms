@@ -29,7 +29,7 @@ const Drafts = () => {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
       } else {
-        setDrafts(response);
+        setDrafts(response?.data);
       }
     } catch (error) {
       console.log(error);

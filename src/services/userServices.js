@@ -17,16 +17,16 @@ export const loginUser = async (data) => {
 };
 
 export const postBlog = async (data) => {
-  return apiClient.post(basr_url + `/allBlogs`, data).then((res) => res);
+  return apiClient.post(basr_url + `/articles`, data).then((res) => res);
 };
 
 export const getAllBlogs = async () => {
-  return apiClient.get(basr_url + `/getallBlogs`).then((res) => res);
+  return apiClient.get(basr_url + `/articles`).then((res) => res);
 };
 
 export const updateBlog = (id, fullBloglogData) => {
   return apiClient
-    .patch(basr_url + `/updateBlog/${id}`, { updatedBlog: fullBloglogData })
+    .patch(basr_url + `/articles/${id}`, { updatedArticle: fullBloglogData })
     .then((res) => res);
 };
 
@@ -36,7 +36,7 @@ export const setDraft = async (data) => {
 
 export const getDynamicBlog = async (title) => {
   return apiClient
-    .get(`${basr_url}/blog/${encodeURIComponent(title)}`)
+    .get(`${basr_url}/articles/${encodeURIComponent(title)}`)
     .then((res) => res);
 };
 
@@ -64,7 +64,7 @@ export const getAllArchives = async () => {
 };
 
 export const handleArchive = async (id) => {
-  return apiClient.delete(basr_url + `/blog/delete/${id}`).then((res) => res);
+  return apiClient.delete(basr_url + `/articles/${id}`).then((res) => res);
 };
 export const postArchive = async (data) => {
   return apiClient.post(basr_url + `/addArchive`, data).then((res) => res);

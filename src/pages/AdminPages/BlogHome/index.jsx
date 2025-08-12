@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./BlogHome.css";
-import { Link, } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   getAllBlogs,
   handleArchive,
@@ -29,36 +29,39 @@ const BlogHome = () => {
     try {
       setLoading(true);
       const response = await getAllBlogs();
-
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+      if (response.status == 200) {
+        setBlogs(response?.data?.articles);
       } else {
-        setBlogs(response?.data);
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };
 
   const handleArchives = async (id) => {
     const artcile = blogs.find((data) => data._id === id);
-    postInArchive(artcile);
+    if (artcile) {
+      postInArchive(artcile);
+    }
+
     try {
       setLoading(true);
       const response = await handleArchive(id);
-
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
+      if (response.status == 200) {
         setArchive(!isArcive);
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error.message || "Something went worng!");
     }
     setLoading(false);
   };

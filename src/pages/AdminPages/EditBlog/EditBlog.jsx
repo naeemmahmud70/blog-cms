@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
-import {
-  getDynamicBlog,
-  updateBlog,
-} from "../../../services/userServices";
+import { getDynamicBlog, updateBlog } from "../../../services/userServices";
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
@@ -48,16 +45,17 @@ const EditBlog = () => {
     try {
       setLoading(true);
       const response = await getDynamicBlog(title);
-
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+      if (response.status == 200) {
+        setBlog(response?.data?.article);
       } else {
-        setBlog(response);
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
       console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };
@@ -182,16 +180,17 @@ const EditBlog = () => {
     try {
       setLoading(true);
       const response = await updateBlog(blog._id, fullBloglogData);
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
-        toast.success("Blog updated successfully!");
+      if (response.status == 200) {
+        toast.success(response.data.message);
         navigate("/admin/blogs");
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error.message || "Something went worng!");
     }
     setLoading(false);
   };

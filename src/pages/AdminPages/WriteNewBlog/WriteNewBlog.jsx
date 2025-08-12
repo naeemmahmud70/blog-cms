@@ -141,16 +141,18 @@ const WriteBlogPost = () => {
     try {
       setLoading(true);
       const response = await postBlog(fullBloglogData);
-      if (response.error) {
+      if (response.status === 201) {
         toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
-        toast.success("Blog posted successfully!");
+        toast.success(response.data.message);
         navigate("/admin/blogs");
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };

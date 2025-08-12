@@ -34,7 +34,7 @@ const ArchivedBlogs = () => {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
       } else {
-        setArchive(response);
+        setArchive(response.data);
       }
     } catch (error) {
       console.log(error);
