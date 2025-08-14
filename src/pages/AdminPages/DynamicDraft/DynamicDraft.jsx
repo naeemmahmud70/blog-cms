@@ -4,29 +4,29 @@ import { useParams } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
 import { getDynamicDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
-import "../DynamicBlog/DynamicBlog.css";
-import "../BlogHome/BlogHome.css";
-import BlogDetails from "../../../components/BlogDetails/BlogDetails";
-import BlogHeader from "../../../components/BlogHeader/BlogHeader";
+import "../DynamicArticle/DynamicArticle.css";
+import "../ArticlesHome/ArticlesHome.css";
+import ArticleHeader from "../../../components/ArticleHeader/ArticleHeader";
+import ArticleDetails from "../../../components/ArticleDetails/ArticleDetails";
 
 const DynamicDraft = () => {
   const { title } = useParams();
-  const [blog, setBlog] = useState({});
+  const [article, setArticle] = useState({});
   const { setLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     if (title) {
-      handleDynamicBlog(title?.replace(/_/g, " "));
+      handleDynamicArticle(title?.replace(/_/g, " "));
     }
   }, [title]);
 
-  const handleDynamicBlog = async (title) => {
+  const handleDynamicArticle = async (title) => {
     try {
       setLoading(true);
       const response = await getDynamicDraft(title);
 
       if (response.status == 200) {
-        setBlog(response?.data?.draft);
+        setArticle(response?.data?.draft);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -42,11 +42,11 @@ const DynamicDraft = () => {
   return (
     <div className="position-relative">
       <section>
-        <BlogHeader blog={blog} />
+        <ArticleHeader article={article} />
       </section>
 
       <section>
-        <BlogDetails blog={blog} />
+        <ArticleDetails article={article} />
       </section>
     </div>
   );

@@ -13,13 +13,13 @@ const Sidebar = () => {
   const data = [
     {
       id: 1,
-      title: "Blogs",
+      title: "Articles",
       link: "/admin/blogs",
       icon: blog,
     },
     {
       id: 2,
-      title: "Write Blog",
+      title: "Write Articles",
       link: "/admin/write_new_blog",
       icon: write,
     },
@@ -58,7 +58,7 @@ const Sidebar = () => {
           <NavLink
             key={item.id}
             to={item.link}
-            end={item.customMatch} 
+            end={item.customMatch}
             className={({ isActive }) =>
               `text-dark text-decoration-none font-nunito d-flex gap-2 align-items-center px-2 py-1 ${
                 isActive ? "active-link fw-medium" : ""

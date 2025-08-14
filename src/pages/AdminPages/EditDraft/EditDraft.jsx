@@ -4,7 +4,7 @@ import { LoadingContext } from "../../../context/LoadingContext";
 import {
   deleteDraft,
   getDynamicDraft,
-  postBlog,
+  postArticle,
   updateDraft,
 } from "../../../services/userServices";
 import { toast } from "react-toastify";
@@ -21,12 +21,12 @@ import plus from "../../../assets/icon/plus.png";
 
 const EditDraft = () => {
   const { title } = useParams();
-  const [blog, setBlog] = useState({});
+  const [article, setArticle] = useState({});
   const { loading, setLoading } = useContext(LoadingContext);
 
   const navigate = useNavigate();
   const [coverImg, setCoverImg] = useState(null);
-  const [blogTitle, setBlogTitle] = useState("");
+  const [articleTitle, setArticleTitle] = useState("");
   const [tagInputs, setTagInputs] = useState([]);
   const [editorHtml, setEditorHtml] = useState("");
   const { quill, quillRef } = useQuill();
@@ -42,16 +42,16 @@ const EditDraft = () => {
 
   useEffect(() => {
     if (title) {
-      handleDynamicBlog(title?.replace(/_/g, " "));
+      handleDynamicArticle(title?.replace(/_/g, " "));
     }
   }, [title]);
 
-  const handleDynamicBlog = async (title) => {
+  const handleDynamicArticle = async (title) => {
     try {
       setLoading(true);
       const response = await getDynamicDraft(title);
       if (response.status == 200) {
-        setBlog(response?.data?.draft);
+        setArticle(response?.data?.draft);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -65,18 +65,18 @@ const EditDraft = () => {
   };
 
   useEffect(() => {
-    if (blog) {
-      setCoverImg(blog.coverImg);
-      setTagInputs(blog.tag);
-      setBlogTitle(blog.blogTitle);
+    if (article) {
+      setCoverImg(article.coverImg);
+      setTagInputs(article.tag);
+      setArticleTitle(article.articleTitle);
 
       // Set Quill editor initial content
-      if (blog.blogContent) {
-        quill.clipboard.dangerouslyPasteHTML(blog.blogContent);
-        setEditorHtml(blog.blogContent); // Keep local state in sync
+      if (article.articleContent) {
+        quill.clipboard.dangerouslyPasteHTML(article.articleContent);
+        setEditorHtml(article.articleContent); // Keep local state in sync
       }
     }
-  }, [blog]);
+  }, [article]);
 
   // generate image url for cover picture by hosting free image hosting server
 
@@ -107,7 +107,7 @@ const EditDraft = () => {
   };
 
   const handleTitleChange = (e) => {
-    setBlogTitle(e.target.value);
+    setArticleTitle(e.target.value);
   };
 
   // 0pen dialog to select and upload image
@@ -148,7 +148,7 @@ const EditDraft = () => {
       isValid = false;
     }
 
-    if (!blogTitle.trim()) {
+    if (!articleTitle.trim()) {
       newErrors.title = "Title is required.";
       isValid = false;
     }
@@ -160,7 +160,7 @@ const EditDraft = () => {
     }
 
     if (!editorHtml || editorHtml === "<p><br></p>") {
-      newErrors.content = "Blog content cannot be empty.";
+      newErrors.content = "Article content cannot be empty.";
       isValid = false;
     }
 
@@ -168,27 +168,29 @@ const EditDraft = () => {
     return isValid;
   };
 
-  // submit full blog data to the mongodb database
+  // submit full article data to the mongodb database
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
 
-    const fullBloglogData = {
+    const fullArticleData = {
       date: fullDate,
       coverImg: coverImg,
       tag: tagInputs,
-      blogTitle: blogTitle,
-      blogContent: editorHtml,
+      articleTitle: articleTitle,
+      articleContent: editorHtml,
     };
 
     try {
       setLoading(true);
-      const response = await postBlog(fullBloglogData);
-      if (response.error) {
+
+      const response = await postArticle(fullArticleData);
+      console.log("res", response)
+      if (response.status == 201) {
+        handleDeleteDraft(article._id);
+      } else {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
-      } else {
-        handleDeleteDraft(blog._id);
       }
     } catch (error) {
       console.log(error);
@@ -202,17 +204,17 @@ const EditDraft = () => {
     event.preventDefault();
     if (!validateForm()) return;
 
-    const fullBloglogData = {
+    const fullArticleData = {
       date: fullDate,
       coverImg: coverImg,
       tag: tagInputs,
-      blogTitle: blogTitle,
-      blogContent: editorHtml,
+      articleTitle: articleTitle,
+      articleContent: editorHtml,
     };
 
     try {
       setLoading(true);
-      const response = await updateDraft(blog._id, fullBloglogData);
+      const response = await updateDraft(article._id, fullArticleData);
       if (response.status == 200) {
         toast.success(response.data.message);
         navigate("/admin/drafts");
@@ -230,13 +232,17 @@ const EditDraft = () => {
 
   const handleDeleteDraft = async (id) => {
     try {
-      const res = await deleteDraft(id);
-      if (res) {
-        toast.success("Blog posted successfully!");
+      const response = await deleteDraft(id);
+      if (response.status == 200) {
+        toast.success("Drafted article posted successfully!");
         navigate("/admin/blogs");
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
-    } catch (err) {
-      console.log("err", err.message);
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 
@@ -259,7 +265,7 @@ const EditDraft = () => {
       <section className="d-flex justify-content-center">
         <div className="w-100">
           <form>
-            <section className="write-blog-header ">
+            <section className="write-article-header ">
               <div className="row px-2 pb-4 pb-lg-0">
                 <div className="col-lg-5 p-4">
                   {coverImg ? (
@@ -374,7 +380,7 @@ const EditDraft = () => {
                             type="text"
                             placeholder="Article Title Here"
                             name="title"
-                            value={blogTitle}
+                            value={articleTitle}
                             onChange={(e) => handleTitleChange(e)}
                           />
                           {errors.title && (
@@ -412,7 +418,7 @@ const EditDraft = () => {
               </div>
             </section>
 
-            {/* Write blog contents */}
+            {/* Write article contents */}
             <section className="py-5">
               <div
                 style={{

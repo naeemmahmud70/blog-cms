@@ -1,36 +1,37 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../BlogHome/BlogHome.css";
+import "../ArticlesHome/ArticlesHome.css";
 import { Link, useParams } from "react-router-dom";
-import { getAllBlogs } from "../../../services/userServices";
+import { getAllArticles } from "../../../services/userServices";
 import { LoadingContext } from "../../../context/LoadingContext";
 import { toast } from "react-toastify";
 import RenderParagraphsJSX from "../../../components/Common/RenderParagraphsJSX/RenderParagraphsJSX";
 import { calculateReadingTime } from "../../../utils/calculateReadingTime";
 
-const TaggedBlogs = () => {
+const TaggedArticles = () => {
   const { tag } = useParams();
   const formattedTag = tag.replace(/_/g, " ");
   const { setLoading } = useContext(LoadingContext);
-  const [blogs, setBlogs] = useState([]);
-  const reversOrder = [...blogs].reverse();
+  const [articles, setArticles] = useState([]);
+  const reversOrder = [...articles].reverse();
 
   useEffect(() => {
-    handleGetAllBlogs();
+    handlegetAllArticles();
   }, []);
 
-  const handleGetAllBlogs = async () => {
+  const handlegetAllArticles = async () => {
     try {
       setLoading(true);
-      const response = await getAllBlogs();
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+      const response = await getAllArticles();
+      if (response.status == 200) {
+        setArticles(response?.data?.articles);
       } else {
-        setBlogs(response);
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error.message || "Something went worng!");
     }
     setLoading(false);
   };
@@ -54,19 +55,19 @@ const TaggedBlogs = () => {
               return (
                 <div
                   key={data?._id}
-                  className={`blogs-div mt-4 pb-4 ${
+                  className={`articles-div mt-4 pb-4 ${
                     !isLastItem ? "border-bottom" : ""
                   }`}
                 >
                   <div className="left-side-content">
                     <Link
                       to={`/admin/blogs/${encodeURIComponent(
-                        data?.blogTitle?.replace(/\s+/g, "_")
+                        data?.articleTitle?.replace(/\s+/g, "_")
                       )}`}
                     >
-                      <div className="admin-blog-card-img-overflow">
+                      <div className="admin-article-card-img-overflow">
                         <img
-                          className="blog-card-img"
+                          className="article-card-img"
                           src={data.coverImg}
                           alt=""
                         />
@@ -74,18 +75,18 @@ const TaggedBlogs = () => {
                     </Link>
                   </div>
                   <div className="d-flex align-items-center right-side-content">
-                    <div className="blog-card-text">
+                    <div className="">
                       <Link
                         to={`/admin/blogs/${encodeURIComponent(
-                          data?.blogTitle?.replace(/\s+/g, "_")
+                          data?.articleTitle?.replace(/\s+/g, "_")
                         )}`}
                         className="text-decoration-none"
                       >
                         <h4 className="text-lg light-black-text font-nunito fw-semibold">
-                          {data.blogTitle}
+                          {data.articleTitle}
                         </h4>{" "}
                         <div className="read-more-overflow secondary-light-text">
-                          <RenderParagraphsJSX html={data.blogContent} />
+                          <RenderParagraphsJSX html={data.articleContent} />
                         </div>
                         <p className="blue-text text-xs-sm font-nunito">
                           Read more...
@@ -100,7 +101,7 @@ const TaggedBlogs = () => {
                             </p>{" "}
                             <strong className="seperator-circle"></strong>{" "}
                             <p className="m-0 text-xs-sm light-black-text font-poppins">
-                              {calculateReadingTime(data.blogContent)} min read
+                              {calculateReadingTime(data.articleContent)} min read
                             </p>
                             <strong className="seperator-circle"></strong>
                           </div>
@@ -130,4 +131,4 @@ const TaggedBlogs = () => {
   );
 };
 
-export default TaggedBlogs;
+export default TaggedArticles;

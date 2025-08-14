@@ -7,10 +7,10 @@ import Profile from "./Profile";
 const Header = () => {
   const location = useLocation();
   const pageTitles = {
-    blogs: "Published Blogs",
-    write_new_blog: "Write New Blog",
+    blogs: "Published Articles",
+    write_new_blog: "Write New Articles",
     drafts: "Saved Drafts",
-    archives: "Archived Blogs",
+    archives: "Archived Articles",
     admins_list: "Admins List",
   };
 

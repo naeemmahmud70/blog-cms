@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-const BlogDetails = ({ blog }) => {
+const ArticleDetails = ({ article }) => {
   return (
     <div className="bg-white position-relative mt-5">
-      {blog?.blogContent && (
+      {article?.articleContent && (
         <div
-          className="main-blog-content"
+          className="main-article-content"
           dangerouslySetInnerHTML={{
-            __html: blog?.blogContent,
+            __html: article?.articleContent,
           }}
         />
       )}
@@ -16,4 +16,4 @@ const BlogDetails = ({ blog }) => {
   );
 };
 
-export default BlogDetails;
+export default ArticleDetails;

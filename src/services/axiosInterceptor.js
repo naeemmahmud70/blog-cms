@@ -26,7 +26,7 @@ apiClient.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     if (status === 401 || status === 403) {
-      localStorage.removeItem("user"); // match what you store
+      localStorage.removeItem("loginAccessToken"); 
     }
     console.error(error);
     return Promise.reject(error);

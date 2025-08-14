@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./BlogHome.css";
+import "./ArticlesHome.css";
 import { Link } from "react-router-dom";
 import {
-  getAllBlogs,
-  handleArchive,
+  deleteArticle,
+  getAllArticles,
   postArchive,
 } from "../../../services/userServices";
 import { LoadingContext } from "../../../context/LoadingContext";
@@ -15,22 +15,22 @@ import archive from "../../../assets/icon/archiving.png";
 import RenderParagraphsJSX from "../../../components/Common/RenderParagraphsJSX/RenderParagraphsJSX";
 import { calculateReadingTime } from "../../../utils/calculateReadingTime";
 
-const BlogHome = () => {
+const ArticlesHome = () => {
   const { setLoading } = useContext(LoadingContext);
-  const [blogs, setBlogs] = useState([]);
-  const reversOrder = [...blogs].reverse();
+  const [articles, setArticles] = useState([]);
+  const reversOrder = [...articles].reverse();
   const [isArcive, setArchive] = useState(true);
 
   useEffect(() => {
-    handleGetAllBlogs();
+    handleAllArticles();
   }, [isArcive]);
 
-  const handleGetAllBlogs = async () => {
+  const handleAllArticles = async () => {
     try {
       setLoading(true);
-      const response = await getAllBlogs();
+      const response = await getAllArticles();
       if (response.status == 200) {
-        setBlogs(response?.data?.articles);
+        setArticles(response?.data?.articles);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -44,14 +44,14 @@ const BlogHome = () => {
   };
 
   const handleArchives = async (id) => {
-    const artcile = blogs.find((data) => data._id === id);
+    const artcile = articles.find((data) => data._id === id);
     if (artcile) {
       postInArchive(artcile);
     }
 
     try {
       setLoading(true);
-      const response = await handleArchive(id);
+      const response = await deleteArticle(id);
       if (response.status == 200) {
         setArchive(!isArcive);
       } else {
@@ -70,17 +70,17 @@ const BlogHome = () => {
   const postInArchive = async (data) => {
     const fulldate = localDateAndTime();
 
-    const fullBloglogData = {
+    const fullArticleData = {
       date: fulldate,
       coverImg: data.coverImg,
       tag: data.tag,
-      blogTitle: data.blogTitle,
-      blogContent: data.blogContent,
+      articleTitle: data.articleTitle,
+      articleContent: data.articleContent,
     };
 
     try {
       setLoading(true);
-      const response = await postArchive(fullBloglogData);
+      const response = await postArchive(fullArticleData);
       if (response.error) {
         toast.dismiss();
         toast.error(response?.error?.message || "Something went worng!");
@@ -105,34 +105,38 @@ const BlogHome = () => {
           return (
             <div
               key={data?._id}
-              className={`blogs-div mt-4 pb-4 ${
+              className={`articles-div mt-4 pb-4 ${
                 !isLastItem ? "border-bottom" : ""
               }`}
             >
               <div className="left-side-content">
                 <Link
                   to={`/admin/blogs/${encodeURIComponent(
-                    data?.blogTitle?.replace(/\s+/g, "_")
+                    data?.articleTitle?.replace(/\s+/g, "_")
                   )}`}
                 >
-                  <div className="admin-blog-card-img-overflow">
-                    <img className="blog-card-img" src={data.coverImg} alt="" />
+                  <div className="admin-article-card-img-overflow">
+                    <img
+                      className="article-card-img"
+                      src={data.coverImg}
+                      alt=""
+                    />
                   </div>
                 </Link>
               </div>
               <div className="d-flex align-items-center right-side-content">
-                <div className="blog-card-text">
+                <div className="">
                   <Link
                     to={`/admin/blogs/${encodeURIComponent(
-                      data?.blogTitle?.replace(/\s+/g, "_")
+                      data?.articleTitle?.replace(/\s+/g, "_")
                     )}`}
                     className="text-decoration-none"
                   >
                     <h4 className="text-lg light-black-text font-nunito fw-semibold">
-                      {data.blogTitle}
+                      {data.articleTitle}
                     </h4>{" "}
                     <div className="read-more-overflow secondary-light-text">
-                      <RenderParagraphsJSX html={data.blogContent} />
+                      <RenderParagraphsJSX html={data.articleContent} />
                     </div>
                     <p className="blue-text text-xs-sm font-nunito">
                       Read more...
@@ -147,7 +151,7 @@ const BlogHome = () => {
                         </p>{" "}
                         <strong className="seperator-circle"></strong>{" "}
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
-                          {calculateReadingTime(data.blogContent)} min read
+                          {calculateReadingTime(data.articleContent)} min read
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
@@ -179,7 +183,7 @@ const BlogHome = () => {
                         <li>
                           <Link
                             to={`/admin/blogs/blog_edit/${encodeURIComponent(
-                              data?.blogTitle?.replace(/\s+/g, "_")
+                              data?.articleTitle?.replace(/\s+/g, "_")
                             )}`}
                             style={{ textDecoration: "none" }}
                           >
@@ -209,4 +213,4 @@ const BlogHome = () => {
   );
 };
 
-export default BlogHome;
+export default ArticlesHome;

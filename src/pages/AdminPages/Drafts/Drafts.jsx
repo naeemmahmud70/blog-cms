@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../BlogHome/BlogHome.css";
+import "../ArticlesHome/ArticlesHome.css";
 import { Link } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
 import { toast } from "react-toastify";
@@ -17,10 +17,10 @@ const Drafts = () => {
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
-    gettAllBlogs();
+    handleAllArticles();
   }, [deleted]);
 
-  const gettAllBlogs = async () => {
+  const handleAllArticles = async () => {
     try {
       setLoading(true);
       const response = await getAllDrafts();
@@ -68,34 +68,34 @@ const Drafts = () => {
           return (
             <div
               key={data?._id}
-              className={`blogs-div mt-4 pb-4 ${
+              className={`articles-div mt-4 pb-4 ${
                 !isLastItem ? "border-bottom" : ""
               }`}
             >
               <div className="left-side-content">
                 <Link
                   to={`/admin/drafts/${encodeURIComponent(
-                    data.blogTitle.replace(/\s+/g, "_")
+                    data.articleTitle.replace(/\s+/g, "_")
                   )}`}
                 >
-                  <div className="admin-blog-card-img-overflow">
-                    <img className="blog-card-img" src={data.coverImg} alt="" />
+                  <div className="admin-article-card-img-overflow">
+                    <img className="article-card-img" src={data.coverImg} alt="" />
                   </div>
                 </Link>
               </div>
               <div className="d-flex align-items-center right-side-content">
-                <div className="blog-card-text">
+                <div className="">
                   <Link
                     to={`/admin/drafts/${encodeURIComponent(
-                      data.blogTitle.replace(/\s+/g, "_")
+                      data.articleTitle.replace(/\s+/g, "_")
                     )}`}
                     className="text-decoration-none"
                   >
                     <h4 className="text-lg light-black-text font-nunito fw-semibold">
-                      {data.blogTitle}
+                      {data.articleTitle}
                     </h4>{" "}
                     <div className="read-more-overflow secondary-light-text">
-                      <RenderParagraphsJSX html={data.blogContent} />
+                      <RenderParagraphsJSX html={data.articleContent} />
                     </div>
                     <p className="blue-text text-xs-sm font-nunito">
                       Read more...
@@ -110,11 +110,11 @@ const Drafts = () => {
                         </p>{" "}
                         <strong className="seperator-circle"></strong>{" "}
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
-                          {calculateReadingTime(data.blogContent)} min read
+                          {calculateReadingTime(data.articleContent)} min read
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
-                      <div className="blog-buttons d-flex flex-wrap gap-2 ms-3">
+                      <div className="d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
                           <Link
                             to={`/admin/blogs/tag/${data.tags.replace(
@@ -142,7 +142,7 @@ const Drafts = () => {
                         <li>
                           <Link
                             to={`/admin/drafts/draft-edit/${encodeURIComponent(
-                              data?.blogTitle?.replace(/\s+/g, "_")
+                              data?.articleTitle?.replace(/\s+/g, "_")
                             )}`}
                             style={{ textDecoration: "none" }}
                           >

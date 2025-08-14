@@ -16,51 +16,53 @@ export const loginUser = async (data) => {
   return apiClient.post(basr_url + `/auth/login`, data).then((res) => res);
 };
 
-export const postBlog = async (data) => {
+export const postArticle = async (data) => {
   return apiClient.post(basr_url + `/articles`, data).then((res) => res);
 };
 
-export const getAllBlogs = async () => {
+export const getAllArticles = async () => {
   return apiClient.get(basr_url + `/articles`).then((res) => res);
 };
 
-export const updateBlog = (id, fullBloglogData) => {
+export const getDynamicArticle = async (title) => {
   return apiClient
-    .patch(basr_url + `/articles/${id}`, { updatedArticle: fullBloglogData })
+    .get(`${basr_url}/articles/${encodeURIComponent(title)}`)
     .then((res) => res);
+};
+
+export const updateArticle = (id, fullArticleData) => {
+  return apiClient
+    .patch(basr_url + `/articles/${id}`, { updatedArticle: fullArticleData })
+    .then((res) => res);
+};
+
+export const deleteArticle = async (id) => {
+  return apiClient.delete(basr_url + `/articles/${id}`).then((res) => res);
 };
 
 export const setDraft = async (data) => {
   return apiClient.post(basr_url + `/drafts`, data).then((res) => res);
 };
 
-export const getDynamicBlog = async (title) => {
-  return apiClient
-    .get(`${basr_url}/articles/${encodeURIComponent(title)}`)
-    .then((res) => res);
-};
-
 export const getAllDrafts = async () => {
   return apiClient.get(basr_url + `/drafts`).then((res) => res);
 };
+
 export const deleteDraft = async (id) => {
   return apiClient.delete(basr_url + `/drafts/${id}`).then((res) => res);
 };
+
 export const getDynamicDraft = async (title) => {
   return apiClient
     .get(`${basr_url}/drafts/${encodeURIComponent(title)}`)
     .then((res) => res);
 };
-export const updateDraft = (id, fullBloglogData) => {
+export const updateDraft = (id, fullArticleData) => {
   return apiClient
     .patch(basr_url + `/drafts/${id}`, {
-      updatedDraft: fullBloglogData,
+      updatedDraft: fullArticleData,
     })
     .then((res) => res);
-};
-
-export const handleArchive = async (id) => {
-  return apiClient.delete(basr_url + `/articles/${id}`).then((res) => res);
 };
 
 export const postArchive = async (data) => {

@@ -1,27 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { LoadingContext } from "../../../context/LoadingContext";
-import { getDynamicBlog, updateBlog } from "../../../services/userServices";
-import { toast } from "react-toastify";
-import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
-import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
-import { generateImageUrl } from "../../../services/imageUpload";
-import { selectLocalImage } from "../../../utils/selectLocalImage";
+import React, { useContext, useState, useEffect } from "react";
+import "./WriteNewArticle.css";
+import "../../../App.css";
+import { Link } from "react-router-dom";
 import arrow from "../../../assets/icon/left-arrow.png";
 import selectImg from "../../../assets/icon/select-img.png";
 import dateIcon from "../../../assets/icon/date.png";
 import timeIcon from "../../../assets/icon/time.png";
 import plus from "../../../assets/icon/plus.png";
+import { useNavigate } from "react-router-dom";
+import { LoadingContext } from "../../../context/LoadingContext";
+import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
+import { postArticle, setDraft } from "../../../services/userServices";
+import { toast } from "react-toastify";
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
+import { generateImageUrl } from "../../../services/imageUpload";
+import { selectLocalImage } from "../../../utils/selectLocalImage";
 
-const EditBlog = () => {
-  const { title } = useParams();
-  const [blog, setBlog] = useState({});
+const WriteNewArticle = () => {
   const { loading, setLoading } = useContext(LoadingContext);
-
   const navigate = useNavigate();
-  const [coverImg, setCoverImg] = useState(null);
-  const [blogTitle, setBlogTitle] = useState("");
+  const [articleTitle, setArticleTitle] = useState("");
   const [tagInputs, setTagInputs] = useState([]);
   const [editorHtml, setEditorHtml] = useState("");
   const { quill, quillRef } = useQuill();
@@ -35,47 +34,8 @@ const EditBlog = () => {
   const fullDate = localDateAndTime();
   const time = getLocalTime();
 
-  useEffect(() => {
-    if (title) {
-      handleDynamicBlog(title?.replace(/_/g, " "));
-    }
-  }, [title]);
-
-  const handleDynamicBlog = async (title) => {
-    try {
-      setLoading(true);
-      const response = await getDynamicBlog(title);
-      if (response.status == 200) {
-        setBlog(response?.data?.article);
-      } else {
-        toast.dismiss();
-        toast.error(response?.data?.message || "Something went worng!");
-      }
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-      toast.dismiss();
-      toast.error(error?.message || "Something went worng!");
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (blog) {
-      setCoverImg(blog.coverImg);
-      setTagInputs(blog.tag);
-      setBlogTitle(blog.blogTitle);
-
-      // Set Quill editor initial content
-      if (blog.blogContent) {
-        quill.clipboard.dangerouslyPasteHTML(blog.blogContent);
-        setEditorHtml(blog.blogContent); // Keep local state in sync
-      }
-    }
-  }, [blog]);
-
   // generate image url for cover picture by hosting free image hosting server
-
+  const [coverImg, setCoverImg] = useState(null);
   const uploadCoverImg = async (event) => {
     try {
       const url = await generateImageUrl(event.target.files[0]);
@@ -103,7 +63,7 @@ const EditBlog = () => {
   };
 
   const handleTitleChange = (e) => {
-    setBlogTitle(e.target.value);
+    setArticleTitle(e.target.value);
   };
 
   // 0pen dialog to select and upload image
@@ -144,7 +104,7 @@ const EditBlog = () => {
       isValid = false;
     }
 
-    if (!blogTitle.trim()) {
+    if (!articleTitle.trim()) {
       newErrors.title = "Title is required.";
       isValid = false;
     }
@@ -156,7 +116,7 @@ const EditBlog = () => {
     }
 
     if (!editorHtml || editorHtml === "<p><br></p>") {
-      newErrors.content = "Blog content cannot be empty.";
+      newErrors.content = "Article content cannot be empty.";
       isValid = false;
     }
 
@@ -164,23 +124,24 @@ const EditBlog = () => {
     return isValid;
   };
 
-  // submit full blog data to the mongodb database
+  // submit full article data to the mongodb database
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
 
-    const fullBloglogData = {
+    const fullArticleData = {
       date: fullDate,
       coverImg: coverImg,
       tag: tagInputs,
-      blogTitle: blogTitle,
-      blogContent: editorHtml,
+      articleTitle: articleTitle,
+      articleContent: editorHtml,
     };
 
     try {
       setLoading(true);
-      const response = await updateBlog(blog._id, fullBloglogData);
-      if (response.status == 200) {
+      const response = await postArticle(fullArticleData);
+      if (response.status === 201) {
+        toast.dismiss();
         toast.success(response.data.message);
         navigate("/admin/blogs");
       } else {
@@ -190,31 +151,61 @@ const EditBlog = () => {
     } catch (error) {
       setLoading(false);
       toast.dismiss();
-      toast.error(error.message || "Something went worng!");
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
   };
 
-  const handleback = () => {
-    navigate(-1);
+  // Save as draft
+  const handleDraftSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    const fullDate = localDateAndTime();
+
+    const fullArticleData = {
+      date: fullDate,
+      coverImg: coverImg,
+      tag: tagInputs,
+      articleTitle: articleTitle,
+      articleContent: editorHtml,
+    };
+
+    try {
+      setLoading(true);
+      const response = await setDraft(fullArticleData);
+      if (response.status == 201) {
+        toast.success(response.data.message);
+        navigate("/admin/drafts");
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
+    }
+
+    setLoading(false);
+    event.preventDefault();
   };
+
   return (
     <section>
       <section>
-        <div
-          className="d-flex gap-2 align-items-center mb-3 cursor-pointer"
-          onClick={handleback}
-        >
-          <img src={arrow} alt="back" height={15} width={15} />
-
-          <p className="light-gray text-base m-0 p-0">Go to back</p>
+        <div className="d-flex gap-2 align-items-center mb-3">
+          <Link to="/admin/blogs">
+            <img className="w-100" src={arrow} alt="back" />
+          </Link>
+          <p className="light-gray text-base m-0 p-0">Back to home</p>
         </div>
       </section>
 
       <section className="d-flex justify-content-center">
         <div className="w-100">
           <form>
-            <section className="write-blog-header ">
+            <section className="write-article-header">
               <div className="row px-2 pb-4 pb-lg-0">
                 <div className="col-lg-5 p-4">
                   {coverImg ? (
@@ -299,7 +290,7 @@ const EditBlog = () => {
                               </button>
                             </div>
                             <div className="tags-input position-relative d-flex flex-wrap">
-                              {tagInputs?.map((data, index) => (
+                              {tagInputs.map((data, index) => (
                                 <div key={index} className="d-flex mt-3">
                                   <input
                                     type="text"
@@ -329,7 +320,7 @@ const EditBlog = () => {
                             type="text"
                             placeholder="Article Title Here"
                             name="title"
-                            value={blogTitle}
+                            value={articleTitle}
                             onChange={(e) => handleTitleChange(e)}
                           />
                           {errors.title && (
@@ -349,17 +340,17 @@ const EditBlog = () => {
                           loading ? "opacity-50" : ""
                         }`}
                       >
-                        Update Article
+                        Publish Article
                       </button>
                       <button
-                        onClick={handleback}
                         disabled={loading}
                         type="button"
+                        onClick={handleDraftSubmit}
                         className={`save-as-draft-btn mt-3 ${
                           loading ? "opacity-50" : ""
                         }`}
                       >
-                        Cancel
+                        Save as Draft
                       </button>
                     </div>
                   </div>
@@ -367,7 +358,7 @@ const EditBlog = () => {
               </div>
             </section>
 
-            {/* Write blog contents */}
+            {/* Write article contents */}
             <section className="py-5">
               <div
                 style={{
@@ -386,9 +377,9 @@ const EditBlog = () => {
           </form>
         </div>
       </section>
-      {/* <section>
+      <section>
         <div
-          className="blog-content"
+          className="article-content"
           style={{
             padding: "1rem",
             border: "1px solid #ccc",
@@ -397,9 +388,9 @@ const EditBlog = () => {
           }}
           dangerouslySetInnerHTML={{ __html: editorHtml }}
         />
-      </section> */}
+      </section>
     </section>
   );
 };
 
-export default EditBlog;
+export default WriteNewArticle;

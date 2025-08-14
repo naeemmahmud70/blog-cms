@@ -1,8 +1,8 @@
-.dynamic-blog-header-content {
+.dynamic-article-header-content {
     backdrop-filter: blur(8px);
 }
 
-.blog-header-title {
+.article-header-title {
     font-size: 36px;
 }
 
@@ -32,16 +32,16 @@ a {
     padding: 2px 10px;
 }
 
-.main-blog-content {
+.main-article-content {
     font-family: 'Nunito', sans-serif;
 }
 
-.main-blog-content a {
+.main-article-content a {
     color: #0C8AE6 !important;
 }
 
 @media screen and (max-width:1024px) {
-    .blog-header-title {
+    .article-header-title {
         font-size: 28px;
     }
 }

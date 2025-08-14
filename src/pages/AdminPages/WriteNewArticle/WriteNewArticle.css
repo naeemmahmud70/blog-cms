@@ -123,7 +123,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.write-blog-header {
+.write-article-header {
     border-radius: 4px;
     background: #c0c0c019;
 }
@@ -142,24 +142,24 @@
 
 
 /* Style bullet lists properly */
-.blog-content ol {
+.article-content ol {
     list-style: none;
     padding-left: 1.5em;
 }
 
-.blog-content li[data-list="bullet"] {
+.article-content li[data-list="bullet"] {
     position: relative;
     padding-left: 1em;
 }
 
-.blog-content li[data-list="bullet"]::before {
+.article-content li[data-list="bullet"]::before {
     content: "•";
     position: absolute;
     left: 0;
     color: #000;
 }
 
-.blog-content li[data-list="ordered"] {
+.article-content li[data-list="ordered"] {
     list-style-type: decimal;
 }
 
@@ -169,7 +169,7 @@
     font-size: 16px;
 }
 
-.blog-content p {
+.article-content p {
     margin: 0;
 }
 

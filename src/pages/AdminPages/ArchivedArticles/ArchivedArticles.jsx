@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../BlogHome/BlogHome.css";
-import { Link } from "react-router-dom";
+import "../ArticlesHome/ArticlesHome.css";
+import { Link, useNavigate } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
 import { toast } from "react-toastify";
 import threeDot from "../../../assets/icon/DotsThreeVertical.png";
@@ -11,12 +11,13 @@ import { calculateReadingTime } from "../../../utils/calculateReadingTime";
 import {
   deleteArchive,
   getAllArchives,
-  postBlog,
+  postArticle,
 } from "../../../services/userServices";
 import { localDateAndTime } from "../../../utils/localtime";
 
-const ArchivedBlogs = () => {
+const ArchivedArticles = () => {
   const { setLoading } = useContext(LoadingContext);
+  const navigate = useNavigate();
   const [archives, setArchive] = useState([]);
   const reversOrder = [...archives].reverse();
   const [isPosted, setPosted] = useState(true);
@@ -48,19 +49,20 @@ const ArchivedBlogs = () => {
     const archive = archives.find((data) => data._id === id);
     const fulldate = localDateAndTime();
 
-    const fullBloglogData = {
+    const fullArchiveData = {
       date: fulldate,
       coverImg: archive.coverImg,
       tag: archive.tag,
-      blogTitle: archive.blogTitle,
-      blogContent: archive.blogContent,
+      articleTitle: archive.articleTitle,
+      articleContent: archive.articleContent,
     };
     try {
       setLoading(true);
-      const response = await postBlog(fullBloglogData);
+      const response = await postArticle(fullArchiveData);
       if (response.status === 201) {
         deleteArchives(id);
-        toast.success("Re-posted article successfully!");
+        toast.success("Article re-posted successfully!");
+        navigate("/admin/blogs");
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -74,11 +76,15 @@ const ArchivedBlogs = () => {
   };
 
   //Deleting archive post
-  const deleteArchives = async (id) => {
+  const deleteArchives = async (id, toastMessage) => {
     try {
       setLoading(true);
       const response = await deleteArchive(id);
       if (response.status == 200) {
+        if (toastMessage) {
+          toast.dismiss();
+          toast.success(response?.data?.message);
+        }
         setPosted(!isPosted);
       } else {
         toast.dismiss();
@@ -101,22 +107,26 @@ const ArchivedBlogs = () => {
           return (
             <div
               key={data?._id}
-              className={`blogs-div mt-4 pb-4 ${
+              className={`articles-div mt-4 pb-4 ${
                 !isLastItem ? "border-bottom" : ""
               }`}
             >
               <div className="left-side-content">
-                <div className="admin-blog-card-img-overflow">
-                  <img className="blog-card-img" src={data.coverImg} alt="" />
+                <div className="admin-article-card-img-overflow">
+                  <img
+                    className="article-card-img"
+                    src={data.coverImg}
+                    alt=""
+                  />
                 </div>
               </div>
               <div className="d-flex align-items-center right-side-content">
-                <div className="blog-card-text">
+                <div className="">
                   <h4 className="text-lg light-black-text font-nunito fw-semibold">
-                    {data.blogTitle}
+                    {data.articleTitle}
                   </h4>{" "}
                   <div className="read-more-overflow secondary-light-text">
-                    <RenderParagraphsJSX html={data.blogContent} />
+                    <RenderParagraphsJSX html={data.articleContent} />
                   </div>
                   <div className="d-flex justify-content-between align-items-center mt-2">
                     <div className="d-flex align-items-center">
@@ -126,11 +136,11 @@ const ArchivedBlogs = () => {
                         </p>{" "}
                         <strong className="seperator-circle"></strong>{" "}
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
-                          {calculateReadingTime(data.blogContent)} min read
+                          {calculateReadingTime(data.articleContent)} min read
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
-                      <div className="blog-buttons d-flex flex-wrap gap-2 ms-3">
+                      <div className="d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
                           <Link
                             to={`/admin/blogs/tag/${data.tags.replace(
@@ -165,7 +175,9 @@ const ArchivedBlogs = () => {
                         </li>
                         <li>
                           <button
-                            onClick={() => deleteArchives(data._id)}
+                            onClick={() =>
+                              deleteArchives(data._id, "toastMessage")
+                            }
                             className="dropdown-item"
                           >
                             Delete <img src={archive} alt="" />{" "}
@@ -184,4 +196,4 @@ const ArchivedBlogs = () => {
   );
 };
 
-export default ArchivedBlogs;
+export default ArchivedArticles;

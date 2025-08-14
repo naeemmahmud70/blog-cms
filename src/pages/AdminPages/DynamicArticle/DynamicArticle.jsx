@@ -2,30 +2,30 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { LoadingContext } from "../../../context/LoadingContext";
-import { getDynamicBlog } from "../../../services/userServices";
+import { getDynamicArticle } from "../../../services/userServices";
 import { toast } from "react-toastify";
-import "./DynamicBlog.css";
-import "../BlogHome/BlogHome.css";
-import BlogDetails from "../../../components/BlogDetails/BlogDetails";
-import BlogHeader from "../../../components/BlogHeader/BlogHeader";
+import "./DynamicArticle.css";
+import "../ArticlesHome/ArticlesHome.css";
+import ArticleHeader from "../../../components/ArticleHeader/ArticleHeader";
+import ArticleDetails from "../../../components/ArticleDetails/ArticleDetails";
 
-const DynamicBlog = () => {
+const DynamicArticle = () => {
   const { title } = useParams();
-  const [blog, setBlog] = useState({});
+  const [article, setArticle] = useState({});
   const { setLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     if (title) {
-      handleDynamicBlog(title?.replace(/_/g, " "));
+      handleDynamicArticle(title?.replace(/_/g, " "));
     }
   }, [title]);
 
-  const handleDynamicBlog = async (title) => {
+  const handleDynamicArticle = async (title) => {
     try {
       setLoading(true);
-      const response = await getDynamicBlog(title);
+      const response = await getDynamicArticle(title);
       if (response.status == 200) {
-        setBlog(response?.data?.article);
+        setArticle(response?.data?.article);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -41,14 +41,14 @@ const DynamicBlog = () => {
   return (
     <div className="position-relative">
       <section>
-        <BlogHeader blog={blog} />
+        <ArticleHeader article={article} />
       </section>
 
       <section>
-        <BlogDetails blog={blog} />
+        <ArticleDetails article={article} />
       </section>
     </div>
   );
 };
 
-export default DynamicBlog;
+export default DynamicArticle;
