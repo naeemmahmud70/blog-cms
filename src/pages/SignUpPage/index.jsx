@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/icon/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setUserDetails, signUpUser } from "../../services/userServices";
+import Loading from "../../components/Loading/Loading";
 
 const signupSchema = z.object({
   name: z
@@ -54,22 +55,27 @@ const SignUpPage = () => {
     resolver: zodResolver(signupSchema),
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const response = await signUpUser(data);
-      console.log("response", response);
+
       if (response.status === 201) {
         reset();
         setUserDetails(response?.data);
         toast.dismiss();
         toast.success(response?.data?.message);
-        navigate("/admin/blogs");
+        navigate("/admin/articles");
       } else {
+        setLoading(false);
         toast.dismiss();
         toast.error(response.message);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.dismiss();
       toast.error(error?.response?.data?.message);
     }
@@ -153,10 +159,11 @@ const SignUpPage = () => {
             <div className="login-button mt-4">
               <button
                 type="submit"
+                disabled={loading}
                 className="border-0 w-100 py-2 px-3 rounded tex-base text-white fw-normal font-nunito blue-background"
                 style={{ height: "46px" }}
               >
-                Sign Up
+                {loading ? <Loading /> : "Sign Up"}
               </button>
             </div>
           </form>

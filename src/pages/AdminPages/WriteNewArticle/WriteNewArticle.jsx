@@ -41,7 +41,8 @@ const WriteNewArticle = () => {
       const url = await generateImageUrl(event.target.files[0]);
       setCoverImg(url);
     } catch (error) {
-      console.log(error);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 
@@ -72,8 +73,9 @@ const WriteNewArticle = () => {
       const file = await selectLocalImage();
       const imageUrl = await generateImageUrl(file);
       insertToEditor(imageUrl);
-    } catch (err) {
-      console.error("err", err?.message);
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 
@@ -143,7 +145,7 @@ const WriteNewArticle = () => {
       if (response.status === 201) {
         toast.dismiss();
         toast.success(response.data.message);
-        navigate("/admin/blogs");
+        navigate("/admin/articles");
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -195,7 +197,7 @@ const WriteNewArticle = () => {
     <section>
       <section>
         <div className="d-flex gap-2 align-items-center mb-3">
-          <Link to="/admin/blogs">
+          <Link to="/admin/articles">
             <img className="w-100" src={arrow} alt="back" />
           </Link>
           <p className="light-gray text-base m-0 p-0">Back to home</p>

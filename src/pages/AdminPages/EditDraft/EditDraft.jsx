@@ -85,7 +85,8 @@ const EditDraft = () => {
       const url = await generateImageUrl(event.target.files[0]);
       setCoverImg(url);
     } catch (error) {
-      console.log(error);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 
@@ -185,7 +186,6 @@ const EditDraft = () => {
       setLoading(true);
 
       const response = await postArticle(fullArticleData);
-      console.log("res", response)
       if (response.status == 201) {
         handleDeleteDraft(article._id);
       } else {
@@ -235,7 +235,7 @@ const EditDraft = () => {
       const response = await deleteDraft(id);
       if (response.status == 200) {
         toast.success("Drafted article posted successfully!");
-        navigate("/admin/blogs");
+        navigate("/admin/articles");
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");

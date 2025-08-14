@@ -6,9 +6,8 @@ import { getUserDetails } from "../services/userServices";
 export const CheckUserLogin = ({ children }) => {
   const location = useLocation();
   const data = getUserDetails();
-  console.log("user", data);
   if (data?.user?.role === "admin") {
-    return <Navigate to="/admin/blogs" state={{ path: location.pathname }} />;
+    return <Navigate to="/admin/articles" state={{ path: location.pathname }} />;
   }
   return children;
 };

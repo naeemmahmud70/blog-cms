@@ -61,7 +61,7 @@ const TaggedArticles = () => {
                 >
                   <div className="left-side-content">
                     <Link
-                      to={`/admin/blogs/${encodeURIComponent(
+                      to={`/admin/articles/${encodeURIComponent(
                         data?.articleTitle?.replace(/\s+/g, "_")
                       )}`}
                     >
@@ -77,7 +77,7 @@ const TaggedArticles = () => {
                   <div className="d-flex align-items-center right-side-content">
                     <div className="">
                       <Link
-                        to={`/admin/blogs/${encodeURIComponent(
+                        to={`/admin/articles/${encodeURIComponent(
                           data?.articleTitle?.replace(/\s+/g, "_")
                         )}`}
                         className="text-decoration-none"
@@ -108,7 +108,7 @@ const TaggedArticles = () => {
                           <div className="d-flex flex-wrap gap-2 ms-3">
                             {data.tag.slice(0, 6).map((data, index) => (
                               <Link
-                                to={`/admin/blogs/tag/${data.tags.replace(
+                                to={`/admin/articles/tag/${data.tags.replace(
                                   /\s+/g,
                                   "_"
                                 )}`}

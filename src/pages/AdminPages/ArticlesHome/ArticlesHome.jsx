@@ -111,7 +111,7 @@ const ArticlesHome = () => {
             >
               <div className="left-side-content">
                 <Link
-                  to={`/admin/blogs/${encodeURIComponent(
+                  to={`/admin/articles/${encodeURIComponent(
                     data?.articleTitle?.replace(/\s+/g, "_")
                   )}`}
                 >
@@ -127,7 +127,7 @@ const ArticlesHome = () => {
               <div className="d-flex align-items-center right-side-content">
                 <div className="">
                   <Link
-                    to={`/admin/blogs/${encodeURIComponent(
+                    to={`/admin/articles/${encodeURIComponent(
                       data?.articleTitle?.replace(/\s+/g, "_")
                     )}`}
                     className="text-decoration-none"
@@ -159,7 +159,7 @@ const ArticlesHome = () => {
                         {data?.tag?.slice(0, 6).map((data, index) => (
                           <Link
                             key={index}
-                            to={`/admin/blogs/tag/${data.tags.replace(
+                            to={`/admin/articles/tag/${data.tags.replace(
                               /\s+/g,
                               "_"
                             )}`}
@@ -182,7 +182,7 @@ const ArticlesHome = () => {
                       <ul className="dropdown-menu drop-down-bg">
                         <li>
                           <Link
-                            to={`/admin/blogs/blog_edit/${encodeURIComponent(
+                            to={`/admin/articles/article_edit/${encodeURIComponent(
                               data?.articleTitle?.replace(/\s+/g, "_")
                             )}`}
                             style={{ textDecoration: "none" }}

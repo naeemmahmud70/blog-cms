@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css";
 import logo from "../../assets/icon/logo.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUser, setUserDetails } from "../../services/userServices";
+import Loading from "../../components/Loading/Loading";
 
 const loginSchema = z.object({
   email: z
@@ -49,23 +50,26 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const response = await loginUser(data);
-      console.log(response);
       if (response.status === 200) {
         reset();
         const userDetails = response?.data;
         setUserDetails(userDetails);
         toast.dismiss();
         toast.success(response?.data?.message);
-        navigate("/admin/blogs");
+        navigate("/admin/articles");
       } else {
+        setLoading(false);
         toast.dismiss();
         toast.error(response?.data?.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.dismiss();
       toast.error(error?.response?.data?.message);
     }
@@ -121,10 +125,13 @@ const Login = () => {
             <div className="login-button mt-4">
               <button
                 type="submit"
-                className="border-0 w-100 py-2 px-3 rounded tex-base text-white fw-normal font-nunito blue-background"
+                disabled={loading}
+                className={`border-0 w-100 py-2 px-3 rounded tex-base text-white fw-normal font-nunito blue-background ${
+                  loading && "opacity-50"
+                }`}
                 style={{ height: "46px" }}
               >
-                Login
+                {loading ? <Loading /> : "Login"}
               </button>
             </div>
           </form>

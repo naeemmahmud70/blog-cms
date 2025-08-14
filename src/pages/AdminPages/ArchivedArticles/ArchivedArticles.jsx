@@ -62,7 +62,7 @@ const ArchivedArticles = () => {
       if (response.status === 201) {
         deleteArchives(id);
         toast.success("Article re-posted successfully!");
-        navigate("/admin/blogs");
+        navigate("/admin/articles");
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -143,7 +143,7 @@ const ArchivedArticles = () => {
                       <div className="d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
                           <Link
-                            to={`/admin/blogs/tag/${data.tags.replace(
+                            to={`/admin/articles/tag/${data.tags.replace(
                               /\s+/g,
                               "_"
                             )}`}

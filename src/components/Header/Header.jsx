@@ -7,8 +7,8 @@ import Profile from "./Profile";
 const Header = () => {
   const location = useLocation();
   const pageTitles = {
-    blogs: "Published Articles",
-    write_new_blog: "Write New Articles",
+    articles: "Published Articles",
+    write_new_article: "Write New Articles",
     drafts: "Saved Drafts",
     archives: "Archived Articles",
     admins_list: "Admins List",

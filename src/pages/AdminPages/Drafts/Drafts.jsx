@@ -117,7 +117,7 @@ const Drafts = () => {
                       <div className="d-flex flex-wrap gap-2 ms-3">
                         {data.tag.slice(0, 6).map((data, index) => (
                           <Link
-                            to={`/admin/blogs/tag/${data.tags.replace(
+                            to={`/admin/articles/tag/${data.tags.replace(
                               /\s+/g,
                               "_"
                             )}`}

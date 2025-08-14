@@ -1,7 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
-import { getDynamicArticle, updateArticle } from "../../../services/userServices";
+import {
+  getDynamicArticle,
+  updateArticle,
+} from "../../../services/userServices";
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
@@ -52,7 +55,6 @@ const EditArticle = () => {
         toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
       toast.dismiss();
       toast.error(error?.message || "Something went worng!");
@@ -81,7 +83,8 @@ const EditArticle = () => {
       const url = await generateImageUrl(event.target.files[0]);
       setCoverImg(url);
     } catch (error) {
-      console.log(error);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 
@@ -182,7 +185,7 @@ const EditArticle = () => {
       const response = await updateArticle(article._id, fullArticleData);
       if (response.status == 200) {
         toast.success(response.data.message);
-        navigate("/admin/blogs");
+        navigate("/admin/articles");
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");

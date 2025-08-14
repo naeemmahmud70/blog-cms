@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/icon/logo.png";
-import blog from "../../assets/icon/blog.png";
+import article from "../../assets/icon/blog.png";
 import write from "../../assets/icon/write.png";
 import draft from "../../assets/icon/draft.png";
 import archive from "../../assets/icon/archive.png";
@@ -14,13 +14,13 @@ const Sidebar = () => {
     {
       id: 1,
       title: "Articles",
-      link: "/admin/blogs",
-      icon: blog,
+      link: "/admin/articles",
+      icon: article,
     },
     {
       id: 2,
       title: "Write Articles",
-      link: "/admin/write_new_blog",
+      link: "/admin/write_new_article",
       icon: write,
     },
     {

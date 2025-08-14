@@ -9,7 +9,7 @@ const ArticleHeader = ({ article }) => {
   const draftUrl = `/admin/drafts/draft-edit/${encodeURIComponent(
     article?.articleTitle?.replace(/\s+/g, "_")
   )}`;
-  const articleUrl = `/admin/blogs/blog_edit/${encodeURIComponent(
+  const articleUrl = `/admin/articles/article_edit/${encodeURIComponent(
     article?.articleTitle?.replace(/\s+/g, "_")
   )}`;
 
@@ -50,7 +50,7 @@ const ArticleHeader = ({ article }) => {
                   <div className="d-flex flex-wrap gap-2 mt-2">
                     {article?.tag.map((data, index) => (
                       <Link
-                        to={`/admin/blogs/tag/${data.tags.replace(
+                        to={`/admin/articles/tag/${data.tags.replace(
                           /\s+/g,
                           "_"
                         )}`}
