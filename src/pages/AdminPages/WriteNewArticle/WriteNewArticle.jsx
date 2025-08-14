@@ -8,7 +8,7 @@ import dateIcon from "../../../assets/icon/date.png";
 import timeIcon from "../../../assets/icon/time.png";
 import plus from "../../../assets/icon/plus.png";
 import { useNavigate } from "react-router-dom";
-import { LoadingContext } from "../../../context/LoadingContext";
+import { LoadingContext, LoginContext } from "../../../context/LoadingContext";
 import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
 import { postArticle, setDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ import { generateImageUrl } from "../../../services/imageUpload";
 import { selectLocalImage } from "../../../utils/selectLocalImage";
 
 const WriteNewArticle = () => {
+  const { loggedIndetails } = useContext(LoginContext);
   const { loading, setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
   const [articleTitle, setArticleTitle] = useState("");
@@ -137,7 +138,9 @@ const WriteNewArticle = () => {
       tag: tagInputs,
       articleTitle: articleTitle,
       articleContent: editorHtml,
+      author: loggedIndetails?.user?.name,
     };
+    console.log("fullArticleData", fullArticleData);
 
     try {
       setLoading(true);
@@ -165,17 +168,19 @@ const WriteNewArticle = () => {
 
     const fullDate = localDateAndTime();
 
-    const fullArticleData = {
+    const fullDraftData = {
       date: fullDate,
       coverImg: coverImg,
       tag: tagInputs,
       articleTitle: articleTitle,
       articleContent: editorHtml,
+      author: loggedIndetails?.user?.name,
     };
+    console.log("fullDraftData", fullDraftData);
 
     try {
       setLoading(true);
-      const response = await setDraft(fullArticleData);
+      const response = await setDraft(fullDraftData);
       if (response.status == 201) {
         toast.success(response.data.message);
         navigate("/admin/drafts");

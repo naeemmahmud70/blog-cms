@@ -4,13 +4,13 @@ import AdminLayout from "../Layouts/AdminLayout";
 import ArticlesHome from "../pages/AdminPages/ArticlesHome/ArticlesHome";
 import DynamicArticle from "../pages/AdminPages/DynamicArticle/DynamicArticle";
 import EditArticle from "../pages/AdminPages/EditArticle/EditArticle";
-import WriteNewArticle from "../pages/AdminPages/WriteNewArticle/WriteNewarticle";
 import ArchivedArticles from "../pages/AdminPages/ArchivedArticles/ArchivedArticles";
 import TaggedArticles from "../pages/AdminPages/TaggedArticles/TaggedArticles";
 import Drafts from "../pages/AdminPages/Drafts/Drafts";
 import DynamicDraft from "../pages/AdminPages/DynamicDraft/DynamicDraft";
 import EditDraft from "../pages/AdminPages/EditDraft/EditDraft";
 import Admins from "../pages/AdminPages/Admins/Admins";
+import WriteNewArticle from "../pages/AdminPages/WriteNewArticle/WriteNewArticle";
 
 const ProtectedRoutes = () => {
   return (

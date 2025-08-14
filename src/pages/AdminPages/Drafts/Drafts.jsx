@@ -79,7 +79,11 @@ const Drafts = () => {
                   )}`}
                 >
                   <div className="admin-article-card-img-overflow">
-                    <img className="article-card-img" src={data.coverImg} alt="" />
+                    <img
+                      className="article-card-img"
+                      src={data.coverImg}
+                      alt=""
+                    />
                   </div>
                 </Link>
               </div>
@@ -103,8 +107,12 @@ const Drafts = () => {
                   </Link>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                      <div className="d-flex flex-wrap gap-3 align-items-center">
+                    <div className="d-flex gap-2 gap-lg-3  flex-column flex-lg-row align-items-lg-center">
+                      <div className="d-flex flex-wrap gap-2 gap-lg-3  align-items-center">
+                        <p className="m-0 text-xs-sm light-black-text font-poppins">
+                          {data?.author}
+                        </p>{" "}
+                        <strong className="seperator-circle"></strong>{" "}
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
                           {data.date}
                         </p>{" "}
@@ -114,7 +122,7 @@ const Drafts = () => {
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
-                      <div className="d-flex flex-wrap gap-2 ms-3">
+                      <div className="d-flex flex-wrap gap-2">
                         {data.tag.slice(0, 6).map((data, index) => (
                           <Link
                             to={`/admin/articles/tag/${data.tags.replace(

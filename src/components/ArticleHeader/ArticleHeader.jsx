@@ -22,11 +22,11 @@ const ArticleHeader = ({ article }) => {
       }}
     >
       <div
-        className={`dynamic-article-header-content w-100 px-4 py-5 d-flex align-items-center p-4`}
+        className={`dynamic-article-header-content w-100 px-3 px-lg-4 py-5 d-flex align-items-center p-4`}
       >
         <Link
           to={link}
-          className="blue-background text-white text-md font-nunito text-center px-4 py-2 rounded-2 d-flex justify-content-center align-items-center gap-2 position-absolute top-0 end-0 m-4"
+          className="blue-background text-white text-md font-nunito text-center px-2 px-lg-4 py-0 py-lg-2 rounded-1 rounded-lg-2 d-flex justify-content-center align-items-center gap-2 position-absolute top-0 end-0 m-2 m-lg-4"
         >
           Edit <img src={edit} alt="edit" height={25} width={25} />
         </Link>
@@ -36,7 +36,11 @@ const ArticleHeader = ({ article }) => {
           </div>
           <div className="col-md-7 d-flex align-items-center">
             <div>
-              <div className="d-flex flex-wrap gap-3 align-items-center mt-4 mt-md-0">
+              <div className="d-flex flex-wrap gap-2 gap-lg-3  align-items-center mt-4 mt-md-0">
+                <p className="m-0 text-xs-sm text-white font-nunito">
+                  {article?.author}
+                </p>{" "}
+                <strong className="seperator-circle bg-white"></strong>{" "}
                 <p className="m-0 text-xs-sm text-white font-nunito">
                   {article?.date}
                 </p>{" "}

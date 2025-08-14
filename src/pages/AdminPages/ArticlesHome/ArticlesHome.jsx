@@ -76,6 +76,7 @@ const ArticlesHome = () => {
       tag: data.tag,
       articleTitle: data.articleTitle,
       articleContent: data.articleContent,
+      author: data.author,
     };
 
     try {
@@ -144,8 +145,12 @@ const ArticlesHome = () => {
                   </Link>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                      <div className="d-flex flex-wrap gap-3 align-items-center">
+                    <div className="d-flex gap-3 flex-column flex-lg-row align-items-lg-center">
+                      <div className="d-flex flex-wrap gap-2 gap-lg-3 align-items-center">
+                        <p className="m-0 text-xs-sm light-black-text font-poppins">
+                          {data?.author}
+                        </p>{" "}
+                        <strong className="seperator-circle"></strong>{" "}
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
                           {data.date}
                         </p>{" "}
@@ -155,7 +160,7 @@ const ArticlesHome = () => {
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
-                      <div className="d-flex flex-wrap gap-2 ms-3">
+                      <div className="d-flex  flex-wrap gap-2">
                         {data?.tag?.slice(0, 6).map((data, index) => (
                           <Link
                             key={index}
@@ -170,7 +175,7 @@ const ArticlesHome = () => {
                         ))}
                       </div>
                     </div>
-                    <div className="dropdown">
+                    <div className="dropdown ms-2">
                       <button
                         className="bg-transparent p-1 border-0"
                         type="button"

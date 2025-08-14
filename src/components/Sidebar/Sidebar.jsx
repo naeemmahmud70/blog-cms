@@ -43,7 +43,7 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="px-4 py-3 sticky-md-top sidebar-section">
+    <div className="px-3 px-lg-4 py-3 sticky-md-top sidebar-section">
       <div className="d-flex justify-content-between">
         <div className="d-flex align-items-center gap-2">
           <img src={logo} height={45} width={25} alt="" />
