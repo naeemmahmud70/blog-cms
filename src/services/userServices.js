@@ -77,9 +77,12 @@ export const deleteArchive = async (id) => {
   return apiClient.delete(basr_url + `/archives/${id}`).then((res) => res);
 };
 
-export const getAllAdmins = async () => {
-  return apiClient.get(basr_url + `/auth/admins`).then((res) => res);
+export const getAllAdmins = async (page, limit) => {
+  return apiClient
+    .get(basr_url + `/auth/admins?page=${page}&limit=${limit}`)
+    .then((res) => res);
 };
+
 export const handleBlockedUser = async (user) => {
   return apiClient.patch(basr_url + `/auth/admins`, user).then((res) => res);
 };

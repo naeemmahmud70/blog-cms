@@ -57,12 +57,18 @@ const Login = () => {
       setLoading(true);
       const response = await loginUser(data);
       if (response.status === 200) {
-        reset();
-        const userDetails = response?.data;
-        setUserDetails(userDetails);
-        toast.dismiss();
-        toast.success(response?.data?.message);
-        navigate("/admin/articles");
+        if (response.data.user.role === "admin") {
+          reset();
+          const userDetails = response?.data;
+          setUserDetails(userDetails);
+          toast.dismiss();
+          toast.success(response?.data?.message);
+          navigate("/admin/articles");
+        } else {
+          toast.dismiss();
+          toast.error("Access denied!");
+        }
+        setLoading(false);
       } else {
         setLoading(false);
         toast.dismiss();
