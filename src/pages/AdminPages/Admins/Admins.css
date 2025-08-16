@@ -1,0 +1,92 @@
+.users-list-header p {
+    color: #141415;
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 22px;
+}
+
+.pagination-section {
+    margin-bottom: -16px;
+    margin-top: 24PX;
+    display: flex;
+    justify-content: end;
+
+}
+
+.active-page {
+    border: 1px solid #0C8AE6;
+    border-radius: 4px;
+}
+
+.page-items {
+    margin: 5px;
+
+    color: black !important;
+}
+
+.page-items a {
+    min-width: 35px;
+    width: auto;
+}
+
+.page-links {
+    background: #fff;
+    border-radius: 4px;
+    display: flex;
+    width: 32px;
+    height: 32px;
+    padding: 5px 4px;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #212B36;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.page-items.disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.page-items.disabled .page-links {
+    pointer-events: none;
+    /* Prevent any interaction */
+    background-color: silver;
+}
+
+.page-items.disabled:hover {
+    color: inherit;
+    /* Ensure no hover effect */
+}
+
+
+@media screen and (max-width: 520px) {
+    .page-items {
+        margin: 3px;
+
+        color: black !important;
+    }
+
+    .page-items a {
+        min-width: 35px;
+        width: auto;
+    }
+
+    .page-links {
+        background: #fff;
+        border-radius: 4px;
+        display: flex;
+        width: fit-content;
+        height: 30px;
+        padding: 3px 2px;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        color: #212B36;
+        font-size: 12px;
+        font-weight: 700;
+    }
+}

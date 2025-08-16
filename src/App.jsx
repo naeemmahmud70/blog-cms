@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import AppRouter from "./router/Router";
 import { ToastContainer } from "react-toastify";
 import { LoginContext, LoadingContext } from "./context/LoadingContext";
-import { getUserDetails } from "./services/userServices";
 import GlobalLoading from "./components/Loading/GlobalLoading";
 
 function App() {
   const [loggedIndetails, setLoggedInDetails] = useState({});
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const userdetails = getUserDetails();
-    if (userdetails?.user) {
-      setLoggedInDetails(userdetails);
-    }
-  }, []);
 
   return (
     <LoginContext.Provider value={{ loggedIndetails, setLoggedInDetails }}>
