@@ -1,12 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: {
-    include: ['quill', 'react-quilljs'], // pre-bundle these deps
+  define: {
+    "process.env": {},
+    global: {},
   },
-  ssr: {
-    noExternal: ['quill', 'react-quilljs'], // force Vite to bundle them for browser
+  resolve: {
+    alias: {
+      "util": "rollup-plugin-node-polyfills/polyfills/util",
+    },
   },
-})
+});
