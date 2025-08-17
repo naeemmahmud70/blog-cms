@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./App.css";
-import AppRouter from "./router/Router";
 import { ToastContainer } from "react-toastify";
 import { LoginContext, LoadingContext } from "./context/LoadingContext";
 import GlobalLoading from "./components/Loading/GlobalLoading";
+import AppRouter from "./router/AppRouter";
 
 function App() {
   const [loggedIndetails, setLoggedInDetails] = useState({});

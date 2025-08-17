@@ -384,18 +384,6 @@ const WriteNewArticle = () => {
           </form>
         </div>
       </section>
-      <section>
-        <div
-          className="article-content"
-          style={{
-            padding: "1rem",
-            border: "1px solid #ccc",
-            minHeight: 100,
-            width: "100%",
-          }}
-          dangerouslySetInnerHTML={{ __html: editorHtml }}
-        />
-      </section>
     </section>
   );
 };
