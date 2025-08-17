@@ -1,32 +1,36 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../ArticlesHome/ArticlesHome.css";
+import "./ArticlesHome.css";
 import { Link } from "react-router-dom";
+import {
+  deleteArticle,
+  getAllArticles,
+  postArchive,
+} from "../../../services/userServices";
 import { LoadingContext } from "../../../context/LoadingContext";
 import { toast } from "react-toastify";
+import { localDateAndTime } from "../../../utils/localtime";
 import threeDot from "../../../assets/icon/DotsThreeVertical.png";
 import edite from "../../../assets/icon/edite.png";
 import archive from "../../../assets/icon/archiving.png";
 import RenderParagraphsJSX from "../../../components/Common/RenderParagraphsJSX/RenderParagraphsJSX";
 import { calculateReadingTime } from "../../../utils/calculateReadingTime";
-import { deleteDraft, getAllDrafts } from "../../../services/userServices";
 
-const Drafts = () => {
+const ArticlesHome = () => {
   const { setLoading } = useContext(LoadingContext);
-  const [drafts, setDrafts] = useState([]);
-  const reversOrder = [...drafts].reverse();
-  const [deleted, setDeleted] = useState(false);
+  const [articles, setArticles] = useState([]);
+  const reversOrder = [...articles].reverse();
+  const [isArcive, setArchive] = useState(true);
 
   useEffect(() => {
     handleAllArticles();
-  }, [deleted]);
+  }, [isArcive]);
 
   const handleAllArticles = async () => {
     try {
       setLoading(true);
-      const response = await getAllDrafts();
-
+      const response = await getAllArticles();
       if (response.status == 200) {
-        setDrafts(response?.data?.drafts);
+        setArticles(response?.data?.articles);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -39,13 +43,17 @@ const Drafts = () => {
     setLoading(false);
   };
 
-  const handleDeleteDraft = async (id) => {
+  const handleArchives = async (id) => {
+    const artcile = articles.find((data) => data._id === id);
+    if (artcile) {
+      postInArchive(artcile);
+    }
+
     try {
       setLoading(true);
-      const response = await deleteDraft(id);
+      const response = await deleteArticle(id);
       if (response.status == 200) {
-        toast.success(response.data.message);
-        setDeleted(!deleted);
+        setArchive(!isArcive);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -53,14 +61,44 @@ const Drafts = () => {
     } catch (error) {
       setLoading(false);
       toast.dismiss();
-      toast.error(error?.message || "Something went worng!");
+      toast.error(error.message || "Something went worng!");
     }
+    setLoading(false);
+  };
+
+  // posting in archive file
+  const postInArchive = async (data) => {
+    const fulldate = localDateAndTime();
+
+    const fullArticleData = {
+      date: fulldate,
+      coverImg: data.coverImg,
+      tag: data.tag,
+      articleTitle: data.articleTitle,
+      articleContent: data.articleContent,
+      author: data.author,
+    };
+
+    try {
+      setLoading(true);
+      const response = await postArchive(fullArticleData);
+      if (response.error) {
+        toast.dismiss();
+        toast.error(response?.error?.message || "Something went worng!");
+      } else {
+        toast.success("Stored in the achives!");
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+    setLoading(false);
   };
 
   return (
     <section>
       <h5 className="text-lg secondary-black-text font-nunito m-0 mb-4">
-        Your drafted articles-
+        All the published articles-
       </h5>
       <div className="">
         {reversOrder.map((data, index) => {
@@ -74,8 +112,8 @@ const Drafts = () => {
             >
               <div className="left-side-content">
                 <Link
-                  to={`/admin/drafts/${encodeURIComponent(
-                    data.articleTitle.replace(/\s+/g, "_")
+                  to={`/admin/articles/${encodeURIComponent(
+                    data?.articleTitle?.replace(/\s+/g, "_")
                   )}`}
                 >
                   <div className="admin-article-card-img-overflow">
@@ -90,8 +128,8 @@ const Drafts = () => {
               <div className="d-flex align-items-center right-side-content">
                 <div className="">
                   <Link
-                    to={`/admin/drafts/${encodeURIComponent(
-                      data.articleTitle.replace(/\s+/g, "_")
+                    to={`/admin/articles/${encodeURIComponent(
+                      data?.articleTitle?.replace(/\s+/g, "_")
                     )}`}
                     className="text-decoration-none"
                   >
@@ -107,8 +145,8 @@ const Drafts = () => {
                   </Link>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex gap-2 gap-lg-3  flex-column flex-lg-row align-items-lg-center">
-                      <div className="d-flex flex-wrap gap-2 gap-lg-3  align-items-center">
+                    <div className="d-flex gap-3 flex-column flex-lg-row align-items-lg-center">
+                      <div className="d-flex flex-wrap gap-2 gap-lg-3 align-items-center">
                         <p className="m-0 text-xs-sm light-black-text font-poppins">
                           {data?.author}
                         </p>{" "}
@@ -122,22 +160,22 @@ const Drafts = () => {
                         </p>
                         <strong className="seperator-circle"></strong>
                       </div>
-                      <div className="d-flex flex-wrap gap-2">
-                        {data.tag.slice(0, 6).map((data, index) => (
+                      <div className="d-flex  flex-wrap gap-2">
+                        {data?.tag?.slice(0, 6).map((data, index) => (
                           <Link
+                            key={index}
                             to={`/admin/articles/tag/${data.tags.replace(
                               /\s+/g,
                               "_"
                             )}`}
                             className={`tag-btn tag-btn-${index + 1}`}
-                            key={index}
                           >
                             <small>{data.tags}</small>
                           </Link>
                         ))}
                       </div>
                     </div>
-                    <div className="dropdown">
+                    <div className="dropdown ms-2">
                       <button
                         className="bg-transparent p-1 border-0"
                         type="button"
@@ -149,22 +187,22 @@ const Drafts = () => {
                       <ul className="dropdown-menu drop-down-bg">
                         <li>
                           <Link
-                            to={`/admin/drafts/draft-edit/${encodeURIComponent(
+                            to={`/admin/articles/article_edit/${encodeURIComponent(
                               data?.articleTitle?.replace(/\s+/g, "_")
                             )}`}
                             style={{ textDecoration: "none" }}
                           >
                             <button className="dropdown-item">
-                              Edit Draft <img src={edite} alt="" />
+                              Edit Article <img src={edite} alt="" />
                             </button>
                           </Link>
                         </li>
                         <li>
                           <button
-                            onClick={() => handleDeleteDraft(data._id)}
+                            onClick={() => handleArchives(data._id)}
                             className="dropdown-item"
                           >
-                            Delete <img src={archive} alt="" />{" "}
+                            Archive <img src={archive} alt="" />{" "}
                           </button>
                         </li>
                       </ul>
@@ -180,4 +218,4 @@ const Drafts = () => {
   );
 };
 
-export default Drafts;
+export default ArticlesHome;

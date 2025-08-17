@@ -8,38 +8,29 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const user = getUserDetails();
-    const accountId = user?.accountId;
-    const token = user?.sessionToken;
+    const token = user?.token; // make sure this matches your backend key
 
-    config.headers["accept"] = "application/json";
-    if (accountId) {
-      config.headers["x-access-user"] = accountId;
-    }
+    config.headers["Accept"] = "application/json";
+
     if (token) {
-      config.headers["x-access-token"] = token;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
+
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 apiClient.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
-  async (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("loginAccessToken");
-      return Promise.reject(error);
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    if (status === 401 || status === 403) {
+      localStorage.removeItem("loginAccessToken"); 
     }
-    if (error.response?.status === 403) {
-      localStorage.removeItem("loginAccessToken");
-      return Promise.reject(error);
-    }
-    console.log(error);
+    console.error(error);
     return Promise.reject(error);
   }
 );
+
 export default apiClient;

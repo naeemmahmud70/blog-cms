@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css";
 import logo from "../../assets/icon/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-// import { loginUser, setUserDetails } from "../services/userService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setUserDetails } from "../../services/userServices";
+import { loginUser, setUserDetails } from "../../services/userServices";
+import Loading from "../../components/Loading/Loading";
 
 const loginSchema = z.object({
   email: z
@@ -50,34 +50,35 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-    if (data.email && data.password) {
-      setUserDetails(data);
+    try {
+      setLoading(true);
+      const response = await loginUser(data);
+      if (response.status === 200) {
+        if (response.data.user.role === "admin") {
+          reset();
+          const userDetails = response?.data;
+          setUserDetails(userDetails);
+          toast.dismiss();
+          toast.success(response?.data?.message);
+          navigate("/admin/articles");
+        } else {
+          toast.dismiss();
+          toast.error("Access denied!");
+        }
+        setLoading(false);
+      } else {
+        setLoading(false);
+        toast.dismiss();
+        toast.error(response?.data?.message);
+      }
+    } catch (error) {
+      setLoading(false);
       toast.dismiss();
-      toast.success("Logged in Successfully!");
-      navigate("/admin/blogs");
-      reset();
+      toast.error(error?.response?.data?.message);
     }
-    // try {
-    //   const response = await loginUser(data);
-    //   // console.logresponse);
-    //   if (response.status === 200) {
-    //     reset();
-    //     const userDetails = response?.data;
-    //     setUserDetails(userDetails);
-    //     toast.dismiss();
-    //     toast.success(response?.message);
-    //     navigate("/dashboard/admin");
-    //   } else {
-    //     toast.dismiss();
-    //     toast.error(response.message);
-    //   }
-    // } catch (error) {
-    //   toast.dismiss();
-    //   toast.error(error?.response?.data?.message);
-    // }
   };
   return (
     <section className="vh-100 w-100 d-flex justify-content-center align-items-center">
@@ -92,7 +93,9 @@ const Login = () => {
           </h1>
         </div>
         <div>
-          <p className="fs-5 primary-black-text fw-normal text-center my-1">Login</p>
+          <p className="fs-5 primary-black-text fw-normal text-center my-1">
+            Login
+          </p>
         </div>
         {/* login form */}
         <div>
@@ -128,10 +131,13 @@ const Login = () => {
             <div className="login-button mt-4">
               <button
                 type="submit"
-                className="border-0 w-100 py-2 px-3 rounded tex-base text-white fw-normal font-nunito blue-background"
+                disabled={loading}
+                className={`border-0 w-100 py-2 px-3 rounded tex-base text-white fw-normal font-nunito blue-background ${
+                  loading && "opacity-50"
+                }`}
                 style={{ height: "46px" }}
               >
-                Login
+                {loading ? <Loading /> : "Login"}
               </button>
             </div>
           </form>

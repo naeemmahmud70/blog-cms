@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/icon/logo.png";
-import blog from "../../assets/icon/blog.png";
+import article from "../../assets/icon/blog.png";
 import write from "../../assets/icon/write.png";
 import draft from "../../assets/icon/draft.png";
 import archive from "../../assets/icon/archive.png";
@@ -13,14 +13,14 @@ const Sidebar = () => {
   const data = [
     {
       id: 1,
-      title: "Blogs",
-      link: "/admin/blogs",
-      icon: blog,
+      title: "Articles",
+      link: "/admin/articles",
+      icon: article,
     },
     {
       id: 2,
-      title: "Write Blog",
-      link: "/admin/write_new_blog",
+      title: "Write Articles",
+      link: "/admin/write_new_article",
       icon: write,
     },
     {
@@ -43,7 +43,7 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="px-4 py-3 sticky-md-top sidebar-section">
+    <div className="px-3 px-lg-4 py-3 sticky-md-top sidebar-section">
       <div className="d-flex justify-content-between">
         <div className="d-flex align-items-center gap-2">
           <img src={logo} height={45} width={25} alt="" />
@@ -58,7 +58,7 @@ const Sidebar = () => {
           <NavLink
             key={item.id}
             to={item.link}
-            end={item.customMatch} 
+            end={item.customMatch}
             className={({ isActive }) =>
               `text-dark text-decoration-none font-nunito d-flex gap-2 align-items-center px-2 py-1 ${
                 isActive ? "active-link fw-medium" : ""

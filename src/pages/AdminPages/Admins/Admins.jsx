@@ -1,49 +1,155 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import "./Admins.css";
+import {
+  getAllAdmins,
+  handleBlockedUser,
+} from "../../../services/userServices";
+import { toast } from "react-toastify";
+import { LoadingContext } from "../../../context/LoadingContext";
+import ReactSwitch from "react-switch";
+import ReactPaginate from "react-paginate";
 
 const Admins = () => {
+  const { setLoading } = useContext(LoadingContext);
+  const [admins, setAdmins] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+  const [serialNo, setSerialNo] = useState(0);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    handleAdminfetch(currentPage, itemsPerPage);
+  }, [currentPage, isUpdated]);
+
+  const handleAdminfetch = async (currentPage, itemsPerPage) => {
+    try {
+      setLoading(true);
+      const response = await getAllAdmins(currentPage, itemsPerPage);
+      if (response.status == 200) {
+        setAdmins(response?.data?.admins);
+        setTotalPage(response?.data?.pagination?.totalPages);
+        setSerialNo(itemsPerPage * response?.data?.pagination?.page);
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went wrong!");
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went wrong!");
+    }
+  };
+
+  const handleStatusChange = async (e, id) => {
+    const user = {
+      userId: id,
+      isBlocked: e,
+    };
+
+    try {
+      const response = await handleBlockedUser(user);
+      if (response.status === 200) {
+        setIsUpdated(!isUpdated);
+        toast.dismiss();
+        toast.success(response.data.message);
+      } else {
+        toast.dismiss();
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error?.message);
+    }
+  };
+
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1);
+  };
+
   return (
-    <div>
-      <h4>Admins List</h4>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet delectus
-        laudantium atque officia exercitationem voluptatem temporibus quaerat.
-        Maiores veniam quasi labore, quisquam sed dicta aperiam, omnis veritatis
-        sequi minus reprehenderit quis nam quos? Veniam voluptatum qui corrupti,
-        tempore ullam sed doloremque architecto maxime est illo eligendi
-        temporibus ducimus nihil consequuntur in velit a et, perspiciatis unde
-        itaque soluta? Non, reprehenderit quam nulla in dicta similique aut
-        nesciunt sapiente incidunt facere iste recusandae deleniti. Quam in
-        assumenda, labore, enim quisquam et facere minima ex exercitationem
-        repellat amet laudantium doloribus, eum cum architecto dicta. Esse hic
-        necessitatibus inventore? Reprehenderit eius velit et enim, inventore
-        omnis dolorem mollitia, odit temporibus vitae at, rem quis distinctio a
-        rerum dolores aut impedit illum porro? Laboriosam optio consequatur
-        dicta. Quaerat doloribus nihil corporis minus ipsam, praesentium
-        molestias cum provident odit deserunt voluptas, amet itaque asperiores?
-        Qui praesentium molestias, assumenda voluptates vero est itaque?
-        Deserunt distinctio ad magnam dolores laboriosam? Soluta laudantium
-        minima ratione rem dolorem voluptates corrupti repellendus. Sapiente
-        aliquam accusamus omnis non, veritatis molestiae? Aliquid, iusto rem?
-        Nisi maiores mollitia possimus sunt ex expedita ducimus dignissimos
-        quidem, ipsum earum beatae pariatur nam voluptatibus, nesciunt optio
-        deserunt adipisci fuga, velit commodi magni? Pariatur numquam fugiat
-        distinctio sequi, qui veritatis placeat esse illo minus deserunt,
-        excepturi ipsum possimus, harum repellendus! Cum architecto odio
-        molestiae autem. Adipisci perferendis minima magni itaque maiores totam
-        blanditiis animi? Pariatur aspernatur iste quisquam magnam illo
-        obcaecati quos consectetur reprehenderit possimus voluptatum sint iure
-        quis fugit quo debitis dolor unde eum, ipsam soluta sequi mollitia!
-        Placeat numquam soluta aliquid temporibus architecto exercitationem, hic
-        quibusdam provident dolorum. Corporis et inventore nostrum veritatis
-        rerum ea? Error autem atque cumque quaerat quod, perspiciatis
-        consequuntur ratione explicabo illum, natus aut repellendus, dolor nisi
-        voluptatem laboriosam porro officiis facilis ad assumenda consectetur
-        dolore. Repellat doloremque cumque iusto vero laborum? Quibusdam
-        pariatur, natus ipsum, temporibus incidunt repellendus, molestiae
-        repudiandae corporis quas officia eos qui! Possimus expedita atque
-        perferendis repudiandae?
-      </p>
-    </div>
+    <section className="border p-2 p-md-3 p-lg-4 rounded">
+      <div className="table-responsive border-2">
+        {admins.length > 0 ? (
+          <table className="table">
+            <thead>
+              <tr className="font-mulish light-black-text">
+                <th>Sr. no.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Created At</th>
+                <th>Role</th>
+                <th>Actions(Unblock/Blocked)</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {admins.map((data, index) => (
+                <tr className="font-nunito" key={index}>
+                  <td className="py-3">{serialNo + 1 + index}</td>
+                  <td className="py-3">{data?.name}</td>
+                  <td className="py-3">{data?.email}</td>
+                  <td className="py-3">{data?.createdAt}</td>
+                  <td className="text-capitalize py-3">{data?.role}</td>
+                  <td className="py-3">
+                    <ReactSwitch
+                      checked={data.role === "blocked" ? true : false}
+                      onChange={(e) => handleStatusChange(e, data._id)}
+                      uncheckedIcon
+                      checkedIcon
+                      height={16}
+                      width={28}
+                      onColor="#0C8AE6"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="table-data-not-available-text">
+              {<p>Loading...</p>}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* pagination */}
+      <div className="pagination-section">
+        <ReactPaginate
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          forcePage={currentPage > 0 ? currentPage - 1 : 0}
+          previousLabel="<"
+          nextLabel=">"
+          pageClassName="page-items"
+          pageLinkClassName="page-links"
+          previousClassName={`page-items ${totalPage <= 1 ? "disabled" : ""}`}
+          previousLinkClassName="page-links"
+          nextClassName={`page-items ${totalPage <= 1 ? "disabled" : ""}`}
+          nextLinkClassName="page-links"
+          breakLabel="..."
+          breakClassName="page-items"
+          breakLinkClassName="page-links"
+          containerClassName="pagination"
+          activeClassName="active-page"
+          renderOnZeroPageCount={null}
+          disabledClassName="disabled"
+        />
+      </div>
+    </section>
   );
 };
 

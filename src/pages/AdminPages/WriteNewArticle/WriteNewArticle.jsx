@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import "./WriteBlogPost.css";
+import "./WriteNewArticle.css";
 import "../../../App.css";
-// import "../BlogHome/BlogHome.css";
 import { Link } from "react-router-dom";
 import arrow from "../../../assets/icon/left-arrow.png";
 import selectImg from "../../../assets/icon/select-img.png";
@@ -9,22 +8,29 @@ import dateIcon from "../../../assets/icon/date.png";
 import timeIcon from "../../../assets/icon/time.png";
 import plus from "../../../assets/icon/plus.png";
 import { useNavigate } from "react-router-dom";
-import { LoadingContext } from "../../../context/LoadingContext";
+import { LoadingContext, LoginContext } from "../../../context/LoadingContext";
 import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
-import { postBlog, setDraft } from "../../../services/userServices";
+import { postArticle, setDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
-import 'quill/dist/quill.snow.css';
+import "quill/dist/quill.snow.css";
 import { generateImageUrl } from "../../../services/imageUpload";
 import { selectLocalImage } from "../../../utils/selectLocalImage";
 
-const WriteBlogPost = () => {
-  const { setLoading } = useContext(LoadingContext);
+const WriteNewArticle = () => {
+  const { loggedIndetails } = useContext(LoginContext);
+  const { loading, setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
-  const [blogTitle, setBlogTitle] = useState({ title: "" });
+  const [articleTitle, setArticleTitle] = useState("");
   const [tagInputs, setTagInputs] = useState([]);
   const [editorHtml, setEditorHtml] = useState("");
   const { quill, quillRef } = useQuill();
+  const [errors, setErrors] = useState({
+    coverImg: "",
+    title: "",
+    tags: "",
+    content: "",
+  });
 
   const fullDate = localDateAndTime();
   const time = getLocalTime();
@@ -36,7 +42,8 @@ const WriteBlogPost = () => {
       const url = await generateImageUrl(event.target.files[0]);
       setCoverImg(url);
     } catch (error) {
-      console.log(error);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 
@@ -52,11 +59,13 @@ const WriteBlogPost = () => {
   };
 
   const handletagRemove = (index) => {
-    console.log(index);
+    const newTags = [...tagInputs];
+    newTags.splice(index, 1);
+    setTagInputs(newTags);
   };
 
   const handleTitleChange = (e) => {
-    setBlogTitle({ ...blogTitle, [e.target.name]: e.target.value });
+    setArticleTitle(e.target.value);
   };
 
   // 0pen dialog to select and upload image
@@ -65,8 +74,9 @@ const WriteBlogPost = () => {
       const file = await selectLocalImage();
       const imageUrl = await generateImageUrl(file);
       insertToEditor(imageUrl);
-    } catch (err) {
-      console.error("err", err?.message);
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
   };
 
@@ -87,61 +97,103 @@ const WriteBlogPost = () => {
     }
   }, [quill]);
 
-  // submit full blog data to the mongodb database
+  // checking validations while publishing and drafting
+  const validateForm = () => {
+    let newErrors = { coverImg: "", title: "", tags: "", content: "" };
+    let isValid = true;
+
+    if (!coverImg) {
+      newErrors.coverImg = "Cover image is required.";
+      isValid = false;
+    }
+
+    if (!articleTitle.trim()) {
+      newErrors.title = "Title is required.";
+      isValid = false;
+    }
+
+    const hasValidTags = tagInputs.some((tag) => tag.tags.trim() !== "");
+    if (!hasValidTags) {
+      newErrors.tags = "At least one tag is required.";
+      isValid = false;
+    }
+
+    if (!editorHtml || editorHtml === "<p><br></p>") {
+      newErrors.content = "Article content cannot be empty.";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  // submit full article data to the mongodb database
   const handleSubmit = async (event) => {
-    const fullBloglogData = {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    const fullArticleData = {
       date: fullDate,
       coverImg: coverImg,
       tag: tagInputs,
-      blogTitle: blogTitle.title,
-      blogContent: editorHtml,
+      articleTitle: articleTitle,
+      articleContent: editorHtml,
+      author: loggedIndetails?.user?.name,
     };
+    console.log("fullArticleData", fullArticleData);
 
-    console.log("fullBloglogData", fullBloglogData);
     try {
       setLoading(true);
-      const response = await postBlog(fullBloglogData);
-      if (response.error) {
+      const response = await postArticle(fullArticleData);
+      if (response.status === 201) {
         toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
+        toast.success(response.data.message);
+        navigate("/admin/articles");
       } else {
-        toast.success("Blog posted successfully!");
-        navigate("/admin/blogs");
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
     setLoading(false);
-    event.preventDefault();
   };
 
   // Save as draft
   const handleDraftSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+
     const fullDate = localDateAndTime();
 
-    const fullBloglogData = {
+    const fullDraftData = {
       date: fullDate,
       coverImg: coverImg,
       tag: tagInputs,
-      blogTitle: blogTitle.title,
-      blogContent: editorHtml,
+      articleTitle: articleTitle,
+      articleContent: editorHtml,
+      author: loggedIndetails?.user?.name,
     };
+    console.log("fullDraftData", fullDraftData);
 
     try {
       setLoading(true);
-      const response = await setDraft(fullBloglogData);
-      if (response.error) {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      } else {
-        toast.success("Draft saved successfully!");
+      const response = await setDraft(fullDraftData);
+      if (response.status == 201) {
+        toast.success(response.data.message);
         navigate("/admin/drafts");
+      } else {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      toast.dismiss();
+      toast.error(error?.message || "Something went worng!");
     }
+
     setLoading(false);
     event.preventDefault();
   };
@@ -150,7 +202,7 @@ const WriteBlogPost = () => {
     <section>
       <section>
         <div className="d-flex gap-2 align-items-center mb-3">
-          <Link to="/admin/blogs">
+          <Link to="/admin/articles">
             <img className="w-100" src={arrow} alt="back" />
           </Link>
           <p className="light-gray text-base m-0 p-0">Back to home</p>
@@ -160,7 +212,7 @@ const WriteBlogPost = () => {
       <section className="d-flex justify-content-center">
         <div className="w-100">
           <form>
-            <section className="write-blog-header ">
+            <section className="write-article-header">
               <div className="row px-2 pb-4 pb-lg-0">
                 <div className="col-lg-5 p-4">
                   {coverImg ? (
@@ -194,6 +246,11 @@ const WriteBlogPost = () => {
                       />
                     </div>
                   )}
+                  {errors.coverImg && (
+                    <p className="text-danger font-nunito text-sm-xs m-0 mt-1">
+                      {errors.coverImg}
+                    </p>
+                  )}
                 </div>
                 <div className="col-lg-7 px-4 py-0 py-lg-4">
                   <div className=" h-100 d-flex flex-column">
@@ -223,39 +280,46 @@ const WriteBlogPost = () => {
                           Tags:
                         </p>
 
-                        <div className="d-flex flex-wrap gap-2">
-                          <div>
-                            <button
-                              type="button"
-                              onClick={addTagFields}
-                              className="add-tag-btn border-0 mt-3 p-2 rounded-1 text-xs text-white font-poppins"
-                            >
-                              Add Tags{" "}
-                              <img
-                                className="tag-plus-icon"
-                                src={plus}
-                                alt=""
-                              />
-                            </button>
-                          </div>
-                          <div className="tags-input position-relative d-flex flex-wrap">
-                            {tagInputs.map((data, index) => (
-                              <div key={index} className="d-flex mt-3">
-                                <input
-                                  type="text"
-                                  name="tags"
-                                  value={data.tags}
-                                  onChange={(e) => handleTagChange(index, e)}
+                        <div>
+                          <div className="d-flex flex-wrap gap-2">
+                            <div>
+                              <button
+                                type="button"
+                                onClick={addTagFields}
+                                className="add-tag-btn border-0 mt-3 p-2 rounded-1 text-xs text-white font-poppins"
+                              >
+                                Add Tags{" "}
+                                <img
+                                  className="tag-plus-icon"
+                                  src={plus}
+                                  alt=""
                                 />
-                                <p
-                                  className="text-secondary tag-close bg-transparent"
-                                  onClick={() => handletagRemove(index)}
-                                >
-                                  +
-                                </p>
-                              </div>
-                            ))}
+                              </button>
+                            </div>
+                            <div className="tags-input position-relative d-flex flex-wrap">
+                              {tagInputs.map((data, index) => (
+                                <div key={index} className="d-flex mt-3">
+                                  <input
+                                    type="text"
+                                    name="tags"
+                                    value={data.tags}
+                                    onChange={(e) => handleTagChange(index, e)}
+                                  />
+                                  <p
+                                    className="text-secondary tag-close bg-transparent"
+                                    onClick={() => handletagRemove(index)}
+                                  >
+                                    +
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
                           </div>
+                          {errors.tags && (
+                            <p className="text-danger font-nunito text-sm-xs m-0 mt-1">
+                              {errors.tags}
+                            </p>
+                          )}
                         </div>
 
                         <div className="article-title-input">
@@ -263,24 +327,35 @@ const WriteBlogPost = () => {
                             type="text"
                             placeholder="Article Title Here"
                             name="title"
-                            value={blogTitle.title}
+                            value={articleTitle}
                             onChange={(e) => handleTitleChange(e)}
                           />
+                          {errors.title && (
+                            <p className="text-danger font-nunito text-sm-xs m-0 mt-1">
+                              {errors.title}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
                     <div className="mt-auto d-md-flex gap-3">
                       <button
+                        disabled={loading}
                         type="button"
                         onClick={handleSubmit}
-                        className="publish-article-btn mt-3"
+                        className={`publish-article-btn mt-3 ${
+                          loading ? "opacity-50" : ""
+                        }`}
                       >
                         Publish Article
                       </button>
                       <button
+                        disabled={loading}
                         type="button"
                         onClick={handleDraftSubmit}
-                        className="save-as-draft-btn mt-3"
+                        className={`save-as-draft-btn mt-3 ${
+                          loading ? "opacity-50" : ""
+                        }`}
                       >
                         Save as Draft
                       </button>
@@ -290,7 +365,7 @@ const WriteBlogPost = () => {
               </div>
             </section>
 
-            {/* Write blog contents */}
+            {/* Write article contents */}
             <section className="py-5">
               <div
                 style={{
@@ -300,13 +375,18 @@ const WriteBlogPost = () => {
               >
                 <div ref={quillRef} />
               </div>
+              {errors.content && (
+                <p className="text-danger font-nunito text-sm-xs m-0 mt-5">
+                  {errors.content}
+                </p>
+              )}
             </section>
           </form>
         </div>
       </section>
       <section>
         <div
-          className="blog-content"
+          className="article-content"
           style={{
             padding: "1rem",
             border: "1px solid #ccc",
@@ -320,4 +400,4 @@ const WriteBlogPost = () => {
   );
 };
 
-export default WriteBlogPost;
+export default WriteNewArticle;

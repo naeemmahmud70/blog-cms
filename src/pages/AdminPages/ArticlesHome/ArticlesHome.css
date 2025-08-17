@@ -1,0 +1,152 @@
+.articles-div {
+    display: flex;
+    gap: 20px;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #c0c0c077;
+}
+
+.left-side-content {
+    width: 300px;
+}
+
+.right-side-content {
+    width: 100%;
+}
+
+.article-card-img {
+    height: 167.5px;
+    width: 265px;
+    border-radius: 5px;
+    transition: 1.5s all ease-in-out;
+    position: relative;
+    left: 15px;
+}
+
+.admin-article-card-img-overflow {
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    right: 12px;
+}
+
+.article-card-img:hover {
+    transform: scale(1.5);
+}
+
+.read-more-overflow {
+    height: 70px;
+    overflow: hidden;
+}
+
+.seperator-circle {
+    height: 5px;
+    width: 5px;
+    background: rgba(128, 128, 128, 0.679);
+    border-radius: 100%;
+}
+
+.drop-down-bg {
+    border: 1px solid white;
+    background: #313135 !important;
+    height: 110px;
+}
+
+.drop-down-bg .dropdown-item {
+    border: 0;
+    background: #fff;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 9px;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drop-down-bg .dropdown-item:active {
+    background: #fff;
+    color: black;
+}
+
+.tag-btn {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: normal;
+    font-family: 'Poppins', sans-serif;
+    padding: 3px 8px 2px 8px;
+    border-radius: 4px;
+    border: 0;
+    color: #161616;
+    text-decoration: none;
+}
+
+.tag-btn.tag-btn-1 {
+    background: #D2CDF4;
+
+}
+
+.tag-btn-2 {
+    background: #CDDBF4;
+}
+
+.tag-btn-3 {
+    background: #F4E6CD;
+}
+
+.tag-btn-4 {
+    background: #D2CDF4;
+}
+
+.tag-btn-5 {
+    background: #CDDBF4;
+}
+
+.tag-btn-6 {
+    background: #F4E6CD;
+}
+
+.tag-btn-7 {
+    background: #D2CDF4;
+}
+
+.tag-btn-8 {
+    background: #CDDBF4;
+}
+
+.tag-btn-9 {
+    background: #F4E6CD;
+}
+
+.tag-btn-10 {
+    background: #D2CDF4;
+}
+
+@media only screen and (max-width: 768px) {
+    .articles-div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .left-side-content {
+        width: 100%;
+    }
+
+    .admin-article-card-img-overflow {
+        border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+        right: 0px;
+    }
+
+    .article-card-img {
+        height: auto;
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        left: 0;
+    }
+}

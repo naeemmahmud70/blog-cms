@@ -2,7 +2,17 @@
     border-bottom: 2px solid #c0c0c077;
 }
 
+.header-styles h4 {
+    font-size: 24px;
+}
+
 .dropdown-toggle:focus,
 .dropdown-toggle.show {
     border-color: rgba(0, 0, 0, 0.227) !important;
+}
+
+@media screen and (max-width:768px) {
+    .header-styles h4 {
+        font-size: 18px;
+    }
 }

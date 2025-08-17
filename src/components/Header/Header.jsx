@@ -7,10 +7,10 @@ import Profile from "./Profile";
 const Header = () => {
   const location = useLocation();
   const pageTitles = {
-    blogs: "Published Blogs",
-    write_new_blog: "Write New Blog",
+    articles: "Published Articles",
+    write_new_article: "Write New Articles",
     drafts: "Saved Drafts",
-    archives: "Archived Blogs",
+    archives: "Archived Articles",
     admins_list: "Admins List",
   };
 
@@ -56,9 +56,9 @@ const Header = () => {
   }
   return (
     <>
-      <header className="bg-white header-styles sticky-top top-0 z-2 px-4 py-3 d-flex justify-content-between align-items-center">
+      <header className="bg-white header-styles sticky-top top-0 z-2 px-3 px-lg-4 py-3 d-flex justify-content-between align-items-center">
         <h4 className="fw-normal m-0 font-poppins light-black-text">
-          {pageTitle}
+          {decodeURIComponent(pageTitle)}
         </h4>
         <div className="d-none d-md-block">
           <Profile />

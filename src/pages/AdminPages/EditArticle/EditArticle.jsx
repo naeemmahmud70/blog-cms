@@ -2,10 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
 import {
-  deleteDraft,
-  getDynamicDraft,
-  postArticle,
-  updateDraft,
+  getDynamicArticle,
+  updateArticle,
 } from "../../../services/userServices";
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
@@ -19,7 +17,7 @@ import dateIcon from "../../../assets/icon/date.png";
 import timeIcon from "../../../assets/icon/time.png";
 import plus from "../../../assets/icon/plus.png";
 
-const EditDraft = () => {
+const EditArticle = () => {
   const { title } = useParams();
   const [article, setArticle] = useState({});
   const { loading, setLoading } = useContext(LoadingContext);
@@ -49,9 +47,9 @@ const EditDraft = () => {
   const handleDynamicArticle = async (title) => {
     try {
       setLoading(true);
-      const response = await getDynamicDraft(title);
+      const response = await getDynamicArticle(title);
       if (response.status == 200) {
-        setArticle(response?.data?.draft);
+        setArticle(response?.data?.article);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -184,66 +182,20 @@ const EditDraft = () => {
 
     try {
       setLoading(true);
-
-      const response = await postArticle(fullArticleData);
-      if (response.status == 201) {
-        handleDeleteDraft(article._id);
-      } else {
-        toast.dismiss();
-        toast.error(response?.error?.message || "Something went worng!");
-      }
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-    setLoading(false);
-  };
-
-  // updating the existing draft
-  const handleDraftUpdate = async (event) => {
-    event.preventDefault();
-    if (!validateForm()) return;
-
-    const fullArticleData = {
-      date: fullDate,
-      coverImg: coverImg,
-      tag: tagInputs,
-      articleTitle: articleTitle,
-      articleContent: editorHtml,
-    };
-
-    try {
-      setLoading(true);
-      const response = await updateDraft(article._id, fullArticleData);
+      const response = await updateArticle(article._id, fullArticleData);
       if (response.status == 200) {
         toast.success(response.data.message);
-        navigate("/admin/drafts");
-      } else {
-        toast.dismiss();
-        toast.error(response?.data?.message || "Something went worng!");
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss();
-      toast.error(error?.message || "Something went worng!");
-    }
-    setLoading(false);
-  };
-
-  const handleDeleteDraft = async (id) => {
-    try {
-      const response = await deleteDraft(id);
-      if (response.status == 200) {
-        toast.success("Drafted article posted successfully!");
         navigate("/admin/articles");
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
       }
     } catch (error) {
+      setLoading(false);
       toast.dismiss();
-      toast.error(error?.message || "Something went worng!");
+      toast.error(error.message || "Something went worng!");
     }
+    setLoading(false);
   };
 
   const handleback = () => {
@@ -400,17 +352,17 @@ const EditDraft = () => {
                           loading ? "opacity-50" : ""
                         }`}
                       >
-                        Publish Article
+                        Update Article
                       </button>
                       <button
-                        onClick={handleDraftUpdate}
+                        onClick={handleback}
                         disabled={loading}
                         type="button"
                         className={`save-as-draft-btn mt-3 ${
                           loading ? "opacity-50" : ""
                         }`}
                       >
-                        Update Draft
+                        Cancel
                       </button>
                     </div>
                   </div>
@@ -441,4 +393,4 @@ const EditDraft = () => {
   );
 };
 
-export default EditDraft;
+export default EditArticle;

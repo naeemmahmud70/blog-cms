@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { LoadingContext } from "../../../context/LoadingContext";
-import { getDynamicDraft } from "../../../services/userServices";
+import { getDynamicArticle } from "../../../services/userServices";
 import { toast } from "react-toastify";
-import "../DynamicArticle/DynamicArticle.css";
+import "./DynamicArticle.css";
 import "../ArticlesHome/ArticlesHome.css";
 import ArticleHeader from "../../../components/ArticleHeader/ArticleHeader";
 import ArticleDetails from "../../../components/ArticleDetails/ArticleDetails";
 
-const DynamicDraft = () => {
+const DynamicArticle = () => {
   const { title } = useParams();
   const [article, setArticle] = useState({});
   const { setLoading } = useContext(LoadingContext);
@@ -23,10 +23,9 @@ const DynamicDraft = () => {
   const handleDynamicArticle = async (title) => {
     try {
       setLoading(true);
-      const response = await getDynamicDraft(title);
-
+      const response = await getDynamicArticle(title);
       if (response.status == 200) {
-        setArticle(response?.data?.draft);
+        setArticle(response?.data?.article);
       } else {
         toast.dismiss();
         toast.error(response?.data?.message || "Something went worng!");
@@ -52,4 +51,4 @@ const DynamicDraft = () => {
   );
 };
 
-export default DynamicDraft;
+export default DynamicArticle;
