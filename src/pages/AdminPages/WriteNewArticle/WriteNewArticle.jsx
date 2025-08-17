@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { Suspense, useContext, useState } from "react";
 import "./WriteNewArticle.css";
 import "../../../App.css";
 import { Link } from "react-router-dom";
@@ -12,10 +12,13 @@ import { LoadingContext, LoginContext } from "../../../context/LoadingContext";
 import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
 import { postArticle, setDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
-import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
+// import { useQuill } from "react-quilljs";
+// import "quill/dist/quill.snow.css";
 import { generateImageUrl } from "../../../services/imageUpload";
-import { selectLocalImage } from "../../../utils/selectLocalImage";
+// import { selectLocalImage } from "../../../utils/selectLocalImage";
+const QuillEditor = React.lazy(() =>
+  import("../../../components/QuillEditor/QuillEditor")
+);
 
 const WriteNewArticle = () => {
   const { loggedIndetails } = useContext(LoginContext);
@@ -24,7 +27,7 @@ const WriteNewArticle = () => {
   const [articleTitle, setArticleTitle] = useState("");
   const [tagInputs, setTagInputs] = useState([]);
   const [editorHtml, setEditorHtml] = useState("");
-  const { quill, quillRef } = useQuill();
+  // const { quill, quillRef } = useQuill();
   const [errors, setErrors] = useState({
     coverImg: "",
     title: "",
@@ -68,34 +71,16 @@ const WriteNewArticle = () => {
     setArticleTitle(e.target.value);
   };
 
-  // 0pen dialog to select and upload image
-  const handleImageUpload = async () => {
-    try {
-      const file = await selectLocalImage();
-      const imageUrl = await generateImageUrl(file);
-      insertToEditor(imageUrl);
-    } catch (error) {
-      toast.dismiss();
-      toast.error(error?.message || "Something went worng!");
-    }
-  };
-
-  // Insert Image(selected by user) to quill
-  const insertToEditor = (url) => {
-    const range = quill.getSelection();
-    quill.insertEmbed(range.index, "image", url);
-  };
-
-  useEffect(() => {
-    if (quill) {
-      // Add custom handler for Image Upload
-      quill.getModule("toolbar").addHandler("image", handleImageUpload);
-      // Listen to text change events
-      quill.on("text-change", () => {
-        setEditorHtml(quill.root.innerHTML); // Get HTML content
-      });
-    }
-  }, [quill]);
+  // useEffect(() => {
+  //   if (quill) {
+  //     // Add custom handler for Image Upload
+  //     quill.getModule("toolbar").addHandler("image", handleImageUpload);
+  //     // Listen to text change events
+  //     quill.on("text-change", () => {
+  //       setEditorHtml(quill.root.innerHTML); // Get HTML content
+  //     });
+  //   }
+  // }, [quill]);
 
   // checking validations while publishing and drafting
   const validateForm = () => {
@@ -366,7 +351,7 @@ const WriteNewArticle = () => {
             </section>
 
             {/* Write article contents */}
-            <section className="py-5">
+            {/* <section className="py-5">
               <div
                 style={{
                   width: "100%",
@@ -380,7 +365,10 @@ const WriteNewArticle = () => {
                   {errors.content}
                 </p>
               )}
-            </section>
+            </section> */}
+            <Suspense fallback={<div>Loading editor...</div>}>
+              <QuillEditor setEditorHtml={setEditorHtml} errors={errors} />
+            </Suspense>
           </form>
         </div>
       </section>
