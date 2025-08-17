@@ -421,6 +421,7 @@ const EditDraft = () => {
             {/* Write article contents */}
             <section className="py-5">
               <div
+                className="quill-white-text"
                 style={{
                   width: "100%",
                   height: "300px",

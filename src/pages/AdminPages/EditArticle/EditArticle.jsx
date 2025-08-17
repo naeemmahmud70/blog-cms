@@ -8,6 +8,7 @@ import {
 import { toast } from "react-toastify";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
+import "../WriteNewArticle/WriteNewArticle.css"
 import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
 import { generateImageUrl } from "../../../services/imageUpload";
 import { selectLocalImage } from "../../../utils/selectLocalImage";
@@ -372,7 +373,7 @@ const EditArticle = () => {
 
             {/* Write article contents */}
             <section className="py-5">
-              <div
+              <div className="quill-white-text"
                 style={{
                   width: "100%",
                   height: "300px",

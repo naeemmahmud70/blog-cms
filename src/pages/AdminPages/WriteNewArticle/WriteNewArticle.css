@@ -1,9 +1,23 @@
 /* Text color white inside the editor */
 .quill-white-text .ql-editor {
-    color: white !important;
-    font-size: 18px;
-    padding: 10px;
-    font-weight: 300;
+    font-family: 'Nunito', sans-serif;
+}
+
+.quill-white-text .ql-editor ol {
+    margin: .5rem !important;
+}
+
+.quill-white-text .ql-editor p {
+    margin: 0 !important;
+}
+
+.quill-white-text .ql-editor h1,
+h2,
+h3,
+h4,
+h5,
+strong {
+    margin-top: 1rem !important;
 }
 
 .cover-img-bg {
