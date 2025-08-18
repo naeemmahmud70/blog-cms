@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingContext } from "../../../context/LoadingContext";
 import {
@@ -6,17 +6,15 @@ import {
   updateArticle,
 } from "../../../services/userServices";
 import { toast } from "react-toastify";
-import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
-import "../WriteNewArticle/WriteNewArticle.css"
+import "../WriteNewArticle/WriteNewArticle.css";
 import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
 import { generateImageUrl } from "../../../services/imageUpload";
-import { selectLocalImage } from "../../../utils/selectLocalImage";
 import arrow from "../../../assets/icon/left-arrow.png";
 import selectImg from "../../../assets/icon/select-img.png";
 import dateIcon from "../../../assets/icon/date.png";
 import timeIcon from "../../../assets/icon/time.png";
 import plus from "../../../assets/icon/plus.png";
+import QuillEditor from "../../../components/QuillEditor/QuillEditor";
 
 const EditArticle = () => {
   const { title } = useParams();
@@ -28,7 +26,6 @@ const EditArticle = () => {
   const [articleTitle, setArticleTitle] = useState("");
   const [tagInputs, setTagInputs] = useState([]);
   const [editorHtml, setEditorHtml] = useState("");
-  const { quill, quillRef } = useQuill();
   const [errors, setErrors] = useState({
     coverImg: "",
     title: "",
@@ -68,17 +65,11 @@ const EditArticle = () => {
       setCoverImg(article.coverImg);
       setTagInputs(article.tag);
       setArticleTitle(article.articleTitle);
-
-      // Set Quill editor initial content
-      if (article.articleContent) {
-        quill.clipboard.dangerouslyPasteHTML(article.articleContent);
-        setEditorHtml(article.articleContent); // Keep local state in sync
-      }
+      setEditorHtml(article.articleContent)
     }
   }, [article]);
 
   // generate image url for cover picture by hosting free image hosting server
-
   const uploadCoverImg = async (event) => {
     try {
       const url = await generateImageUrl(event.target.files[0]);
@@ -109,34 +100,6 @@ const EditArticle = () => {
   const handleTitleChange = (e) => {
     setArticleTitle(e.target.value);
   };
-
-  // 0pen dialog to select and upload image
-  const handleImageUpload = async () => {
-    try {
-      const file = await selectLocalImage();
-      const imageUrl = await generateImageUrl(file);
-      insertToEditor(imageUrl);
-    } catch (err) {
-      console.error("err", err?.message);
-    }
-  };
-
-  // Insert Image(selected by user) to quill
-  const insertToEditor = (url) => {
-    const range = quill.getSelection();
-    quill.insertEmbed(range.index, "image", url);
-  };
-
-  useEffect(() => {
-    if (quill) {
-      // Add custom handler for Image Upload
-      quill.getModule("toolbar").addHandler("image", handleImageUpload);
-      // Listen to text change events
-      quill.on("text-change", () => {
-        setEditorHtml(quill.root.innerHTML); // Get HTML content
-      });
-    }
-  }, [quill]);
 
   // checking validations while publishing and drafting
   const validateForm = () => {
@@ -372,21 +335,13 @@ const EditArticle = () => {
             </section>
 
             {/* Write article contents */}
-            <section className="py-5">
-              <div className="quill-white-text"
-                style={{
-                  width: "100%",
-                  height: "300px",
-                }}
-              >
-                <div ref={quillRef} />
-              </div>
-              {errors.content && (
-                <p className="text-danger font-nunito text-sm-xs m-0 mt-5">
-                  {errors.content}
-                </p>
-              )}
-            </section>
+            <Suspense fallback={<div>Loading editor...</div>}>
+              <QuillEditor
+                editorHtml={editorHtml}
+                setEditorHtml={setEditorHtml}
+                errors={errors}
+              />
+            </Suspense>
           </form>
         </div>
       </section>

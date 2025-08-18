@@ -5,6 +5,7 @@ import RequireAuth from "../Auth/RequiredAuth";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { CheckUserLogin } from "../Auth/CheckUserLogin";
 import SignUpPage from "../pages/SignUpPage";
+import NotFound from "../pages/NotFound/NotFound";
 
 const AppRouter = () => {
   return (
@@ -37,6 +38,7 @@ const AppRouter = () => {
           </RequireAuth>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

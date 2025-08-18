@@ -1,5 +1,6 @@
 .dynamic-article-header-content {
     backdrop-filter: blur(8px);
+    min-height: 356px;
 }
 
 .article-header-title {

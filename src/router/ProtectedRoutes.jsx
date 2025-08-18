@@ -11,6 +11,7 @@ import DynamicDraft from "../pages/AdminPages/DynamicDraft/DynamicDraft";
 import EditDraft from "../pages/AdminPages/EditDraft/EditDraft";
 import Admins from "../pages/AdminPages/Admins/Admins";
 import WriteNewArticle from "../pages/AdminPages/WriteNewArticle/WriteNewArticle";
+import NotFound from "../pages/NotFound/NotFound";
 
 const ProtectedRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const ProtectedRoutes = () => {
         <Route path="drafts/draft-edit/:title" element={<EditDraft />} />
         <Route path="archives" element={<ArchivedArticles />} />
         <Route path="admins_list" element={<Admins />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
