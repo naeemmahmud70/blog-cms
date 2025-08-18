@@ -12,10 +12,7 @@ import { LoadingContext, LoginContext } from "../../../context/LoadingContext";
 import { getLocalTime, localDateAndTime } from "../../../utils/localtime";
 import { postArticle, setDraft } from "../../../services/userServices";
 import { toast } from "react-toastify";
-// import { useQuill } from "react-quilljs";
-// import "quill/dist/quill.snow.css";
 import { generateImageUrl } from "../../../services/imageUpload";
-// import { selectLocalImage } from "../../../utils/selectLocalImage";
 const QuillEditor = React.lazy(() =>
   import("../../../components/QuillEditor/QuillEditor")
 );
@@ -27,7 +24,6 @@ const WriteNewArticle = () => {
   const [articleTitle, setArticleTitle] = useState("");
   const [tagInputs, setTagInputs] = useState([]);
   const [editorHtml, setEditorHtml] = useState("");
-  // const { quill, quillRef } = useQuill();
   const [errors, setErrors] = useState({
     coverImg: "",
     title: "",
@@ -70,17 +66,6 @@ const WriteNewArticle = () => {
   const handleTitleChange = (e) => {
     setArticleTitle(e.target.value);
   };
-
-  // useEffect(() => {
-  //   if (quill) {
-  //     // Add custom handler for Image Upload
-  //     quill.getModule("toolbar").addHandler("image", handleImageUpload);
-  //     // Listen to text change events
-  //     quill.on("text-change", () => {
-  //       setEditorHtml(quill.root.innerHTML); // Get HTML content
-  //     });
-  //   }
-  // }, [quill]);
 
   // checking validations while publishing and drafting
   const validateForm = () => {
@@ -125,7 +110,6 @@ const WriteNewArticle = () => {
       articleContent: editorHtml,
       author: loggedIndetails?.user?.name,
     };
-    console.log("fullArticleData", fullArticleData);
 
     try {
       setLoading(true);
@@ -351,23 +335,13 @@ const WriteNewArticle = () => {
             </section>
 
             {/* Write article contents */}
-            {/* <section className="py-5">
-              <div
-                style={{
-                  width: "100%",
-                  height: "300px",
-                }}
-              >
-                <div ref={quillRef} />
-              </div>
-              {errors.content && (
-                <p className="text-danger font-nunito text-sm-xs m-0 mt-5">
-                  {errors.content}
-                </p>
-              )}
-            </section> */}
+
             <Suspense fallback={<div>Loading editor...</div>}>
-              <QuillEditor setEditorHtml={setEditorHtml} errors={errors} />
+              <QuillEditor
+                editorHtml={editorHtml}
+                setEditorHtml={setEditorHtml}
+                errors={errors}
+              />
             </Suspense>
           </form>
         </div>
