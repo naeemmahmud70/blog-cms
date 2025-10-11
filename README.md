@@ -29,8 +29,10 @@ The system emphasizes security, scalability, and usability, combining robust aut
 **Last Release Date:** `18/08/2025`  
 **Latest Stable Branch:** `main`  
 **Active Development Branch:** `development`
-**Hosted Link:**  `https://publishpro-mu.vercel.app`
-**Backend Repo:**  `https://github.com/naeemmahmud70/cms-backend`
+
+**Hosted Link:** `https://publishpro-mu.vercel.app`
+
+**Backend Repo:** `https://github.com/naeemmahmud70/cms-backend`
 
 ## Build Instructions
 
