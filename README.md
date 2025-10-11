@@ -1,7 +1,7 @@
-![TripNest](public/publishpro.png)
+![PublishPro](public/publishpro.png)
 
 # Project Overview
-### Project Name: PublishPro
+### Project Name: PublishPro(frontend)
 **Description:** PublishPro is a full-stack, enterprise-grade Content Management System (CMS) engineered for scalable, secure, and collaborative digital publishing. Designed with a role-based architecture, the platform empowers organizations to manage complex content workflows across multiple user hierarchies — Admins, Editors, and Writers — with precision and control.
 
 Built on a modern web stack, PublishPro delivers a comprehensive content lifecycle, enabling seamless drafting, editing, publishing, archiving, restoring, and deletion of articles. Its Medium-style WYSIWYG editor provides a rich, distraction-free writing environment, empowering creators with intuitive formatting tools and a fluid authoring experience.
