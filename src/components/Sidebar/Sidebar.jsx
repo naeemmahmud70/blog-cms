@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/icon/logo.png";
+import logo from "../../assets/icon/publishpro.png";
 import article from "../../assets/icon/blog.png";
 import write from "../../assets/icon/write.png";
 import draft from "../../assets/icon/draft.png";
@@ -46,8 +46,7 @@ const Sidebar = () => {
     <div className="px-3 px-lg-4 py-3 sticky-md-top sidebar-section">
       <div className="d-flex justify-content-between">
         <div className="d-flex align-items-center gap-2">
-          <img src={logo} height={45} width={25} alt="" />
-          <h2 className="font-mulish m-0">BAAI</h2>
+          <img width={170} src={logo} alt="" />
         </div>
         <div className="d-block d-md-none">
           <Profile />

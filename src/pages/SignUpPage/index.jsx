@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../../assets/icon/logo.png";
+import logo from "../../assets/icon/publishpro.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -87,10 +87,7 @@ const SignUpPage = () => {
         style={{ maxWidth: "500px" }}
       >
         <div className="d-flex justify-content-center align-items-center gap-2">
-          <img height={50} width={28.56} src={logo} alt="" />
-          <h1 className="fw-normal m-0 font-mulish secondary-black-text brand-text">
-            BAAI
-          </h1>
+          <img width={220} src={logo} alt="" />
         </div>
         <div>
           <p className="fs-5 primary-black-text fw-normal text-center my-1">
