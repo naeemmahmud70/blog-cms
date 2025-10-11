@@ -11,11 +11,17 @@ The system emphasizes security, scalability, and usability, combining robust aut
 ### 🚀 Key Features
 
 🔐 Advanced Authentication & Role-Based Authorization – Implemented secure user authentication and granular access control, ensuring protected workflows for Admins, Editors, and Writers.
+
 📝 Integrated Medium-Style Rich Text Editor – Built a powerful WYSIWYG editor supporting modern formatting, embedded media, and structured content creation for a professional writing experience.
+
 🔄 End-to-End Content Lifecycle Management – Architected a robust workflow that enables users to seamlessly draft, edit, publish, archive, restore, and permanently delete content while maintaining version integrity.
+
 🧭 Comprehensive Admin Dashboard – Developed a fully functional control panel for administrators to manage users, assign roles, monitor activities, and oversee publishing pipelines with real-time insights.
+
 💡 Responsive & Accessible UI/UX – Designed a sleek, device-agnostic interface using React and Bootstrap, ensuring optimal usability, accessibility, and fluid navigation across all user roles.
+
 ⚙️ High-Performance RESTful API Layer – Engineered an Express.js backend with modular routing and optimized MongoDB queries, delivering scalability, speed, and reliable data persistence.
+
 🧩 Production-Ready Architecture – Built with extensibility in mind, supporting future enhancements such as analytics, editorial workflow automation, and AI-assisted content recommendations.
 
 ## Repository/Project Information
