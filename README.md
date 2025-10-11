@@ -25,7 +25,7 @@ The system emphasizes security, scalability, and usability, combining robust aut
 🧩 Production-Ready Architecture – Built with extensibility in mind, supporting future enhancements such as analytics, editorial workflow automation, and AI-assisted content recommendations.
 
 ## Repository/Project Information
-**Version:** `0.01`  
+**Version:** `0.02`  
 **Last Release Date:** `18/08/2025`  
 **Latest Stable Branch:** `main`  
 **Active Development Branch:** `development`  
