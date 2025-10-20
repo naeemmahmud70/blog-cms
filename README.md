@@ -1,4 +1,4 @@
-![PublishPro](public/publishpro.png)
+![PublishPro](public/writer.png)
 
 # Project Overview
 ### Project Name: PublishPro(frontend)
